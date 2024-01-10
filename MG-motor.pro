@@ -29,12 +29,14 @@ SOURCES += \
         main.cpp \
     mainfunction.cpp \
         widget.cpp \
-    weigh.cpp
+    weigh.cpp \
+    motor.cpp
 
 HEADERS += \
     headers.h \
         widget.h \
-    weigh.h
+    weigh.h \
+    motor.h
 
 FORMS += \
         widget.ui

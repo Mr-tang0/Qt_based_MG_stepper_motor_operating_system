@@ -9,10 +9,14 @@ class weigh : public QObject
 public:
     explicit weigh(QObject *parent = nullptr);
     
-    int getWeight(QString serialData);
+    void getWeight(int weighAddress);
+    void shelling(int weighAddress,bool shell);
+
+    void decode(QString reseiveMessage);
+
+private:
     QByteArray buildData(int weighAddress,QString data,bool optWork);
     QByteArray CRC16(QByteArray data);
-
 
 signals:
     void weightChange(int weight);

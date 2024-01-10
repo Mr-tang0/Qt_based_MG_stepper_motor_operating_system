@@ -4,16 +4,39 @@ weigh::weigh(QObject *parent) : QObject(parent)
 {
 
 }
-
-int weigh::getWeight(QString serialData)
+//实时重量
+void weigh::getWeight(int weighAddress)
 {
-    int Weight = 0;
-    QByteArray builtData = buildData(1,"00:00",false);
+    QByteArray builtData = buildData(weighAddress,"00:00",false);
     Widget::myPort->write(builtData);
-
-    return 0;
 }
 
+//去皮
+void weigh::shelling(int weighAddress,bool shell)
+{
+    QByteArray builtData;
+
+    builtData = buildData(weighAddress,"23:1",true);
+    Widget::myPort->write(builtData);//关闭写保护
+
+    if(shell)
+        builtData = buildData(weighAddress,"15:1",true);
+    else
+        builtData = buildData(weighAddress,"15:2",true);
+
+    Widget::myPort->write(builtData);
+
+    builtData = buildData(weighAddress,"23:2",true);
+    Widget::myPort->write(builtData);//开始写保护
+}
+
+void weigh::decode(QString reseiveMessage)
+{
+
+}
+
+
+//数据构建
 QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
 {
     QByteArray builtData;
@@ -26,10 +49,12 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
 
     switch (data.mid(0,2).toInt())
     {
-        //关闭写保护
+        //关闭写保护/开启写保护
         case 23:
             register_address = "00 17";
-            operate = "00 01";
+            if(data.mid(3,1)=="1")
+                operate = "00 01";//关闭写保护
+            else operate = "00 00";//开启写保护
         break;
 
         //获取当前重量
@@ -54,18 +79,18 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
         //去皮/取消去皮
         case 15:
             register_address = "00 15";
-            if(data.mid(3,-1)=="0")operate = "00 01";//去皮
+            if(data.mid(3,-1)=="1")operate = "00 01";//去皮
             else operate = "00 02";//取消去皮
         break;
 
         default:
-            qDebug()<<"erorr";
+
         break;
 
     }
 
     temp_data = weigh_address +" "+register_state+" "+register_address+" "+operate;
-
+    qDebug()<<temp_data;
     bool ok;
     for (const auto &chunk : temp_data.split(" "))
     {
@@ -74,6 +99,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
         {
             // 转换失败后的操作，待定
             qDebug() << "转换失败,数据存在错误" ;
+            builtData.clear();
             continue;
         }
         else
@@ -83,7 +109,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
     }
 
     //数据校验
-    builtData = builtData+CRC16(builtData);
+    if(ok) builtData = builtData+CRC16(builtData);
 
 
     return builtData;
@@ -137,5 +163,6 @@ QByteArray weigh::CRC16(QByteArray data)
             dataChange.append(byteValue);
         }
     }
-    return dataChange;
+
+    return dataChange;//校验值，高位在后
 }
