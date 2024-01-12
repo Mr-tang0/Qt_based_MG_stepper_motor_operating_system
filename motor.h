@@ -2,16 +2,17 @@
 #define MOTOR_H
 
 #include <QObject>
+#include"headers.h"
 
 class motor : public QObject
 {
     Q_OBJECT
 public:
     explicit motor(QObject *parent = nullptr);
-
+    QByteArray buildData(int motorAddress,QString data);
+    QByteArray verifySUM(QString data);
 private:
-    QByteArray buildData(int weighAddress,QString data,bool optWork);
-    QByteArray CRC16(QByteArray data);
+
 
 signals:
 

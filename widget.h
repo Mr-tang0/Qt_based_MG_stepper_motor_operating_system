@@ -2,10 +2,11 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include"weigh.h"
 #include"headers.h"
 
-
+#include"weigh.h"
+#include"motor.h"
+#include"worker.h"
 
 
 namespace Ui {
@@ -22,10 +23,12 @@ public:
 
     void findAvailablePort();
     bool connectSerialPort(int baundRate,QString portName);
+    void delay(int time);
 
 
     static QSerialPort *myPort;
-    const weigh *Weigh = new weigh();
+    static Worker *newworker;
+
 
 
 

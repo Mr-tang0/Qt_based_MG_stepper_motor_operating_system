@@ -10,7 +10,7 @@ QByteArray motor::buildData(int motorAddress,QString command)
     QString header = "3e";
     QString motor_address = QString::number(motorAddress,16);
 
-    //此处导入json配置表----------------------------------------------此处导入json配置表
+    //此处导入json配置表（应该放到某个地方统一导入，否则每次构建帧都需要导入）
     QString rootPath  = QCoreApplication::applicationDirPath();
     QFile file(rootPath+"/motor_command.json");
 
@@ -30,7 +30,7 @@ QByteArray motor::buildData(int motorAddress,QString command)
         qDebug()<<QStringLiteral("命令'%1'不存在。").arg(command);
         return "";
     }
-    QString temp_data = header+" " + myObject[command].toString() + " "+motor_address+" 00";//"00"为发送数据字符长度始终为0
+    QString temp_data = header+" " + myObject[command].toString() + " "+motor_address+" 00";//"00"为此处发送数据字符长度始终为0
 
     QByteArray builtData;
     bool ok;
@@ -67,8 +67,8 @@ QByteArray motor::verifySUM(QString data)
         uint temp = chunk.toUInt(&ok,16);
         if(ok)num = num + temp;
     }
-
-    uchar byteValue = uchar(num) & 0x00ff;//注意这里的校验是舍弃高8位的
+    //这里的校验是舍弃高8位的
+    uchar byteValue = uchar(num) & 0x00ff;
 
     builtData.append(char(byteValue));
 

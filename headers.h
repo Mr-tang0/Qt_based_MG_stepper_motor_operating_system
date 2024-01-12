@@ -5,8 +5,14 @@
 #include<QtSerialPort/QSerialPortInfo>
 #include<QDebug>
 
+#include <QFile>
+#include<QJsonDocument>
+#include<QJsonObject>
+#include<QJsonArray>
+#include<QCoreApplication>
 
-
+#include<QThread>
+#include<QTimer>
 
 
 

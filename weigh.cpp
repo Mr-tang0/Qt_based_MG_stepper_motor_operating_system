@@ -4,11 +4,13 @@ weigh::weigh(QObject *parent) : QObject(parent)
 {
 
 }
+//此类不应该直接对串口进行写操作，应当发出写信号，交由串口类（移入子线程）统一进行调控，否则几个类直接的写操作有冲突的风险
+
 //实时重量
 void weigh::getWeight(int weighAddress)
 {
     QByteArray builtData = buildData(weighAddress,"00:00",false);
-    Widget::myPort->write(builtData);
+    Widget::newworker->sendMessage(builtData);
 }
 
 //去皮
@@ -17,17 +19,17 @@ void weigh::shelling(int weighAddress,bool shell)
     QByteArray builtData;
 
     builtData = buildData(weighAddress,"23:1",true);
-    Widget::myPort->write(builtData);//关闭写保护
+     Widget::newworker->sendMessage(builtData);//关闭写保护
 
     if(shell)
         builtData = buildData(weighAddress,"15:1",true);
     else
         builtData = buildData(weighAddress,"15:2",true);
 
-    Widget::myPort->write(builtData);
+     Widget::newworker->sendMessage(builtData);
 
     builtData = buildData(weighAddress,"23:2",true);
-    Widget::myPort->write(builtData);//开始写保护
+     Widget::newworker->sendMessage(builtData);//开始写保护
 }
 
 void weigh::decode(QString reseiveMessage)
@@ -64,7 +66,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
         break;
 
         //调零
-        case 22:break;
+        case 22:
             register_address = "00 16";
             operate = "00 01";
         break;
@@ -90,11 +92,11 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
     }
 
     temp_data = weigh_address +" "+register_state+" "+register_address+" "+operate;
-    qDebug()<<temp_data;
-    bool ok;
+
+    bool ok = false;
     for (const auto &chunk : temp_data.split(" "))
     {
-        uchar byteValue = chunk.toUShort(&ok, 16);
+        uchar byteValue = uchar(chunk.toUShort(&ok, 16));
         if (!ok)
         {
             // 转换失败后的操作，待定
@@ -104,7 +106,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
         }
         else
         {
-            builtData.append(byteValue);
+            builtData.append(char(byteValue));
         }
     }
 
@@ -124,7 +126,7 @@ QByteArray weigh::CRC16(QByteArray data)
 
     for (int i = 0; i < data.size(); ++i)
     {
-        quint8 byte = data[i];
+        char byte = data[i];
 
         for (int j = 0; j < 8; ++j)
         {
@@ -144,23 +146,21 @@ QByteArray weigh::CRC16(QByteArray data)
     QString temp =QString::number(crc,16);
     temp =temp.right(2)+" "+temp.left(temp.length()-2);
 
-    qDebug()<<temp;
-
     QByteArray dataChange;
 
     bool ok;
     for (const auto &chunk : temp.split(" "))
     {
-        uchar byteValue = chunk.toUShort(&ok, 16);
+        uchar byteValue = uchar(chunk.toUShort(&ok, 16));
         if (!ok)
         {
             // 转换失败后的操作，待定
             qDebug() << "转换失败,数据存在错误" ;
-            continue;
+            return "";
         }
         else
         {
-            dataChange.append(byteValue);
+            dataChange.append(char(byteValue));
         }
     }
 

@@ -2,6 +2,7 @@
 #define WEIGH_H
 
 #include <QObject>
+#include"headers.h"
 
 class weigh : public QObject
 {

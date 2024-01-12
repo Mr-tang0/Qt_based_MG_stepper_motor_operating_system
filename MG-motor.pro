@@ -30,13 +30,15 @@ SOURCES += \
     mainfunction.cpp \
         widget.cpp \
     weigh.cpp \
-    motor.cpp
+    motor.cpp \
+    worker.cpp
 
 HEADERS += \
     headers.h \
         widget.h \
     weigh.h \
-    motor.h
+    motor.h \
+    worker.h
 
 FORMS += \
         widget.ui

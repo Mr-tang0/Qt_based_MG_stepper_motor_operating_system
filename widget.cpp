@@ -1,6 +1,5 @@
 #include "widget.h"
-#include "ui_widget.h"
-
+#include "ui_widget.h" 
 
 
 Widget::Widget(QWidget *parent) :
@@ -12,9 +11,19 @@ Widget::Widget(QWidget *parent) :
     findAvailablePort();
     connectSerialPort(9600,"COM1");
 
+    QThread *mythread = new QThread;
+    newworker->moveToThread(mythread);//worker进入子线程，有关于收发的函数均在子线程中执行
+    newworker->openReseiveChannal();//开接收
+
     weigh *myWeigh = new weigh;
-    myWeigh->shelling(1,true);
-    myWeigh->getWeight(1);
+
+    for (int i = 0;i<100;i++)
+    {
+        myWeigh->getWeight(1);
+        delay(100);
+    }
+
+
 }
 
 Widget::~Widget()
