@@ -1,27 +1,36 @@
 #include "widget.h"
 #include "ui_widget.h" 
-
+#include "portui.h"
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    this->setWindowTitle("mainWindow");
+    portUi *portui = new portUi;
+    portui->show();
+    connect(portui,&portUi::connected,[=](bool connectFlag){
+        if(connectFlag)
+        this->show();
+        else this->close();
+        ui->label->setText(QStringLiteral("当前连接：%1 波特率：%2").arg(myPort->portName()).arg(myPort->baudRate()));
 
-    findAvailablePort();
-    connectSerialPort(9600,"COM1");
+    });
 
-    QThread *mythread = new QThread;
-    newworker->moveToThread(mythread);//worker进入子线程，有关于收发的函数均在子线程中执行
-    newworker->openReseiveChannal();//开接收
 
-    weigh *myWeigh = new weigh;
 
-    for (int i = 0;i<100;i++)
-    {
-        myWeigh->getWeight(1);
-        delay(100);
-    }
+//    findAvailablePort();
+//    connectSerialPort(9600,"COM1");
+
+//    QThread *mythread = new QThread;
+//    newworker->moveToThread(mythread);//worker进入子线程，有关于收发的函数均在子线程中执行
+//    newworker->openReseiveChannal();//开接收
+
+
+//    motor *myMotor = new motor;
+//    myMotor->buildData("power_control","500");
+
 
 
 }

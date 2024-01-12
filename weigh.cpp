@@ -2,9 +2,21 @@
 #include "widget.h"
 weigh::weigh(QObject *parent) : QObject(parent)
 {
+    QString rootPath  = QCoreApplication::applicationDirPath();
+    QFile weighfile(rootPath+"/weigh_command.json");
+    if(!weighfile.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/weigh_command.json");
+    }
+    else
+    {
+        QByteArray jsonData = weighfile.readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+        weighObject = jsonDoc.object();
+        weighfile.close();
+    }
 
 }
-//此类不应该直接对串口进行写操作，应当发出写信号，交由串口类（移入子线程）统一进行调控，否则几个类直接的写操作有冲突的风险
 
 //实时重量
 void weigh::getWeight(int weighAddress)
@@ -19,7 +31,7 @@ void weigh::shelling(int weighAddress,bool shell)
     QByteArray builtData;
 
     builtData = buildData(weighAddress,"23:1",true);
-     Widget::newworker->sendMessage(builtData);//关闭写保护
+    Widget::newworker->sendMessage(builtData);//关闭写保护
 
     if(shell)
         builtData = buildData(weighAddress,"15:1",true);

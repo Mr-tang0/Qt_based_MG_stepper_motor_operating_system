@@ -21,8 +21,6 @@ public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget();
 
-    void findAvailablePort();
-    bool connectSerialPort(int baundRate,QString portName);
     void delay(int time);
 
 
@@ -31,9 +29,9 @@ public:
 
 
 
-
-private:
     Ui::Widget *ui;
+private:
+
 };
 
 

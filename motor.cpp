@@ -1,37 +1,92 @@
 #include "motor.h"
 #include "widget.h"
+
 motor::motor(QObject *parent) : QObject(parent)
 {
-
-}
-
-QByteArray motor::buildData(int motorAddress,QString command)
-{
-    QString header = "3e";
-    QString motor_address = QString::number(motorAddress,16);
-
-    //此处导入json配置表----------------------------------------------此处导入json配置表
+    //导入配置文件
     QString rootPath  = QCoreApplication::applicationDirPath();
-    QFile file(rootPath+"/motor_command.json");
 
-    bool openflag = file.open(QIODevice::ReadOnly);
-    if(!openflag)
+    QFile motorfile(rootPath+"/motor_command.json");
+
+    if(!motorfile.open(QIODevice::ReadOnly))
     {
         qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/motor_command.json");
     }
-    QByteArray jsonData = file.readAll();
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-    QJsonObject myObject = jsonDoc.object();
-    file.close();
+    else
+    {
+        QByteArray jsonData = motorfile.readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+        motorCmdObject = jsonDoc.object();
+        motorfile.close();
+    }
+}
 
-    //配置命令myObject[command]
-    if(myObject[command].isNull())//命令不存在就退出返回
+
+//数据帧,参数：操作字，数据内容
+QByteArray motor::buildData(QString command,QString messageData)
+{       
+    if(motorCmdObject[command].isNull())//命令不存在就退出返回
     {
         qDebug()<<QStringLiteral("命令'%1'不存在。").arg(command);
         return "";
     }
-    QString temp_data = header+" " + myObject[command].toString() + " "+motor_address+" 00";//"00"为发送数据字符长度始终为0
 
+    QByteArray builtData;
+    bool ok;
+    QString byte;
+    QString temp_data;
+
+    if(motorCmdObject[command+"_type"].toString()=="int16")
+    {
+        byte = QString::number(messageData.toInt(),16);
+    }
+    else if (motorCmdObject[command+"_type"].toString()=="int32") {
+        byte = QString::number(messageData.toInt(),32);
+    }
+    else if (motorCmdObject[command+"_type"].toString()=="int64") {
+        byte = QString::number(messageData.toInt(),64);
+    }
+
+    double len = byte.length();
+
+    for(int i = 0;i<qCeil(len/2);i++)
+    {
+        uchar byteValue = byte.right(2).toUShort(&ok, 16);
+        if(ok)
+        {
+            temp_data =temp_data+byte.right(2)+" ";
+            builtData.append(byteValue);
+        }
+        else return "";
+        byte = QString::number(messageData.toInt(),16).remove(byte.length()-2,2);
+    }
+
+    builtData = builtData+verifySUM(temp_data);
+
+    //qDebug()<<"debug from buildData"<<builtData.toHex();
+
+    return builtData;
+}
+
+
+//命令帧,参数：地址，操作字，数据帧长度
+QByteArray motor::buildCmdData(int motorAddress,QString command,int commandDataLen)
+{
+    QString header = "3e";
+    QString motor_address = QString::number(motorAddress,16);
+
+    //配置命令 motorObject[command]
+
+    if(motorCmdObject[command].isNull())//命令不存在就退出返回
+    {
+        qDebug()<<QStringLiteral("命令'%1'不存在。").arg(command);
+        return "";
+    }
+
+    QString temp_data = header+" " + motorCmdObject[command].toString() + " "+motor_address+" "+QString::number(commandDataLen,16);
+
+
+    //构建命令帧
     QByteArray builtData;
     bool ok;
     for (const auto &chunk : temp_data.split(" "))
@@ -49,8 +104,10 @@ QByteArray motor::buildData(int motorAddress,QString command)
         }
     }
 
-    //数据校验
+    //构建数据校验
     builtData = builtData+verifySUM(temp_data);
+
+    //qDebug()<<"debug from buildCmdData"<<builtData.toHex();
 
     return builtData;
 
@@ -71,6 +128,6 @@ QByteArray motor::verifySUM(QString data)
     uchar byteValue = uchar(num) & 0x00ff;//注意这里的校验是舍弃高8位的
 
     builtData.append(char(byteValue));
-
+    //qDebug()<<"debug from verifySUM"<<builtData.toHex();
     return builtData;
 }

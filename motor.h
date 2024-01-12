@@ -9,9 +9,12 @@ class motor : public QObject
     Q_OBJECT
 public:
     explicit motor(QObject *parent = nullptr);
-    QByteArray buildData(int motorAddress,QString data);
+    QByteArray buildCmdData(int motorAddress,QString command,int commandDataLen);
+    QByteArray buildData(QString command,QString messageData);
     QByteArray verifySUM(QString data);
+
 private:
+    QJsonObject motorCmdObject;
 
 
 signals:

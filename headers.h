@@ -13,7 +13,7 @@
 
 #include<QThread>
 #include<QTimer>
-
+#include<qmath.h>
 
 
 

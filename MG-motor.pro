@@ -28,6 +28,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     mainfunction.cpp \
+    portui.cpp \
         widget.cpp \
     weigh.cpp \
     motor.cpp \
@@ -35,12 +36,14 @@ SOURCES += \
 
 HEADERS += \
     headers.h \
+    portui.h \
         widget.h \
     weigh.h \
     motor.h \
     worker.h
 
 FORMS += \
+        portui.ui \
         widget.ui
 
 # Default rules for deployment.

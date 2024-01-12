@@ -19,6 +19,8 @@ private:
     QByteArray buildData(int weighAddress,QString data,bool optWork);
     QByteArray CRC16(QByteArray data);
 
+    QJsonObject weighObject;
+
 signals:
     void weightChange(int weight);
 
