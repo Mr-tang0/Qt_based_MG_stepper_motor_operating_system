@@ -1,0 +1,16 @@
+{
+    "angleControl": -1,
+    "angleIncrement": -1,
+    "maxSpeed": -1,
+    "motorID": -1,
+    "motorname": "",
+    "origal angleControl": -1,
+    "origal angleIncrement": -1,
+    "origal maxSpeed": -1,
+    "origal motorID": -1,
+    "origal motorname": "origal",
+    "origal powerControl": -1,
+    "origal speedControl": -1,
+    "powerControl": -1,
+    "speedControl": -1
+}

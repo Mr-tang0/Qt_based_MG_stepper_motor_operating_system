@@ -15,10 +15,11 @@ Widget::Widget(QWidget *parent) :
         this->show();
         else this->close();
         ui->label->setText(QStringLiteral("当前连接：%1 波特率：%2").arg(myPort->portName()).arg(myPort->baudRate()));
-
     });
 
-
+    QList<motorDetails> a;
+    QString filePath = "D:/QT/qtcode/platform/MG-motor/motor_details.json";
+    loadMotorDetails(a, filePath);
 
 //    findAvailablePort();
 //    connectSerialPort(9600,"COM1");
@@ -38,4 +39,9 @@ Widget::Widget(QWidget *parent) :
 Widget::~Widget()
 {
     delete ui;
+}
+
+void Widget::on_pushButton_clicked()
+{
+    buttonTwinkling("pushButton",true);
 }

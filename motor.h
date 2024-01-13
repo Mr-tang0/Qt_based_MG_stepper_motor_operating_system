@@ -13,6 +13,8 @@ public:
     QByteArray buildData(QString command,QString messageData);
     QByteArray verifySUM(QString data);
 
+
+
 private:
     QJsonObject motorCmdObject;
 

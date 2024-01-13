@@ -22,14 +22,21 @@ public:
     ~Widget();
 
     void delay(int time);
+    void buttonTwinkling(QString btnName, bool flag);
+    void saveJson(motorDetails &motordetail,QString filePath);
+    void loadMotorDetails(QList<motorDetails> &loadmotordetail,QString filePath);
 
 
     static QSerialPort *myPort;
     static Worker *newworker;
 
+    QTimer *twinker = new QTimer;
 
 
     Ui::Widget *ui;
+private slots:
+    void on_pushButton_clicked();
+
 private:
 
 };

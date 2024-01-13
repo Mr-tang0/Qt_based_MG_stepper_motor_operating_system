@@ -131,3 +131,4 @@ QByteArray motor::verifySUM(QString data)
     //qDebug()<<"debug from verifySUM"<<builtData.toHex();
     return builtData;
 }
+
