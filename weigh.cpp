@@ -2,6 +2,7 @@
 #include "widget.h"
 weigh::weigh(QObject *parent) : QObject(parent)
 {
+    //以下代码暂时为用到
     QString rootPath  = QCoreApplication::applicationDirPath();
     QFile weighfile(rootPath+"/weigh_command.json");
     if(!weighfile.open(QIODevice::ReadOnly))
@@ -46,7 +47,7 @@ void weigh::shelling(int weighAddress,bool shell)
 
 void weigh::decode(QString reseiveMessage)
 {
-
+        //接受来自worker的reseiveMessage，进行decode
 }
 
 
