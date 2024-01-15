@@ -18,17 +18,18 @@
 
 struct motorDetails
 {
-    QString motorname = "origal";
-    int motorID = -1;
+    QString motorname;
+    double motorID;
 
-    int powerControl = -1;
+    double powerControl;
 
-    int speedControl = -1;
-    int maxSpeed = -1;
+    double speedControl;
+    double maxSpeed;
 
-    int angleControl = -1;
-    int angleIncrement = -1;
+    double angleControl;
+    double angleIncrement;
 };
+
 
 
 
