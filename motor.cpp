@@ -21,6 +21,41 @@ motor::motor(QObject *parent) : QObject(parent)
     }
 }
 
+bool motor::motorOpen(bool open)
+{
+    int address = detail.motorID;
+    QByteArray openData;
+    if(open)
+    {
+        openData = buildCmdData(address,"motor_open",0);
+    }
+    else {
+        openData = buildCmdData(address,"motor_close",0);
+    }
+
+    if(Widget::newworker->sendMessage(openData))
+        motorOpenFlag = open;
+    return motorOpenFlag;
+}
+
+void motor::motorPowerMove(bool direction)
+{
+    int address = detail.motorID;
+    QByteArray directionData;
+
+    if(direction){
+        directionData = buildCmdData(address,"cw_move",0);
+    }
+    else {
+        directionData = buildCmdData(address,"ccw_move",0);
+    }
+    Widget::newworker->sendMessage(directionData);
+}
+
+void motor::moveToSetPosition()
+{
+
+}
 
 //数据帧,参数：操作字，数据内容
 QByteArray motor::buildData(QString command,QString messageData)
@@ -83,7 +118,10 @@ QByteArray motor::buildCmdData(int motorAddress,QString command,int commandDataL
         return "";
     }
 
-    QString temp_data = header+" " + motorCmdObject[command].toString() + " "+motor_address+" "+QString::number(commandDataLen,16);
+    QString temp_data = header+" "
+            + motorCmdObject[command].toString() + " "
+            +motor_address+" "
+            +QString::number(commandDataLen,16);
 
 
     //构建命令帧

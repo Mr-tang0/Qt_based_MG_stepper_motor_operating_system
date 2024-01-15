@@ -9,11 +9,17 @@ class motor : public QObject
     Q_OBJECT
 public:
     explicit motor(QObject *parent = nullptr);
+
     QByteArray buildCmdData(int motorAddress,QString command,int commandDataLen);
     QByteArray buildData(QString command,QString messageData);
-    QByteArray verifySUM(QString data);
 
-    motorDetails detail={"",0.,0.,0.,0.,0.,0.};
+    QByteArray verifySUM(QString data);
+    bool motorOpen(bool open);
+    void motorPowerMove(bool direction);
+    void moveToSetPosition();
+
+    motorDetails detail={"",0,0.,0.,0.,0.,0.};
+    bool motorOpenFlag = false;
 
 
 private:

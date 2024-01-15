@@ -19,7 +19,7 @@
 struct motorDetails
 {
     QString motorname;
-    double motorID;
+    int motorID;
 
     double powerControl;
 

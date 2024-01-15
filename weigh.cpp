@@ -45,10 +45,6 @@ void weigh::shelling(int weighAddress,bool shell)
      Widget::newworker->sendMessage(builtData);//开始写保护
 }
 
-void weigh::decode(QString reseiveMessage)
-{
-        //接受来自worker的reseiveMessage，进行decode
-}
 
 
 //数据构建

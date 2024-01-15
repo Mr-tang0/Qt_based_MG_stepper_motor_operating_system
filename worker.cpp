@@ -26,7 +26,7 @@ bool Worker::openReseiveChannal()
 //串口接收解码
 void Worker::decodeMessage(QString reseivedMessage)
 {
-    qDebug()<<reseivedMessage;
+    qDebug()<<reseivedMessage.toUtf8().toHex();
     //判断来自motor还是weigh
     if(reseivedMessage.left(2)=="3e")
     {

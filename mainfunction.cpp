@@ -4,7 +4,7 @@
 //静态成员初始化区
 QSerialPort *Widget::myPort = new QSerialPort();
 Worker *Widget::newworker = new Worker();
-
+weigh *Widget::myweigh = new weigh;
 QList<motor*> Widget::myMotorList = {};
 
 //静态成员初始化区
@@ -16,6 +16,7 @@ void Widget::initSystem()
     refreshUi();
     buttonTwinkling("motor_1","yellow",true);
 
+
 }
 void Widget::refreshUi()
 {
@@ -25,24 +26,38 @@ void Widget::refreshUi()
         btn->setText(myMotorList[i]->detail.motorname);
         btn->setStyleSheet("background-color: white");
 
-        QList<QString> lineEditList = {"motorName_","motorID_","setSpeed_","maxSpeed_","setPositon_"};
-        QList<QLineEdit> EditList;
-
-        for (int j = 0;j<lineEditList.length();j++)
-        {
-            EditList.append(*findChild<QLineEdit*>(lineEditList[j]+QString::number(1)));
-            QLineEdit *lineEdit = findChild<QLineEdit*>(lineEditList[j]+QString::number(1));
-            lineEdit->setText(myMotorList[i]->detail.motorname);
-
-        }
-
-
-
+        findChild<QLineEdit*>("motorName_"+QString::number(i+1))->setText(myMotorList[i]->detail.motorname);
+        findChild<QLineEdit*>("motorID_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.motorID));
+        findChild<QLineEdit*>("setSpeed_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.speedControl));
+        findChild<QLineEdit*>("maxSpeed_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.maxSpeed));
+        findChild<QLineEdit*>("setPositon_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.angleControl));
+        findChild<QLineEdit*>("powerControl_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.powerControl));
     }
-
 }
-void Widget::buttonTwinkling(QString btnName,QString color,bool flag)
+
+void Widget::saveMotor(int index,QString filePath)
 {
+
+    if(index>=myMotorList.length())
+    {
+        myMotorList.append(new motor);
+    }
+    myMotorList[index]->detail.motorname = findChild<QLineEdit*>("motorName_"+QString::number(index+1))->text();
+    myMotorList[index]->detail.motorID = findChild<QLineEdit*>("motorID_"+QString::number(index+1))->text().toInt();
+
+    myMotorList[index]->detail.speedControl = findChild<QLineEdit*>("setSpeed_"+QString::number(index+1))->text().toDouble();
+    myMotorList[index]->detail.maxSpeed = findChild<QLineEdit*>("maxSpeed_"+QString::number(index+1))->text().toDouble();
+    myMotorList[index]->detail.angleControl = findChild<QLineEdit*>("setPositon_"+QString::number(index+1))->text().toDouble();
+    myMotorList[index]->detail.powerControl = findChild<QLineEdit*>("powerControl_"+QString::number(index+1))->text().toDouble();
+    qDebug()<<findChild<QLineEdit*>("motorName_"+QString::number(index+1))->text();
+
+    saveJson(myMotorList,filePath);
+    refreshUi();
+}
+
+void Widget::buttonTwinkling(QString btnName,QString color,bool flag)//timer的生命周期有问题
+{
+
     QPushButton *btn = new QPushButton;
     btn = findChild<QPushButton*>(btnName);
     if(flag)
@@ -51,7 +66,7 @@ void Widget::buttonTwinkling(QString btnName,QString color,bool flag)
         connect(twinker,&QTimer::timeout,[=,&twinklingFlag](){
 
             if(twinklingFlag==1){
-                btn->setStyleSheet("background-color: yellow");
+                btn->setStyleSheet(QStringLiteral("background-color: %1").arg(color));
                 twinklingFlag = 0;
             }
             else
@@ -60,7 +75,7 @@ void Widget::buttonTwinkling(QString btnName,QString color,bool flag)
                 twinklingFlag = 1;
             }
         });
-        twinker->start(500);
+        twinker->start(250);
     }
     else
     {
@@ -111,7 +126,7 @@ void Widget::saveJson(QList<motor*> MotorList,QString filePath)
 
 void Widget::loadMotorDetails(QString filePath)
 {
-
+    myMotorList.clear();
     QFile motorfile(filePath);
 
     try {
@@ -135,11 +150,11 @@ void Widget::loadMotorDetails(QString filePath)
         {
             jsonObject["motorName_"+QString::number(i)].toString(),//motorname:
             jsonObject["motorID_"+QString::number(i)].toInt(),//motorID:
-            jsonObject["powerControl_"+QString::number(i)].toInt(),//powerControl:
-            jsonObject["speedControl_"+QString::number(i)].toInt(),//speedControl:
-            jsonObject["maxSpeed_"+QString::number(i)].toInt(),//maxSpeed:
-            jsonObject["angleControl_"+QString::number(i)].toInt(),//angleControl:
-            jsonObject["angleIncrement_"+QString::number(i)].toInt()//angleIncrement:
+            jsonObject["powerControl_"+QString::number(i)].toDouble(),//powerControl:
+            jsonObject["speedControl_"+QString::number(i)].toDouble(),//speedControl:
+            jsonObject["maxSpeed_"+QString::number(i)].toDouble(),//maxSpeed:
+            jsonObject["angleControl_"+QString::number(i)].toDouble(),//angleControl:
+            jsonObject["angleIncrement_"+QString::number(i)].toDouble()//angleIncrement:
         };
         myMotorList[i]->detail = detail;
     }

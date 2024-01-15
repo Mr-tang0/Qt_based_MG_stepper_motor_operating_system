@@ -13,7 +13,7 @@ public:
     void getWeight(int weighAddress);
     void shelling(int weighAddress,bool shell);
 
-    void decode(QString reseiveMessage);
+    int address;
 
 private:
     QByteArray buildData(int weighAddress,QString data,bool optWork);

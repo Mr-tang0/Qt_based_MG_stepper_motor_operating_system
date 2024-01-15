@@ -29,7 +29,6 @@ SOURCES += \
         main.cpp \
     mainfunction.cpp \
     portui.cpp \
-    setui.cpp \
         widget.cpp \
     weigh.cpp \
     motor.cpp \
@@ -38,7 +37,6 @@ SOURCES += \
 HEADERS += \
     headers.h \
     portui.h \
-    setui.h \
         widget.h \
     weigh.h \
     motor.h \
@@ -46,7 +44,6 @@ HEADERS += \
 
 FORMS += \
         portui.ui \
-        setui.ui \
         widget.ui
 
 # Default rules for deployment.
