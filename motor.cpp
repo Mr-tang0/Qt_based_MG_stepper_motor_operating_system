@@ -40,18 +40,35 @@ bool motor::motorOpen(bool open)
 
 void motor::motorPowerMove(bool direction)
 {
+    stopMove();
+
     int address = detail.motorID;
-    QByteArray directionData;
+    QByteArray cmdData,data;
+    cmdData = buildCmdData(address,"open_circle",2);
+    Widget::newworker->sendMessage(cmdData);
+
+    int16_t power = detail.powerControl;
+    if(power>850) power = 850;
+    else if(power<-850) power = -850;
 
     if(direction){
-        directionData = buildCmdData(address,"cw_move",0);
+        data = buildData("open_circle",QString::number(power));
     }
     else {
-        directionData = buildCmdData(address,"ccw_move",0);
+        data = buildData("open_circle",QString::number(-power));
     }
-    Widget::newworker->sendMessage(directionData);
+
+    Widget::newworker->sendMessage(data);
 }
 
+void motor::stopMove()
+{
+    int address = detail.motorID;
+    QByteArray stopData;
+    stopData = buildCmdData(address,"motor_stop",0);
+    Widget::newworker->sendMessage(stopData);
+
+}
 void motor::moveToSetPosition()
 {
 
@@ -60,9 +77,10 @@ void motor::moveToSetPosition()
 //数据帧,参数：操作字，数据内容
 QByteArray motor::buildData(QString command,QString messageData)
 {       
-    if(motorCmdObject[command].isNull())//命令不存在就退出返回
+
+    if(motorCmdObject[command+"_type"].isNull())//命令不存在就退出返回
     {
-        qDebug()<<QStringLiteral("命令'%1'不存在。").arg(command);
+        qDebug()<<QStringLiteral("命令'%1'不存在。").arg(command+"_type");
         return "";
     }
 
@@ -71,14 +89,19 @@ QByteArray motor::buildData(QString command,QString messageData)
     QString byte;
     QString temp_data;
 
-    if(motorCmdObject[command+"_type"].toString()=="int16")
+
+
+    if(motorCmdObject[command+"_type"].toString()=="int_16t")
     {
         byte = QString::number(messageData.toInt(),16);
     }
-    else if (motorCmdObject[command+"_type"].toString()=="int32") {
+    else if (motorCmdObject[command+"_type"].toString()=="int_32t") {
         byte = QString::number(messageData.toInt(),32);
     }
-    else if (motorCmdObject[command+"_type"].toString()=="int64") {
+    else if (motorCmdObject[command+"_type"].toString()=="int_64t") {
+        byte = QString::number(messageData.toInt(),64);
+    }
+    else if (motorCmdObject[command+"_type"].toString()=="int_64t+int_32t") {
         byte = QString::number(messageData.toInt(),64);
     }
 

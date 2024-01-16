@@ -3,19 +3,19 @@
 weigh::weigh(QObject *parent) : QObject(parent)
 {
     //以下代码暂时为用到
-    QString rootPath  = QCoreApplication::applicationDirPath();
-    QFile weighfile(rootPath+"/weigh_command.json");
-    if(!weighfile.open(QIODevice::ReadOnly))
-    {
-        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/weigh_command.json");
-    }
-    else
-    {
-        QByteArray jsonData = weighfile.readAll();
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-        weighObject = jsonDoc.object();
-        weighfile.close();
-    }
+//    QString rootPath  = QCoreApplication::applicationDirPath();
+//    QFile weighfile(rootPath+"/weigh_command.json");
+//    if(!weighfile.open(QIODevice::ReadOnly))
+//    {
+//        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/weigh_command.json");
+//    }
+//    else
+//    {
+//        QByteArray jsonData = weighfile.readAll();
+//        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+//        weighObject = jsonDoc.object();
+//        weighfile.close();
+//    }
 
 }
 
@@ -120,6 +120,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
     }
 
     //数据校验
+    qDebug()<<builtData<<CRC16(builtData);
     if(ok) builtData = builtData+CRC16(builtData);
 
 

@@ -100,6 +100,11 @@ Widget::Widget(QWidget *parent) :
             myMotorList[i]->motorPowerMove(true);
         });
 
+        QPushButton *stop = findChild<QPushButton*>("motorStop_"+QString::number(i+1));
+        connect(stop,&QPushButton::clicked,[=](){
+            myMotorList[i]->stopMove();
+        });
+
         QPushButton *ccwMove = findChild<QPushButton*>("ccwMove_"+QString::number(i+1));
         connect(ccwMove,&QPushButton::clicked,[=](){
             myMotorList[i]->motorPowerMove(false);
@@ -119,6 +124,13 @@ Widget::Widget(QWidget *parent) :
         });
     }
 
+    connect(newworker,&Worker::currentWeight,[=](int,double weight){
+        ui->weightDisplay->setText(QString::number(weight));
+        ui->weightDisplay->setStyleSheet("background-color:white");
+    });
+    connect(newworker,&Worker::weighError,[=](int address){
+        ui->weightText->append(QStringLiteral("%1称重模块错误").arg(QString::number(address)));
+    });
 
 }
 
@@ -135,22 +147,26 @@ void Widget::on_changeWeigh_clicked()
     {
         ui->weighAddress->setEnabled(true);
         ui->changeWeigh->setText("确认设置");
-
-        int address = ui->weighAddress->text().toInt();
-        for (int i = 0;i<myMotorList.length();i++) {
-            if(address==myMotorList[i]->detail.motorID){
-                qDebug()<<"地址不能与电机地址相同";
-                myweigh->address = myweigh->address;
-                break;
-            }
-            else {
-                myweigh->address = address;
-            }
-        }
     }
     else {
-        ui->weighAddress->setEnabled(false);
-        ui->changeWeigh->setText("更改地址");
+        for (int i = 0;i<myMotorList.length();i++) {
+            if(ui->weighAddress->text().toInt()==myMotorList[i]->detail.motorID){
+                qDebug()<<"地址不能与电机地址相同";
+                for (int i = 0;i<2;i++) {
+                    ui->changeWeigh->setStyleSheet("background-color: red");
+                    delay(50);
+                    ui->changeWeigh->setStyleSheet("background-color: white");
+                    delay(50);
+                }
+                break;
+            }
+            else if(ui->weighAddress->text().toInt()!=0){
+                myweigh->address = ui->weighAddress->text().toInt();
+                ui->weighAddress->setEnabled(false);
+                ui->changeWeigh->setText("更改地址");
+            }
+        }
+
     }
 }
 
@@ -161,7 +177,7 @@ void Widget::on_refreshWeigh_clicked()
 
 void Widget::on_saveWeight_clicked()
 {
-
+    saveWeigh(0,"");
 }
 
 void Widget::on_weighShelling_clicked()

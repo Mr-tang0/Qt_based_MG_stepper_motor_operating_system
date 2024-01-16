@@ -4,7 +4,7 @@
 //静态成员初始化区
 QSerialPort *Widget::myPort = new QSerialPort();
 Worker *Widget::newworker = new Worker();
-weigh *Widget::myweigh = new weigh;
+weigh* Widget::myweigh = new weigh;
 QList<motor*> Widget::myMotorList = {};
 
 //静态成员初始化区
@@ -13,6 +13,7 @@ void Widget::initSystem()
 {
     QString rootPath  = QCoreApplication::applicationDirPath();
     loadMotorDetails(rootPath+"/motor_log.json");
+    loadWeighDetails(rootPath+"/weigh_log.json");
     refreshUi();
     buttonTwinkling("motor_1","yellow",true);
 
@@ -33,6 +34,7 @@ void Widget::refreshUi()
         findChild<QLineEdit*>("setPositon_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.angleControl));
         findChild<QLineEdit*>("powerControl_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.powerControl));
     }
+    findChild<QLineEdit*>("weighAddress")->setText(QString::number(myweigh->address));
 }
 
 void Widget::saveMotor(int index,QString filePath)
@@ -53,6 +55,12 @@ void Widget::saveMotor(int index,QString filePath)
 
     saveJson(myMotorList,filePath);
     refreshUi();
+}
+
+
+void Widget::saveWeigh(int index,QString filePath)
+{
+
 }
 
 void Widget::buttonTwinkling(QString btnName,QString color,bool flag)//timer的生命周期有问题
@@ -123,6 +131,30 @@ void Widget::saveJson(QList<motor*> MotorList,QString filePath)
     motorfile.write(temp.toUtf8());
     motorfile.close();
 }
+
+void Widget::loadWeighDetails(QString filePath)
+{
+    QFile motorfile(filePath);
+
+    try {
+        motorfile.open(QIODevice::ReadOnly);
+    }
+    catch (QFileDevice::FileError) {
+        qDebug()<<QStringLiteral("日志文件%1不存在").arg(filePath);
+        return;
+    }
+
+    QByteArray jsonData = motorfile.readAll();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+    QJsonObject jsonObject = jsonDoc.object();
+    motorfile.close();
+
+    myweigh->address = jsonObject["address"].toInt();
+
+
+
+}
+
 
 void Widget::loadMotorDetails(QString filePath)
 {

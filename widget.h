@@ -25,16 +25,18 @@ public:
     void buttonTwinkling(QString btnName, QString color, bool flag);
     void saveJson(QList<motor*> MotorList,QString filePath);
     void loadMotorDetails(QString filePath);
+    void loadWeighDetails(QString filePath);
 
     void initSystem();
     void refreshUi();
-    void saveMotor(int index,QString filePath);
 
+    void saveMotor(int index,QString filePath);
+    void saveWeigh(int index,QString filePath);
 
     static QSerialPort *myPort;
     static Worker *newworker;
     static QList<motor*> myMotorList;
-    static weigh *myweigh;
+    static weigh* myweigh;
 
     QTimer* twinker =new QTimer;
 

@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include"headers.h"
+#include "motor.h"
+#include "weigh.h"
 
 class Worker : public QObject
 {
@@ -17,6 +19,8 @@ public:
 private:
     void decodeMessage(QString reseivedMessage);
     void delay(int delayTime);
+    static motor *tempMotor;
+    static weigh *tempweigh;
 
 signals:
     void currentPosition(int motorID,double positon);
@@ -26,6 +30,9 @@ signals:
     void currentTemperature(int motorID,double temperature);
 
     void currentWeight(int weighID, double weight);
+
+    void weighError(int weighID);
+    void motorError(int motorID);
 
 public slots:
 };

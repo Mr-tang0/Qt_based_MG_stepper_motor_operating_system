@@ -14,12 +14,16 @@ public:
     void shelling(int weighAddress,bool shell);
 
     int address;
+    double currentWeight;
 
-private:
     QByteArray buildData(int weighAddress,QString data,bool optWork);
     QByteArray CRC16(QByteArray data);
 
     QJsonObject weighObject;
+private:
+
+
+
 
 signals:
     void weightChange(int weight);
