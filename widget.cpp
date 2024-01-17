@@ -9,15 +9,20 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("控制");
-    Login *l = new Login;
-    l->show();
+
+    Login *myLogin = new Login;
+    myLogin->show();
+
     portUi *portui = new portUi;
-    //portui->show();
+    connect(myLogin,&Login::Logined,[=](QString userName){
+        portui->show();
+        currentUserName = userName;
+    });
+
     connect(portui,&portUi::connected,[=](bool connectFlag){
-        if(connectFlag)
-        this->show();
+        if(connectFlag)this->show();
         else this->close();
-        ui->label->setText(QStringLiteral("当前连接：%1 波特率：%2").arg(myPort->portName()).arg(myPort->baudRate()));
+        ui->label->setText(QStringLiteral("当前连接：%1 波特率：%2%3").arg(myPort->portName()).arg(myPort->baudRate()).arg(currentUserName));
     });
 
     //这里是否考虑将发送和接收放入不同线程

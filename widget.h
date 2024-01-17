@@ -56,6 +56,7 @@ private slots:
     void on_clearWeighLog_clicked();
 
 private:
+    QString currentUserName;
     Ui::Widget *ui;
 };
 

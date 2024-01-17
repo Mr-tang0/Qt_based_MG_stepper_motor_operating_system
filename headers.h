@@ -22,8 +22,15 @@
 #include <QByteArray>
 
 #include <QCryptographicHash>
+#include <QMessageBox>
+#include "qtmaterialappbar.h"
+//#include "qtmaterialoverlaywidget.h"
+#include "qtmaterialautocomplete.h"
+#include "qtmaterialsnackbar.h"
 
 //#include <QWebEngineView>
+#include<QAction>
+
 
 struct motorDetails
 {
