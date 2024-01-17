@@ -12,12 +12,10 @@ QList<motor*> Widget::myMotorList = {};
 void Widget::initSystem()
 {
     QString rootPath  = QCoreApplication::applicationDirPath();
-    loadMotorDetails(rootPath+"/motor_log.json");
-    loadWeighDetails(rootPath+"/weigh_log.json");
+    loadMotorDetails(rootPath+"/log/motor_log.json");
+    loadWeighDetails(rootPath+"/log/weigh_log.json");
     refreshUi();
     buttonTwinkling("motor_1","yellow",true);
-
-
 }
 void Widget::refreshUi()
 {
@@ -35,6 +33,11 @@ void Widget::refreshUi()
         findChild<QLineEdit*>("powerControl_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.powerControl));
     }
     findChild<QLineEdit*>("weighAddress")->setText(QString::number(myweigh->address));
+
+    ui->weightText->clear();
+    for (int i =0;i<myweigh->weighLogList.length();i++) {
+        ui->weightText->append(myweigh->weighLogList[i]);
+    }
 }
 
 void Widget::saveMotor(int index,QString filePath)
@@ -58,8 +61,38 @@ void Widget::saveMotor(int index,QString filePath)
 }
 
 
-void Widget::saveWeigh(int index,QString filePath)
+void Widget::saveWeigh(QString filePath,bool clear)
 {
+    QFile weighfile(filePath);
+    weighfile.open(QIODevice::ReadOnly);
+    QByteArray jsonData = weighfile.readAll();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+    QJsonObject Object = jsonDoc.object();
+    weighfile.close();
+
+    Object["weighIndex"] = myweigh->address;
+
+    QString currentTime = QTime::currentTime().toString();
+    QString currentDate = QDateTime::currentDateTime().toString("yyyy-MM-dd");
+
+    QString dateLog = QString::number(myweigh->currentWeight)+QStringLiteral("_kg_%1_%2").arg(currentDate).arg(currentTime);
+    Object["leastWeight"] = dateLog;
+
+
+    QJsonArray weightLog = Object["weightLog"].toArray();
+    weightLog.append(dateLog);
+
+    if(clear)weightLog = {};
+
+    ui->weightText->append(dateLog);
+    Object["weightLog"] = weightLog;
+
+    jsonDoc.setObject(Object);
+    QString temp  = jsonDoc.toJson();
+    weighfile.open(QIODevice::WriteOnly);
+    weighfile.write(temp.toUtf8());
+    weighfile.close();
+
 
 }
 
@@ -149,8 +182,10 @@ void Widget::loadWeighDetails(QString filePath)
     QJsonObject jsonObject = jsonDoc.object();
     motorfile.close();
 
-    myweigh->address = jsonObject["address"].toInt();
-
+    myweigh->address = jsonObject["weighIndex"].toInt();
+    for (int i =0;i<jsonObject["weightLog"].toArray().size();i++) {
+        myweigh->weighLogList.append(jsonObject["weightLog"].toArray()[i].toString());
+    }
 
 
 }

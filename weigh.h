@@ -15,6 +15,7 @@ public:
 
     int address;
     double currentWeight;
+    QList<QString> weighLogList;
 
     QByteArray buildData(int weighAddress,QString data,bool optWork);
     QByteArray CRC16(QByteArray data);

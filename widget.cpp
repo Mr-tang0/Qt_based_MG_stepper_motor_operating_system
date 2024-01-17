@@ -1,15 +1,18 @@
 #include "widget.h"
 #include "ui_widget.h" 
 #include "portui.h"
+#include "login.h"
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    this->setWindowTitle("mainWindow");
+    this->setWindowTitle("控制");
+    Login *l = new Login;
+    l->show();
     portUi *portui = new portUi;
-    portui->show();
+    //portui->show();
     connect(portui,&portUi::connected,[=](bool connectFlag){
         if(connectFlag)
         this->show();
@@ -23,7 +26,7 @@ Widget::Widget(QWidget *parent) :
     newworker->openReseiveChannal();//开接收
 
     QString rootPath  = QCoreApplication::applicationDirPath();
-    loadMotorDetails(rootPath+"/motor_log.json");
+
     initSystem();
 
 
@@ -52,7 +55,9 @@ Widget::Widget(QWidget *parent) :
             }
             else{
                 setBtn->setText("更改设置");
-                saveMotor(i,rootPath+"/motor_log.json");
+
+                saveMotor(i,rootPath+"/log/motor_log.json");
+
                 setBtn->setStyleSheet("background-color: white");
                 //关禁止，保存
                 findChild<QLineEdit*>("motorName_"+QString::number(i+1))->setEnabled(false);
@@ -119,14 +124,16 @@ Widget::Widget(QWidget *parent) :
         connect(deletebtn,&QPushButton::clicked,[=](){
             myMotorList.removeOne(myMotorList[i]);
             myMotorList.append(new motor);
+            myMotorList[i]->detail.motorname = "null";
             refreshUi();
-            saveMotor(i,rootPath+"/motor_log.json");
+            saveMotor(i,rootPath+"/log/motor_log.json");
         });
     }
 
     connect(newworker,&Worker::currentWeight,[=](int,double weight){
         ui->weightDisplay->setText(QString::number(weight));
         ui->weightDisplay->setStyleSheet("background-color:white");
+        myweigh->currentWeight = weight;
     });
     connect(newworker,&Worker::weighError,[=](int address){
         ui->weightText->append(QStringLiteral("%1称重模块错误").arg(QString::number(address)));
@@ -177,7 +184,8 @@ void Widget::on_refreshWeigh_clicked()
 
 void Widget::on_saveWeight_clicked()
 {
-    saveWeigh(0,"");
+    QString rootPath  = QCoreApplication::applicationDirPath();
+    saveWeigh(rootPath+"/log/weigh_log.json",false);
 }
 
 void Widget::on_weighShelling_clicked()
@@ -190,4 +198,11 @@ void Widget::on_weighShelling_clicked()
         myweigh->shelling(myweigh->address,false);
         ui->weighShelling->setText("去皮");
     }
+}
+
+void Widget::on_clearWeighLog_clicked()
+{
+    QString rootPath  = QCoreApplication::applicationDirPath();
+    saveWeigh(rootPath+"/log/weigh_log.json",true);
+    ui->weightText->clear();
 }

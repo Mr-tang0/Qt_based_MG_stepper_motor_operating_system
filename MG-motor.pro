@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += serialport
+#QT       += webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -32,7 +33,8 @@ SOURCES += \
         widget.cpp \
     weigh.cpp \
     motor.cpp \
-    worker.cpp
+    worker.cpp \
+    login.cpp
 
 HEADERS += \
     headers.h \
@@ -40,11 +42,13 @@ HEADERS += \
         widget.h \
     weigh.h \
     motor.h \
-    worker.h
+    worker.h \
+    login.h
 
 FORMS += \
         portui.ui \
-        widget.ui
+        widget.ui \
+    login.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -6,19 +6,20 @@ motor::motor(QObject *parent) : QObject(parent)
     //导入配置文件
     QString rootPath  = QCoreApplication::applicationDirPath();
 
-    QFile motorfile(rootPath+"/motor_command.json");
+    QFile motorfile(rootPath+"/log/motor_command.json");
 
     if(!motorfile.open(QIODevice::ReadOnly))
     {
-        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/motor_command.json");
+        qDebug()<<QStringLiteral("配置文件缺失1：'%1'").arg(rootPath+"/log/motor_command.json");
     }
     else
     {
         QByteArray jsonData = motorfile.readAll();
         QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
         motorCmdObject = jsonDoc.object();
-        motorfile.close();
+
     }
+    motorfile.close();
 }
 
 bool motor::motorOpen(bool open)

@@ -7,7 +7,7 @@ weigh::weigh(QObject *parent) : QObject(parent)
 //    QFile weighfile(rootPath+"/weigh_command.json");
 //    if(!weighfile.open(QIODevice::ReadOnly))
 //    {
-//        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/weigh_command.json");
+//        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/log/weigh_command.json");
 //    }
 //    else
 //    {

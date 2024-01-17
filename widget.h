@@ -31,7 +31,7 @@ public:
     void refreshUi();
 
     void saveMotor(int index,QString filePath);
-    void saveWeigh(int index,QString filePath);
+    void saveWeigh(QString filePath,bool clear);
 
     static QSerialPort *myPort;
     static Worker *newworker;
@@ -52,6 +52,8 @@ private slots:
     void on_saveWeight_clicked();
 
     void on_weighShelling_clicked();
+
+    void on_clearWeighLog_clicked();
 
 private:
     Ui::Widget *ui;

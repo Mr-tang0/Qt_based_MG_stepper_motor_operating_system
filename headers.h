@@ -16,6 +16,15 @@
 #include<qmath.h>
 #include<QPushButton>
 
+#include<QTime>
+#include<QDateTime>
+
+#include <QByteArray>
+
+#include <QCryptographicHash>
+
+//#include <QWebEngineView>
+
 struct motorDetails
 {
     QString motorname;
