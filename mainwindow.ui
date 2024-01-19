@@ -90,60 +90,55 @@
      </item>
     </layout>
    </widget>
-   <widget class="QtMaterialFlatButton" name="test">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>460</y>
-      <width>161</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>材料测试</string>
-    </property>
-   </widget>
-   <widget class="QtMaterialFlatButton" name="login">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>40</x>
       <y>370</y>
-      <width>161</width>
-      <height>71</height>
+      <width>171</width>
+      <height>361</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(184, 255, 217);</string>
-    </property>
-    <property name="text">
-     <string>账号登录</string>
-    </property>
-   </widget>
-   <widget class="QtMaterialFlatButton" name="help">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>560</y>
-      <width>161</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>帮助文档</string>
-    </property>
-   </widget>
-   <widget class="QtMaterialFlatButton" name="about">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>650</y>
-      <width>161</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>关于软件</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QtMaterialFlatButton" name="login">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(184, 255, 217);</string>
+       </property>
+       <property name="text">
+        <string>账号登录</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QtMaterialFlatButton" name="test">
+       <property name="text">
+        <string>材料测试</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QtMaterialFlatButton" name="systemSet">
+       <property name="text">
+        <string>系统设置</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QtMaterialFlatButton" name="help">
+       <property name="text">
+        <string>帮助文档</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QtMaterialFlatButton" name="about">
+       <property name="text">
+        <string>关于软件</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -152,7 +147,7 @@
      <x>0</x>
      <y>0</y>
      <width>1524</width>
-     <height>30</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

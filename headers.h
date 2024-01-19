@@ -6,6 +6,8 @@
 #include<QDebug>
 
 #include <QFile>
+#include <QTextStream>
+#include <QButtonGroup>
 #include<QJsonDocument>
 #include<QJsonObject>
 #include<QJsonArray>
@@ -41,6 +43,9 @@
 #include <QVector>
 #include <QPainter>
 
+#include<QLineEdit>
+
+
 struct motorDetails
 {
     QString motorname;
@@ -53,6 +58,28 @@ struct motorDetails
 
     double angleControl;
     double angleIncrement;
+
+    double currentAngle;
+
+};
+
+struct weighDetails
+{
+    int address;
+
+    double currentWeight;
+
+    QList<QString> weighLogList;
+
+
+};
+
+struct materialDetails
+{
+    double materialCrossSectional;
+
+
+
 };
 
 

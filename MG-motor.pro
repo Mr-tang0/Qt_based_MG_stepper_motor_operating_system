@@ -32,43 +32,44 @@ INCLUDEPATH+=$$PWD/libs/Include
 CONFIG += c++11
 
 SOURCES += \
-    hleper.cpp \
         main.cpp \
     mainfunction.cpp \
-    mainuitest.cpp \
     mainwindow.cpp \
-    portui.cpp \
-    qbout.cpp \
-    signup.cpp \
         widget.cpp \
     weigh.cpp \
     motor.cpp \
     worker.cpp \
-    login.cpp
+    testfunction.cpp \
+    login_window.cpp \
+    portui_window.cpp \
+    about_window.cpp \
+    signup_window.cpp \
+    systemset_window.cpp \
+    test_window.cpp
 
 HEADERS += \
     headers.h \
-    hleper.h \
-    mainuitest.h \
     mainwindow.h \
-    portui.h \
-    qbout.h \
-    signup.h \
         widget.h \
     weigh.h \
     motor.h \
     worker.h \
-    login.h
+    about_window.h \
+    login_window.h \
+    signup_window.h \
+    systemset_window.h \
+    test_window.h \
+    portui_window.h
 
 FORMS += \
-    hleper.ui \
-    mainuitest.ui \
     mainwindow.ui \
-        portui.ui \
-    qbout.ui \
-    signup.ui \
         widget.ui \
-    login.ui
+    login_window.ui \
+    portui_window.ui \
+    about_window.ui \
+    signup_window.ui \
+    systemset_window.ui \
+    test_window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

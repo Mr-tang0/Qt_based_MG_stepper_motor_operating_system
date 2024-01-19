@@ -13,6 +13,9 @@ public:
     void getWeight(int weighAddress);
     void shelling(int weighAddress,bool shell);
 
+
+    weighDetails detail;
+
     int address;
     double currentWeight;
     QList<QString> weighLogList;

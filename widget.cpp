@@ -1,7 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h" 
-#include "portui.h"
-#include "login.h"
+#include "portui_window.h"
+#include "login_window.h"
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -19,7 +19,7 @@ Widget::Widget(QWidget *parent) :
         currentUserName = userName;
     });
 
-    connect(portui,&portUi::connected,[=](bool connectFlag){
+    connect(portui,&portUi::portConnected,[=](bool connectFlag){
         if(connectFlag)this->show();
         else this->close();
         ui->label->setText(QStringLiteral("当前连接：%1 波特率：%2%3").arg(myPort->portName()).arg(myPort->baudRate()).arg(currentUserName));

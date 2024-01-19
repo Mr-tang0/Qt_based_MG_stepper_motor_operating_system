@@ -3,14 +3,15 @@
 
 #include <QMainWindow>
 #include "headers.h"
-#include "mainuitest.h"
+#include "test_window.h"
 
-#include "login.h"
-#include "signup.h"
-#include "hleper.h"
-#include "qbout.h"
-#include "signup.h"
+#include "login_window.h"
+#include "signup_window.h"
 
+#include "about_window.h"
+#include "signup_window.h"
+#include "systemset_window.h"
+#include "portui_window.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,10 +24,16 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    QWidget *test,*empty,*login,*helper,*about,*signUp;
+
+    QWidget *test,*empty,*helper,*about,*system;//初始化各个界面
+    Login *login;
+    signup *signUp;
+
+    void delay(int delayTime);
 
 
 private slots:
+
     void on_login_clicked();
 
     void on_test_clicked();
@@ -35,8 +42,15 @@ private slots:
 
     void on_about_clicked();
 
+    void signUping();
+
+    void on_systemSet_clicked();
+
+
 private:
+    QtMaterialSnackbar  *const m_snackbar;
     Ui::MainWindow *ui;
+    QString currentUserName;
 };
 
 #endif // MAINWINDOW_H
