@@ -32,9 +32,13 @@ INCLUDEPATH+=$$PWD/libs/Include
 CONFIG += c++11
 
 SOURCES += \
+    hleper.cpp \
         main.cpp \
     mainfunction.cpp \
+    mainuitest.cpp \
+    mainwindow.cpp \
     portui.cpp \
+    qbout.cpp \
     signup.cpp \
         widget.cpp \
     weigh.cpp \
@@ -44,7 +48,11 @@ SOURCES += \
 
 HEADERS += \
     headers.h \
+    hleper.h \
+    mainuitest.h \
+    mainwindow.h \
     portui.h \
+    qbout.h \
     signup.h \
         widget.h \
     weigh.h \
@@ -53,7 +61,11 @@ HEADERS += \
     login.h
 
 FORMS += \
+    hleper.ui \
+    mainuitest.ui \
+    mainwindow.ui \
         portui.ui \
+    qbout.ui \
     signup.ui \
         widget.ui \
     login.ui

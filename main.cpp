@@ -1,13 +1,14 @@
-#include "widget.h"
 #include <QApplication>
+#include "mainwindow.h"
+#include "mainuitest.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Widget w;
-    //w.setWindowFlag(Qt::FramelessWindowHint);
-    //w.setAttribute(Qt::WA_TranslucentBackground);
-    //w.show();
+
+    MainWindow w;
+
+    w.show();
 
     return a.exec();
 }

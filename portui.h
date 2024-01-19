@@ -4,8 +4,6 @@
 #include <QWidget>
 #include "headers.h"
 
-
-
 namespace Ui {
 class portUi;
 }

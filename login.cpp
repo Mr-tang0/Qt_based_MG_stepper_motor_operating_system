@@ -77,7 +77,6 @@ void Login::on_loginBtn_clicked()
     if(hashPassWord==loginObject[hashUserName].toString())
     {
         m_snackbar->addMessage(QString("登录成功!"));
-        this->close();
         emit Logined(userName);
         return;
     }
@@ -94,7 +93,7 @@ void Login::on_signUpBtn_clicked()
 
     signup *w = new signup;
     w->show();
-    //this->close();
+
     connect(w,&signup::signUpDone,[=](QString userName,QString passWord){
         QString rootPath  = QCoreApplication::applicationDirPath();
         QFile file(rootPath+"/users/users.users");

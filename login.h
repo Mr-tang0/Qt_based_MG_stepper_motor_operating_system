@@ -30,6 +30,7 @@ private slots:
 
 signals:
     void Logined(QString currentUser);
+
 private:
     Ui::Login *ui;
     QJsonObject loginObject;

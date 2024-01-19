@@ -23,14 +23,23 @@
 
 #include <QCryptographicHash>
 #include <QMessageBox>
-#include "qtmaterialappbar.h"
-//#include "qtmaterialoverlaywidget.h"
-#include "qtmaterialautocomplete.h"
+
+
 #include "qtmaterialsnackbar.h"
+#include "qtmaterialflatbutton.h"
 
 //#include <QWebEngineView>
 #include<QAction>
 
+#include<QHBoxLayout>
+#include<QStackedLayout>
+#include<QListWidget>
+
+#include <QList>
+#include <QPointF>
+#include <QPainterPath>
+#include <QVector>
+#include <QPainter>
 
 struct motorDetails
 {
