@@ -14,10 +14,15 @@ public:
     QByteArray buildData(QString command,QString messageData);
 
     QByteArray verifySUM(QString data);
+
+    void writePram();
+
     bool motorOpen(bool open);
     void motorPowerMove(bool direction);
     void stopMove();
     void moveToSetPosition();
+
+
 
     motorDetails detail={"",0,0.,0.,0.,0.,0.};
     bool motorOpenFlag = false;

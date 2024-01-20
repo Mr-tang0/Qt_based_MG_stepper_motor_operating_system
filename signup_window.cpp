@@ -23,18 +23,18 @@ void signup::on_confirm_clicked()
 
     if(userName=="" or passWord=="" or passWord2=="")
     {
-        m_snackbar->addMessage("用户名或密码不能为空");
+        m_snackbar->addMessage(emptyEdit[ChineseOrEnglish]);
         return;
     }
 
     if(passWord!=passWord2)
     {
-        m_snackbar->addMessage("两次密码输入不一致");
+        m_snackbar->addMessage(inconsistency[ChineseOrEnglish]);
         return;
     }
     if(passWord.length()<=5)
     {
-        m_snackbar->addMessage("密码不少于6位");
+        m_snackbar->addMessage(shortPassword[ChineseOrEnglish]);
         return;
     }
     else

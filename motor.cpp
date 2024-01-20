@@ -70,6 +70,21 @@ void motor::stopMove()
     Widget::newworker->sendMessage(stopData);
 
 }
+
+void motor::writePram()
+{
+    int address = detail.motorID;
+    double SpeedRate = detail.maxSpeed;
+
+    SpeedRate = 5;
+
+    double pitch = detail.pitch;
+
+    pitch = 0.01;
+
+    int angle = 360*SpeedRate/pitch;
+    qDebug()<<angle;
+}
 void motor::moveToSetPosition()
 {
 

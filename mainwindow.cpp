@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+//mainUiTest *MainWindow::test = new mainUiTest();
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_snackbar(new QtMaterialSnackbar),
@@ -10,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     test = new mainUiTest();
+
     empty = new QWidget();
     login = new Login();
 //    helper = new Helper();
@@ -36,21 +39,40 @@ MainWindow::MainWindow(QWidget *parent) :
     signUp->hide();
     system->hide();
 
-    ui->test->setEnabled(false);
-    ui->systemSet->setEnabled(false);
+//    ui->test->setEnabled(false);
+//    ui->systemSet->setEnabled(false);
 
     ui->widget->setLayout(layout);
 
+    //查询登录若有注册要求则跳注册
     connect(login,SIGNAL(signUping()),this,SLOT(signUping()));
 
-    portUi *portui = new portUi;
 
+    //登录成功跳转表单设置，同时开权限试验
     connect(login,&Login::Logined,this,[=](QString userName)
     {
-        portui->show();
+        login->hide();
+        ui->label->setText(userName);
         currentUserName = userName;
         ui->test->setEnabled(true);
         ui->systemSet->setEnabled(true);
+        system->show();
+    });
+
+    //增加试验表单
+    connect(system,&systemSet::saveSet,[=](QString rootPath){
+        system->saveLabel(rootPath);
+    });
+
+    //取消增加试验
+    connect(system,&systemSet::cancelSet,[=](){on_test_clicked();});
+
+    //新建试验，原界面更新一点问题，新建界面会掉信号绑定
+    connect(test,&mainUiTest::newTest,[=](){
+//        layout->removeWidget(system);
+//        system = new systemSet();
+//        layout->addWidget(system);
+        on_systemSet_clicked();
     });
 }
 
@@ -76,7 +98,7 @@ void MainWindow::on_test_clicked()
     test->hide();
     login->hide();
     test->show();
-    helper->hide();
+    //helper->hide();
     about->hide();
     signUp->hide();
     system->hide();
@@ -100,7 +122,7 @@ void MainWindow::on_about_clicked()
     test->hide();
     login->hide();
     test->hide();
-    helper->hide();
+    //helper->hide();
     about->show();
     signUp->hide();
     system->hide();
@@ -126,11 +148,11 @@ void MainWindow::signUping()
 
         if(!login->loginObject[hashUserName].isNull())
         {
-            signUp->m_snackbar->addMessage("用户已存在");
+            signUp->m_snackbar->addMessage(signUpError[ChineseOrEnglish]);
         }
         else
         {
-            signUp->m_snackbar->addMessage("注册成功");
+            signUp->m_snackbar->addMessage(signUpDone[ChineseOrEnglish]);
             delay(500);
 
             signUp->hide();
@@ -148,44 +170,8 @@ void MainWindow::signUping()
             file.close();
         }
 
-
     });
 
-
-
-
-    //    signup *w = new signup;
-    //    w->show();
-
-    //    connect(w,&signup::signUpDone,[=](QString userName,QString passWord){
-    //        QString rootPath  = QCoreApplication::applicationDirPath();
-    //        QFile file(rootPath+"/users/users.users");
-
-    //        QString hashPassWord = hashEncode(passWord);
-    //        QString hashUserName = hashEncode(userName);
-    //        if(!loginObject[hashUserName].isNull())
-    //        {
-    //            w->m_snackbar->addMessage("用户已存在");
-    //        }
-    //        else
-    //        {
-    //            w->close();
-    //            //this->show();
-    //            ui->userName->setText(userName);
-    //            ui->passWord->clear();
-
-    //            loginObject[hashUserName] = hashPassWord;
-    //            QJsonDocument jsonDoc;
-    //            jsonDoc.setObject(loginObject);
-    //            QString temp  = jsonDoc.toJson();
-    //            file.open(QIODevice::WriteOnly);
-    //            file.write(temp.toUtf8());
-    //            file.close();
-
-    //            m_snackbar->addMessage("注册成功");
-
-    //        }
-    //    });
 }
 
 void MainWindow::on_systemSet_clicked()

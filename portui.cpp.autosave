@@ -1,6 +1,6 @@
 #include "portui.h"
 #include "ui_portui.h"
-#include "widget.h"
+#include "test.h"
 
 
 portUi::portUi(QWidget *parent) :
@@ -33,9 +33,10 @@ void portUi::findAvailablePort()
 
 bool portUi::connectSerialPort(int baundRate,QString portName)
 {
-    Widget::myPort->setPortName(portName);
-    Widget::myPort->setBaudRate(baundRate);
-    bool openFlag = Widget::myPort->open(QIODevice::ReadWrite);
+    mainUiTest::myPort->setPortName(portName);
+    mainUiTest::myPort->setBaudRate(baundRate);
+
+    bool openFlag = mainUiTest::myPort->open(QIODevice::ReadWrite);
     return openFlag;
 }
 
@@ -57,10 +58,10 @@ void portUi::on_connect_clicked()
         ui->text->setText(QStringLiteral("当前连接：%1\n波特率：%2").arg(portName).arg(baundRate));
     }
     else {
-        Widget::myPort->close();
+        mainUiTest::myPort->close();
         ui->connect->setStyleSheet("background-color: white");
         ui->text->setText("已断开");
     }
 
-    emit connected(openFlag);
+    emit portConnected(openFlag);
 }

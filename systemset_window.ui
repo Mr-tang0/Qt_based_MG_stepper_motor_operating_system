@@ -14,93 +14,146 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="11" column="2" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+   <item row="0" column="3" colspan="3">
+    <widget class="QLabel" name="label_19">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+     </property>
+     <property name="text">
+      <string>试验表单填写</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="6">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="submitBtn">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>40</height>
-        </size>
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
        </property>
        <property name="text">
-        <string>提交作业</string>
+        <string>实验人：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLineEdit" name="ExperimenterEdit">
+       <property name="enabled">
+        <bool>false</bool>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelBtn">
        <property name="minimumSize">
         <size>
-         <width>150</width>
-         <height>40</height>
+         <width>100</width>
+         <height>30</height>
         </size>
-       </property>
-       <property name="text">
-        <string>取消</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLabel" name="label_3">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
        </property>
-       <property name="sizeHint" stdset="0">
+       <property name="text">
+        <string>样本编号：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="timeNumberEdit">
+       <property name="minimumSize">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>100</width>
+         <height>30</height>
         </size>
        </property>
-      </spacer>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+       </property>
+       <property name="text">
+        <string>样本材质：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="MaterialEdit">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+       </property>
+       <property name="text">
+        <string>样本样式：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="sampleEdit">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+       </property>
+       <property name="text">
+        <string>当前时间：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="currentTime">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
-   <item row="9" column="1" colspan="4">
-    <widget class="Line" name="line_2">
+   <item row="2" column="0" rowspan="2" colspan="8">
+    <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="7" column="3">
-    <widget class="QRadioButton" name="Manually">
-     <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-     </property>
-     <property name="text">
-      <string>手动加载</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
+   <item row="3" column="1" colspan="2">
     <widget class="QLabel" name="label_20">
      <property name="styleSheet">
       <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
@@ -113,17 +166,30 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="3">
-    <widget class="QRadioButton" name="Customize">
+   <item row="3" column="4" colspan="2">
+    <widget class="QLabel" name="label_8">
      <property name="styleSheet">
       <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
      </property>
      <property name="text">
-      <string>自定义</string>
+      <string>*试验加载类型：</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" rowspan="5">
+   <item row="4" column="0" colspan="2">
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2" rowspan="5">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -253,155 +319,7 @@
      </item>
     </layout>
    </item>
-   <item row="10" column="1">
-    <widget class="QLabel" name="label_7">
-     <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-     </property>
-     <property name="text">
-      <string>系统参数：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="4" rowspan="5">
-    <widget class="QStackedWidget" name="menu">
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(149, 190, 255);
-background-color: rgb(237, 255, 252);</string>
-     </property>
-     <property name="currentIndex">
-      <number>4</number>
-     </property>
-     <widget class="QWidget" name="p1"/>
-     <widget class="QWidget" name="p2"/>
-     <widget class="QWidget" name="p3"/>
-     <widget class="QWidget" name="p4"/>
-     <widget class="QWidget" name="p5"/>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="4">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-       </property>
-       <property name="text">
-        <string>实验人：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="ExperimenterEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-       </property>
-       <property name="text">
-        <string>样本编号：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="timeNumberEdit">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-       </property>
-       <property name="text">
-        <string>样本材质：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="MaterialEdit">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-       </property>
-       <property name="text">
-        <string>样本样式：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="sampleEdit">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="styleSheet">
-        <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-       </property>
-       <property name="text">
-        <string>当前时间：</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="currentTime">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="4" column="3">
+   <item row="4" column="4">
     <widget class="QRadioButton" name="Compression">
      <property name="styleSheet">
       <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
@@ -417,14 +335,23 @@ background-color: rgb(237, 255, 252);</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="4">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="4" column="6" rowspan="5">
+    <widget class="QStackedWidget" name="menu">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(149, 190, 255);
+background-color: rgb(237, 255, 252);</string>
      </property>
+     <property name="currentIndex">
+      <number>4</number>
+     </property>
+     <widget class="QWidget" name="p1"/>
+     <widget class="QWidget" name="p2"/>
+     <widget class="QWidget" name="p3"/>
+     <widget class="QWidget" name="p4"/>
+     <widget class="QWidget" name="p5"/>
     </widget>
    </item>
-   <item row="4" column="5">
+   <item row="4" column="7">
     <spacer name="horizontalSpacer_5">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -437,7 +364,107 @@ background-color: rgb(237, 255, 252);</string>
      </property>
     </spacer>
    </item>
-   <item row="11" column="1">
+   <item row="5" column="4">
+    <widget class="QRadioButton" name="stretching">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+     </property>
+     <property name="text">
+      <string>拉伸</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="4" colspan="2">
+    <widget class="QRadioButton" name="Reciprocating">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+     </property>
+     <property name="text">
+      <string>往复加载</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="4" colspan="2">
+    <widget class="QRadioButton" name="Manually">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+     </property>
+     <property name="text">
+      <string>手动加载</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="4" colspan="2">
+    <widget class="QRadioButton" name="Customize">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+     </property>
+     <property name="text">
+      <string>自定义</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" rowspan="2" colspan="8">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1" rowspan="2" colspan="2">
+    <widget class="QLabel" name="label_7">
+     <property name="styleSheet">
+      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
+     </property>
+     <property name="text">
+      <string>系统参数：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="5" rowspan="2" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QPushButton" name="portConnect">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>连接</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="portRefresh">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>刷新</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="12" column="2" rowspan="3" colspan="3">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -495,7 +522,7 @@ background-color: rgb(237, 255, 252);</string>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_5">
+        <widget class="QComboBox" name="driveBox">
          <property name="minimumSize">
           <size>
            <width>150</width>
@@ -505,7 +532,7 @@ background-color: rgb(237, 255, 252);</string>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="sensorBox">
          <property name="minimumSize">
           <size>
            <width>150</width>
@@ -545,7 +572,7 @@ background-color: rgb(237, 255, 252);</string>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="samplingRate">
+        <widget class="QLabel" name="d2w">
          <property name="styleSheet">
           <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
          </property>
@@ -582,7 +609,7 @@ background-color: rgb(237, 255, 252);</string>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_6">
+        <widget class="QComboBox" name="samplingRate">
          <property name="minimumSize">
           <size>
            <width>150</width>
@@ -595,58 +622,84 @@ background-color: rgb(237, 255, 252);</string>
      </item>
     </layout>
    </item>
-   <item row="5" column="3">
-    <widget class="QRadioButton" name="stretching">
-     <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-     </property>
-     <property name="text">
-      <string>拉伸</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="QLabel" name="label_8">
-     <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-     </property>
-     <property name="text">
-      <string>*试验加载类型：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QRadioButton" name="Reciprocating">
-     <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-     </property>
-     <property name="text">
-      <string>往复加载</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
+   <item row="13" column="5" colspan="2">
+    <widget class="QLineEdit" name="filePathEdit">
+     <property name="minimumSize">
       <size>
-       <width>40</width>
-       <height>20</height>
+       <width>0</width>
+       <height>30</height>
       </size>
      </property>
-    </spacer>
-   </item>
-   <item row="0" column="2" colspan="2">
-    <widget class="QLabel" name="label_19">
-     <property name="styleSheet">
-      <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-     </property>
-     <property name="text">
-      <string>试验表单填写</string>
-     </property>
     </widget>
+   </item>
+   <item row="14" column="5" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="submitBtn">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>提交作业</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelBtn">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>取消</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

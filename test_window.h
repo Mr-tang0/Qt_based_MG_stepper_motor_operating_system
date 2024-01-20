@@ -54,6 +54,17 @@ private slots:
 
     void on_startTest_clicked();
 
+    void on_newTest_clicked();
+
+    void on_saveTest_clicked();
+
+    void on_stopTest_clicked();
+
+    void on_emergency_clicked();
+
+signals:
+    void newTest();
+
 private:
     QPointF zero;
     int frameWidth,frameHeight;

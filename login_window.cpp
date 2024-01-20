@@ -71,18 +71,18 @@ void Login::on_loginBtn_clicked()
 
     if(userName=="" or passWord=="")
     {
-        m_snackbar->addMessage(QString("请输入用户名或密码!"));
+        m_snackbar->addMessage(emptyEdit[ChineseOrEnglish]);
         return;
     }
     if(hashPassWord==loginObject[hashUserName].toString())
     {
-        m_snackbar->addMessage(QString("登录成功!"));
+        m_snackbar->addMessage(logined[ChineseOrEnglish]);
         emit Logined(userName);
         return;
     }
     else
     {
-        m_snackbar->addMessage(QString("用户名或密码错误!"));
+        m_snackbar->addMessage(unlogined[ChineseOrEnglish]);
     }
 
 }
@@ -91,39 +91,6 @@ void Login::on_loginBtn_clicked()
 void Login::on_signUpBtn_clicked()
 {
     emit signUping();
-
-//    signup *w = new signup;
-//    w->show();
-
-//    connect(w,&signup::signUpDone,[=](QString userName,QString passWord){
-//        QString rootPath  = QCoreApplication::applicationDirPath();
-//        QFile file(rootPath+"/users/users.users");
-
-//        QString hashPassWord = hashEncode(passWord);
-//        QString hashUserName = hashEncode(userName);
-//        if(!loginObject[hashUserName].isNull())
-//        {
-//            w->m_snackbar->addMessage("用户已存在");
-//        }
-//        else
-//        {
-//            w->close();
-//            //this->show();
-//            ui->userName->setText(userName);
-//            ui->passWord->clear();
-
-//            loginObject[hashUserName] = hashPassWord;
-//            QJsonDocument jsonDoc;
-//            jsonDoc.setObject(loginObject);
-//            QString temp  = jsonDoc.toJson();
-//            file.open(QIODevice::WriteOnly);
-//            file.write(temp.toUtf8());
-//            file.close();
-
-//            m_snackbar->addMessage("注册成功");
-
-//        }
-//    });
 }
 
 

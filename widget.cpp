@@ -211,3 +211,5 @@ void Widget::on_clearWeighLog_clicked()
     saveWeigh(rootPath+"/log/weigh_log.json",true);
     ui->weightText->clear();
 }
+
+

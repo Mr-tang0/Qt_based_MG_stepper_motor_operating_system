@@ -25,9 +25,13 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    QWidget *test,*empty,*helper,*about,*system;//初始化各个界面
+    QWidget *empty;//初始化各个界面
+
     Login *login;
     signup *signUp;
+    systemSet *system;
+    Qbout *about;
+    mainUiTest *test;
 
     void delay(int delayTime);
 
