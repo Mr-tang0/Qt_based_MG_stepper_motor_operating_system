@@ -1,5 +1,5 @@
 #include "widget.h"
-#include "ui_widget.h" 
+#include "ui_widget.h"
 #include "portui_window.h"
 #include "login_window.h"
 
@@ -89,41 +89,41 @@ Widget::Widget(QWidget *parent) :
         });
 
         //运动模块
-        QPushButton *openMotor = findChild<QPushButton*>("openMotor_"+QString::number(i+1));
-        connect(openMotor,&QPushButton::clicked,[=](){
-            if(openMotor->text()=="开启电机"){
-                if(myMotorList[i]->motorOpen(true)){
-                    openMotor->setText("关闭电机");
-                    openMotor->setStyleSheet("background-color: yellow");
-                }
-            }
-            else {
-                if(!myMotorList[i]->motorOpen(false)){
-                    openMotor->setText("开启电机");
-                    openMotor->setStyleSheet("background-color: white");
-                }
-            }
-        });
+//        QPushButton *openMotor = findChild<QPushButton*>("openMotor_"+QString::number(i+1));
+//        connect(openMotor,&QPushButton::clicked,[=](){
+//            if(openMotor->text()=="开启电机"){
+//                if(myMotorList[i]->motorOpen(true)){
+//                    openMotor->setText("关闭电机");
+//                    openMotor->setStyleSheet("background-color: yellow");
+//                }
+//            }
+//            else {
+//                if(!myMotorList[i]->motorOpen(false)){
+//                    openMotor->setText("开启电机");
+//                    openMotor->setStyleSheet("background-color: white");
+//                }
+//            }
+//        });
 
-        QPushButton *cwMove = findChild<QPushButton*>("cwMove_"+QString::number(i+1));
-        connect(cwMove,&QPushButton::clicked,[=](){
-            myMotorList[i]->motorPowerMove(true);
-        });
+//        QPushButton *cwMove = findChild<QPushButton*>("cwMove_"+QString::number(i+1));
+//        connect(cwMove,&QPushButton::clicked,[=](){
+//            myMotorList[i]->motorPowerMove(true);
+//        });
 
-        QPushButton *stop = findChild<QPushButton*>("motorStop_"+QString::number(i+1));
-        connect(stop,&QPushButton::clicked,[=](){
-            myMotorList[i]->stopMove();
-        });
+//        QPushButton *stop = findChild<QPushButton*>("motorStop_"+QString::number(i+1));
+//        connect(stop,&QPushButton::clicked,[=](){
+//            myMotorList[i]->stopMove();
+//        });
 
-        QPushButton *ccwMove = findChild<QPushButton*>("ccwMove_"+QString::number(i+1));
-        connect(ccwMove,&QPushButton::clicked,[=](){
-            myMotorList[i]->motorPowerMove(false);
-        });
+//        QPushButton *ccwMove = findChild<QPushButton*>("ccwMove_"+QString::number(i+1));
+//        connect(ccwMove,&QPushButton::clicked,[=](){
+//            myMotorList[i]->motorPowerMove(false);
+//        });
 
-        QPushButton *moveTo = findChild<QPushButton*>("moveTo_"+QString::number(i+1));
-        connect(moveTo,&QPushButton::clicked,[=](){
-            myMotorList[i]->moveToSetPosition();
-        });
+//        QPushButton *moveTo = findChild<QPushButton*>("moveTo_"+QString::number(i+1));
+//        connect(moveTo,&QPushButton::clicked,[=](){
+//            myMotorList[i]->moveToSetPosition();
+//        });
 
         QPushButton *deletebtn = findChild<QPushButton*>("delete_"+QString::number(i+1));
         connect(deletebtn,&QPushButton::clicked,[=](){

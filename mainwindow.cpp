@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+//    motorCMD cmd;
+//    qDebug()<<cmd.clearMotorErrorCMD.arg(12);
 
     test = new mainUiTest();
 
@@ -54,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
         login->hide();
         ui->label->setText(userName);
         currentUserName = userName;
+        ui->label->setText(currentUserName);
         ui->test->setEnabled(true);
         ui->systemSet->setEnabled(true);
         system->show();

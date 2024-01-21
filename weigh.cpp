@@ -2,20 +2,6 @@
 #include "widget.h"
 weigh::weigh(QObject *parent) : QObject(parent)
 {
-    //以下代码暂时为用到
-//    QString rootPath  = QCoreApplication::applicationDirPath();
-//    QFile weighfile(rootPath+"/weigh_command.json");
-//    if(!weighfile.open(QIODevice::ReadOnly))
-//    {
-//        qDebug()<<QStringLiteral("配置文件缺失：'%1'").arg(rootPath+"/log/weigh_command.json");
-//    }
-//    else
-//    {
-//        QByteArray jsonData = weighfile.readAll();
-//        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-//        weighObject = jsonDoc.object();
-//        weighfile.close();
-//    }
 
 }
 

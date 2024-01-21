@@ -1,6 +1,8 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
+#include"command.h"
+
 #include<QtSerialPort/QSerialPort>
 #include<QtSerialPort/QSerialPortInfo>
 #include<QDebug>
@@ -55,12 +57,12 @@ struct motorDetails
 
     double powerControl;
 
-    double speedControl;
+    double speed;
 
     double maxSpeed;//最大速度设置
     double pitch;//螺距
 
-    double angleControl;
+    double length;//运动距离
     double angleIncrement;
 
     double currentAngle;
@@ -115,7 +117,9 @@ static QList<QString> alreadyHaveFile = {"当前位置已存在文件,不可覆�
 
 static QList<QString>openAndClosee ={ "当前位置已存在文件,不可覆盖！","The file already exists in the current location and cannot be overwritten!"};
 
-static QList<QString> startTestFlag = {"测试开始！",""};
+static QList<QString> startTestFlag = {"测试开始！","The test begins!"};
+static QList<QString> stopTestFlag = {"测试已停止！","Testing has been stopped!"};
+
 static int ChineseOrEnglish = 0; //预料切换
 
 

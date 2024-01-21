@@ -27,9 +27,9 @@ void Widget::refreshUi()
 
         findChild<QLineEdit*>("motorName_"+QString::number(i+1))->setText(myMotorList[i]->detail.motorname);
         findChild<QLineEdit*>("motorID_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.motorID));
-        findChild<QLineEdit*>("setSpeed_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.speedControl));
+        findChild<QLineEdit*>("setSpeed_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.speed));
         findChild<QLineEdit*>("maxSpeed_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.maxSpeed));
-        findChild<QLineEdit*>("setPositon_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.angleControl));
+        findChild<QLineEdit*>("setPositon_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.length));
         findChild<QLineEdit*>("powerControl_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.powerControl));
     }
     findChild<QLineEdit*>("weighAddress")->setText(QString::number(myweigh->address));
@@ -50,9 +50,9 @@ void Widget::saveMotor(int index,QString filePath)
     myMotorList[index]->detail.motorname = findChild<QLineEdit*>("motorName_"+QString::number(index+1))->text();
     myMotorList[index]->detail.motorID = findChild<QLineEdit*>("motorID_"+QString::number(index+1))->text().toInt();
 
-    myMotorList[index]->detail.speedControl = findChild<QLineEdit*>("setSpeed_"+QString::number(index+1))->text().toDouble();
+    myMotorList[index]->detail.speed = findChild<QLineEdit*>("setSpeed_"+QString::number(index+1))->text().toDouble();
     myMotorList[index]->detail.maxSpeed = findChild<QLineEdit*>("maxSpeed_"+QString::number(index+1))->text().toDouble();
-    myMotorList[index]->detail.angleControl = findChild<QLineEdit*>("setPositon_"+QString::number(index+1))->text().toDouble();
+    myMotorList[index]->detail.length = findChild<QLineEdit*>("setPositon_"+QString::number(index+1))->text().toDouble();
     myMotorList[index]->detail.powerControl = findChild<QLineEdit*>("powerControl_"+QString::number(index+1))->text().toDouble();
     qDebug()<<findChild<QLineEdit*>("motorName_"+QString::number(index+1))->text();
 
@@ -150,10 +150,10 @@ void Widget::saveJson(QList<motor*> MotorList,QString filePath)
 
         Object["powerControl_"+QString::number(i)] = MotorList[i]->detail.powerControl;
 
-        Object["speedControl_"+QString::number(i)] = MotorList[i]->detail.speedControl;
+        Object["speedControl_"+QString::number(i)] = MotorList[i]->detail.speed;
         Object["maxSpeed_"+QString::number(i)] = MotorList[i]->detail.maxSpeed;
 
-        Object["angleControl_"+QString::number(i)] = MotorList[i]->detail.angleControl;
+        Object["angleControl_"+QString::number(i)] = MotorList[i]->detail.length;
         Object["angleIncrement_"+QString::number(i)] = MotorList[i]->detail.angleIncrement;
     }
     Object["motorNumber"] = MotorList.length();

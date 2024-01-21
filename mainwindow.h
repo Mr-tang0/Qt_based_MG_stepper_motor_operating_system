@@ -25,6 +25,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
     QWidget *empty;//初始化各个界面
 
     Login *login;

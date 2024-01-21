@@ -32,25 +32,27 @@ INCLUDEPATH+=$$PWD/libs/Include
 CONFIG += c++11
 
 SOURCES += \
+    decodethread.cpp \
+    formfill.cpp \
         main.cpp \
     mainfunction.cpp \
     mainwindow.cpp \
-        widget.cpp \
     weigh.cpp \
     motor.cpp \
     worker.cpp \
     testfunction.cpp \
     login_window.cpp \
-    portui_window.cpp \
     about_window.cpp \
     signup_window.cpp \
     systemset_window.cpp \
     test_window.cpp
 
 HEADERS += \
+    command.h \
+    decodethread.h \
+    formfill.h \
     headers.h \
     mainwindow.h \
-        widget.h \
     weigh.h \
     motor.h \
     worker.h \
@@ -58,14 +60,12 @@ HEADERS += \
     login_window.h \
     signup_window.h \
     systemset_window.h \
-    test_window.h \
-    portui_window.h
+    test_window.h
 
 FORMS += \
+    formfill.ui \
     mainwindow.ui \
-        widget.ui \
     login_window.ui \
-    portui_window.ui \
     about_window.ui \
     signup_window.ui \
     systemset_window.ui \

@@ -10,26 +10,37 @@ class motor : public QObject
 public:
     explicit motor(QObject *parent = nullptr);
 
-    QByteArray buildCmdData(int motorAddress,QString command,int commandDataLen);
+    QByteArray buildCmdData(QString command);
+
     QByteArray buildData(QString command,QString messageData);
 
     QByteArray verifySUM(QString data);
 
-    void writePram();
 
-    bool motorOpen(bool open);
-    void motorPowerMove(bool direction);
-    void stopMove();
-    void moveToSetPosition();
+    bool open();
+    bool close();
+    bool stop();
 
+    void speedMove();
+    void angleMove();
 
+    bool writeParam();
 
-    motorDetails detail={"",0,0.,0.,0.,0.,0.};
+    bool readState1();
+    bool readState2();
+    bool readState3();
+    bool clearError();
+
+    motorDetails detail={"",0,0.,0.,0.,0.,0.,0.,0.};
     bool motorOpenFlag = false;
 
 
 private:
-    QJsonObject motorCmdObject;
+    QJsonObject motorCmdObject;//这是用json文件的读参数方法
+
+    motorCMD motorcmd;
+    motorDATA motordata;
+    motorParam motorparam;
 
 
 signals:

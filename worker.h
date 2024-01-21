@@ -17,12 +17,14 @@ public:
 
 
 private:
-    void decodeMessage(QString reseivedMessage);
     void delay(int delayTime);
     static motor *tempMotor;
     static weigh *tempweigh;
 
 signals:
+    void ReseiveMassage(QString temp);
+
+
     void currentPosition(int motorID,double positon);
     void currentSpeed(int motorID,double speed);
     void currentVoltage(int motorID,double voltage);

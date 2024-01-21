@@ -22,6 +22,8 @@ public:
 
     void findAvailablePort();
 
+    static QString rootPath;
+
 private slots:
     void on_submitBtn_clicked();
 
@@ -48,7 +50,7 @@ private:
     QButtonGroup *group;
 
     QString showTime;
-    static QString rootPath;
+
 };
 
 #endif // SYSTEMSET_H

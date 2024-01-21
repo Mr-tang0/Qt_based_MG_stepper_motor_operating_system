@@ -7,6 +7,7 @@
 #include"weigh.h"
 #include"motor.h"
 #include"worker.h"
+#include "decodethread.h"
 
 namespace Ui {
 class mainUiTest;
@@ -37,7 +38,9 @@ public:
     void saveWeigh(QString filePath,bool clear);
 
     static QSerialPort *myPort;
-    static Worker *newworker;
+
+    static Worker *sendWork;
+    static decodeThread *decodeWork;
 
     static motor* myMotor;
 
@@ -45,12 +48,13 @@ public:
 
     static materialDetails *material;
 
-    QTime startTime;
+    static QList<QStringList> testLog;//这是电机记录的位移和拉力模块记录的数据,每个QStringList是一对一的关系；
+
+
 
     QTimer* twinker =new QTimer;
 
 private slots:
-
 
     void on_startTest_clicked();
 
@@ -66,11 +70,25 @@ signals:
     void newTest();
 
 private:
-    QPointF zero;
-    int frameWidth,frameHeight;
     Ui::mainUiTest *ui;
+    QtMaterialSnackbar  *const m_snackbar;
+
+    QPointF zero;
+
+    int frameWidth,frameHeight;
+
     QVector<QPointF> datas;
+
     QPainterPath pathNormal;
+
+    void recodeTest(QString filePath);
+    void mageDrawing();
+
+    QTimer *startTimer = new QTimer;
+    QTime startTime;
+
+    QString filePath;
+
 
 };
 

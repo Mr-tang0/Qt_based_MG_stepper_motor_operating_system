@@ -4,20 +4,31 @@
 
 mainUiTest::mainUiTest(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::mainUiTest)
+    ui(new Ui::mainUiTest),
+    m_snackbar(new QtMaterialSnackbar)
 {
     ui->setupUi(this);
 
-    QThread *mythread = new QThread;
-    newworker->moveToThread(mythread);//worker进入子线程，有关于收发的函数均在子线程中执行
-    newworker->openReseiveChannal();//开接收
+    m_snackbar->setParent(this);
+    m_snackbar->setBackgroundColor(QColor(150,150,150));
+    m_snackbar->setFont(QFont("幼圆"));
+
+    QThread *sendThread = new QThread;
+    sendWork->moveToThread(sendThread);//sendWork进入子线程，有关于收发的函数均在子线程中执行
+    sendWork->openReseiveChannal();//开接收
+
+    QThread *decodeThread = new QThread;
+    decodeWork->moveToThread(decodeThread);//decodeWork进入子线程，有关于解码的函数均在子线程中执行
+    connect(sendWork,&Worker::ReseiveMassage,[=](QString massage){
+        decodeWork->decodeMessage(massage);
+    });
 
     initSystem();
 
-
-    startTime = QTime::currentTime();
-
-
+    connect(startTimer,&QTimer::timeout,[=]()
+    {
+        refreshUi();
+    });
 
 
     //测试
@@ -92,7 +103,11 @@ QPointF mainUiTest::pointTraslater(QPointF zero,QPointF point)
 
 void mainUiTest::on_startTest_clicked()
 {
-     myMotor->writePram();
+     startTime = QTime::currentTime();
+     startTimer->start(100);//此时间设置刷新率
+     myMotor->open();
+     myMotor->angleMove();
+     m_snackbar->addMessage(startTestFlag[ChineseOrEnglish]);
 }
 
 
@@ -104,16 +119,21 @@ void mainUiTest::on_newTest_clicked()
 //开始测试，读电机设置，称重模块设置，测试参数（计算运动参数）
 void mainUiTest::on_saveTest_clicked()
 {
+    recodeTest(systemSet::rootPath);
 
-//    startTestFlag
 }
 
 void mainUiTest::on_stopTest_clicked()
 {
-    myMotor->stopMove();
+    myMotor->stop();
+    startTimer->stop();
+    m_snackbar->addMessage(stopTestFlag[ChineseOrEnglish]);
 }
 
 void mainUiTest::on_emergency_clicked()
 {
-    myMotor->stopMove();
+    myMotor->stop();
+    myMotor->close();
+    startTimer->stop();
+    m_snackbar->addMessage(stopTestFlag[ChineseOrEnglish]);
 }
