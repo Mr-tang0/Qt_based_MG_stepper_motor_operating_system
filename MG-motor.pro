@@ -6,7 +6,7 @@
 
 QT       += core gui
 QT       += serialport
-#QT       += webenginewidgets
+QT       += charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -32,8 +32,10 @@ INCLUDEPATH+=$$PWD/libs/Include
 CONFIG += c++11
 
 SOURCES += \
+    chart.cpp \
     decodethread.cpp \
     formfill.cpp \
+    helper.cpp \
         main.cpp \
     mainfunction.cpp \
     mainwindow.cpp \
@@ -48,10 +50,12 @@ SOURCES += \
     test_window.cpp
 
 HEADERS += \
+    chart.h \
     command.h \
     decodethread.h \
     formfill.h \
     headers.h \
+    helper.h \
     mainwindow.h \
     weigh.h \
     motor.h \
@@ -64,6 +68,7 @@ HEADERS += \
 
 FORMS += \
     formfill.ui \
+    helper.ui \
     mainwindow.ui \
     login_window.ui \
     about_window.ui \

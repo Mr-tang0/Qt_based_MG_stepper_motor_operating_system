@@ -3,5 +3,7 @@
         <file>icon/background.png</file>
         <file>icon/eyeclose.png</file>
         <file>icon/eyeopen.png</file>
+        <file>icon/triangle.jpg</file>
+        <file>icon/header.png</file>
     </qresource>
 </RCC>

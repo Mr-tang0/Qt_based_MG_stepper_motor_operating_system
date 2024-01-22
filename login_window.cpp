@@ -62,7 +62,7 @@ void Login::messageBox(QString message)
 void Login::on_loginBtn_clicked()
 {
 
-
+    qDebug()<<ChineseOrEnglish;
     QString userName = ui->userName->text();
     QString passWord = ui->passWord->text();
 
@@ -76,6 +76,7 @@ void Login::on_loginBtn_clicked()
     }
     if(hashPassWord==loginObject[hashUserName].toString())
     {
+
         m_snackbar->addMessage(logined[ChineseOrEnglish]);
         emit Logined(userName);
         return;

@@ -12,6 +12,8 @@
 #include "signup_window.h"
 #include "systemset_window.h"
 #include "portui_window.h"
+#include "formfill.h"
+#include "helper.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,11 +30,14 @@ public:
 
     QWidget *empty;//初始化各个界面
 
+
     Login *login;
     signup *signUp;
-    systemSet *system;
+    FormFill *formfill;
     Qbout *about;
     mainUiTest *test;
+    systemSet *system;
+    Helper *helper;
 
     void delay(int delayTime);
 

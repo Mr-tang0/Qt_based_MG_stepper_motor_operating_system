@@ -1,5 +1,9 @@
 #include "test_window.h"
 #include "ui_test_window.h"
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
+//charts宏
+QT_CHARTS_USE_NAMESPACE
 
 //静态成员初始化区
 QSerialPort *mainUiTest::myPort = new QSerialPort();
@@ -12,6 +16,8 @@ motor* mainUiTest::myMotor = new motor;
 materialDetails*  mainUiTest::material = new materialDetails;
 
 QList<QStringList> mainUiTest::testLog = {{"time","stress","Theoretical displacement","Actual displacement"}};
+
+int mainUiTest::sampleRate = 100;
 //静态成员初始化区
 
 void mainUiTest::initSystem()
@@ -21,6 +27,15 @@ void mainUiTest::initSystem()
     loadMotorDetails(rootPath+"/log/motor_log.json");
     loadWeighDetails(rootPath+"/log/weigh_log.json");
 
+//    int windowWidth = this->width();
+//    int windowHeight = this->height();
+//    zero  = QPointF(-windowWidth/2+50,-windowHeight/2+50);
+//    qDebug()<<zero;
+
+//    pathNormal.moveTo(zero);
+
+    ui->graphicsView->setChart(chart);
+
     refreshUi();
 
     //buttonTwinkling("motor_1","yellow",true);
@@ -29,26 +44,31 @@ void mainUiTest::initSystem()
 void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 {
     double load = myWeigh->detail.currentWeight;
-    ui->load->display(load);//载荷
+
+    ui->load->display(QString::number(load,'f',1));//载荷
 
     double Area= material->materialArea;
+    Area = 1;//测试代码
     double stress = myWeigh->detail.currentWeight/Area;
-    ui->stress->display(stress);//应力
+    ui->stress->display(QString::number(stress,'f',1));//应力
 
     double speed = myMotor->detail.speed;
+    speed = 1;//测试代码
     QTime currentTime = QTime::currentTime();
     double timeDifference = startTime.msecsTo(currentTime)/1000.0;//时间差
     double theoreticallyLengthDifference = timeDifference*speed;
-    ui->displacement->display(theoreticallyLengthDifference);//计算位移,理论位移
+    ui->displacement->display(QString::number(theoreticallyLengthDifference,'f',1));//计算位移,理论位移
 
     double displacement = myMotor->detail.currentAngle;
-    ui->displacement_sensors->display(displacement);//传感器的实际位移
+    ui->displacement_sensors->display(QString::number(displacement,'f',1));//传感器的实际位移
 
     ui->strain->display(0);//应变
 
-    ui->Duration->display(timeDifference);//耗时
+    ui->Duration->display(QString::number(timeDifference,'f',1));//耗时
 
     //图像绘制
+
+    drawer(myWeigh->detail.currentWeight,myMotor->detail.currentAngle);
 
 
     //实验记录
@@ -59,6 +79,58 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
                          };
     testLog.append(couple);
 
+}
+
+
+void mainUiTest::drawer(double x,double y)
+{
+    QPointF data = QPointF(x,y);//pointTraslater(zero,QPointF(x,y));//画布坐标转换为世界坐标
+    *series<<data;
+    if(!chart->series().isEmpty())chart->removeSeries(series);
+    chart->addSeries(series);
+    chart->legend()->hide();
+    chart->createDefaultAxes();
+
+
+
+}
+
+void mainUiTest::paintEvent(QPaintEvent *)
+{
+
+//    QPainter painter(this);
+//    painter.setRenderHint(QPainter::Antialiasing);
+//    painter.translate(width() / 2, height() / 2);
+//    painter.scale(1, -1);
+
+
+//    //绘制画布
+
+//    frameWidth = this->width()-ui->verticalLayout_5->geometry().width()-100;
+//    frameHeight =ui->horizontalLayout_4->geometry().height()-50;
+
+//    painter.setPen(Qt::black);
+//    painter.setBrush(Qt::gray);
+
+//    QRectF rectangle(zero,pointTraslater(zero,QPointF(frameWidth,frameHeight)));
+//    painter.drawRect(rectangle);
+
+//    //画原点
+//    painter.setBrush(Qt::black);
+//    painter.drawEllipse(zero, 3, 3);
+
+//    //画线
+//    painter.setPen(Qt::white);
+//    painter.setBrush(Qt::NoBrush);
+//    painter.drawPath(pathNormal);
+
+}
+
+QPointF mainUiTest::pointTraslater(QPointF zero,QPointF point)
+{
+//    QPointF traslaterPoint = zero+point;
+
+//    return traslaterPoint;
 }
 
 void mainUiTest::saveMotor(QString filePath)

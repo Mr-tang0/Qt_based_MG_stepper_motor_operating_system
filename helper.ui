@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Qbout</class>
- <widget class="QWidget" name="Qbout">
+ <class>Helper</class>
+ <widget class="QWidget" name="Helper">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,7 +25,7 @@
 }</string>
        </property>
        <property name="text">
-        <string>ABOUT</string>
+        <string>HELPER</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

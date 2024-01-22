@@ -2,7 +2,7 @@
 #define QBOUT_H
 
 #include <QWidget>
-
+#include "headers.h"
 namespace Ui {
 class Qbout;
 }

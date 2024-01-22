@@ -47,6 +47,16 @@
 
 #include<QLineEdit>
 
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMainWindow>
+#include <QtCore/QtMath>
+#include <QtCore/QRandomGenerator>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
+//charts宏
+QT_CHARTS_USE_NAMESPACE
 
 
 //电机信息
@@ -54,6 +64,7 @@ struct motorDetails
 {
     QString motorname;
     int motorID;
+
 
     double powerControl;
 
@@ -120,7 +131,7 @@ static QList<QString>openAndClosee ={ "当前位置已存在文件,不可覆盖�
 static QList<QString> startTestFlag = {"测试开始！","The test begins!"};
 static QList<QString> stopTestFlag = {"测试已停止！","Testing has been stopped!"};
 
-static int ChineseOrEnglish = 0; //预料切换
+static int ChineseOrEnglish = 0; //预料切换,用不了
 
 
 

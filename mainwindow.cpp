@@ -13,13 +13,15 @@ MainWindow::MainWindow(QWidget *parent) :
 //    motorCMD cmd;
 //    qDebug()<<cmd.clearMotorErrorCMD.arg(12);
 
+
     test = new mainUiTest();
 
     empty = new QWidget();
     login = new Login();
-//    helper = new Helper();
+    helper = new Helper();
     about = new Qbout();
     signUp = new signup();
+    formfill = new FormFill();
     system = new systemSet();
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -28,18 +30,20 @@ MainWindow::MainWindow(QWidget *parent) :
     layout->addWidget(test);
     layout->addWidget(empty);
     layout->addWidget(login);
-    //layout->addWidget(helper);
+    layout->addWidget(helper);
     layout->addWidget(about);
     layout->addWidget(signUp);
+    layout->addWidget(formfill);
     layout->addWidget(system);
 
     test->hide();
     empty->hide();
     login->show();
-    //helper->hide();
     about->hide();
     signUp->hide();
+    formfill->hide();
     system->hide();
+    helper->hide();
 
 //    ui->test->setEnabled(false);
 //    ui->systemSet->setEnabled(false);
@@ -59,23 +63,32 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->label->setText(currentUserName);
         ui->test->setEnabled(true);
         ui->systemSet->setEnabled(true);
-        system->show();
+        formfill->show();
     });
 
     //增加试验表单
-    connect(system,&systemSet::saveSet,[=](QString rootPath){
-        system->saveLabel(rootPath);
+    connect(formfill,&FormFill::saveSet,[=](QString rootPath){
+        formfill->saveLabel(rootPath);
+        delay(800);
+        formfill->hide();
+        test->show();
     });
 
     //取消增加试验
-    connect(system,&systemSet::cancelSet,[=](){on_test_clicked();});
+    connect(formfill,&FormFill::cancelSet,[=](){on_test_clicked();});
 
     //新建试验，原界面更新一点问题，新建界面会掉信号绑定
     connect(test,&mainUiTest::newTest,[=](){
-//        layout->removeWidget(system);
-//        system = new systemSet();
-//        layout->addWidget(system);
-        on_systemSet_clicked();
+        test->hide();
+        empty->hide();
+        login->hide();
+        about->hide();
+        signUp->hide();
+        formfill->show();
+        system->hide();
+        helper->hide();
+//        test = new mainUiTest();
+
     });
 }
 
@@ -89,9 +102,10 @@ void MainWindow::on_login_clicked()
     test->hide();
     login->show();
     test->hide();
-    //helper->hide();
+    helper->hide();
     about->hide();
     signUp->hide();
+    formfill->hide();
     system->hide();
 
 }
@@ -101,11 +115,11 @@ void MainWindow::on_test_clicked()
     test->hide();
     login->hide();
     test->show();
-    //helper->hide();
+    helper->hide();
     about->hide();
     signUp->hide();
+    formfill->hide();
     system->hide();
-
 
 }
 
@@ -114,9 +128,10 @@ void MainWindow::on_help_clicked()
     test->hide();
     login->hide();
     test->hide();
-    //helper->show();
+    helper->show();
     about->hide();
     signUp->hide();
+    formfill->hide();
     system->hide();
 }
 
@@ -125,9 +140,10 @@ void MainWindow::on_about_clicked()
     test->hide();
     login->hide();
     test->hide();
-    //helper->hide();
+    helper->hide();
     about->show();
     signUp->hide();
+    formfill->hide();
     system->hide();
 }
 
@@ -136,9 +152,10 @@ void MainWindow::signUping()
     test->hide();
     login->hide();
     test->hide();
-    //helper->hide();
+    helper->hide();
     about->hide();
     signUp->show();
+    formfill->hide();
     system->hide();
 
 
@@ -182,9 +199,10 @@ void MainWindow::on_systemSet_clicked()
     test->hide();
     login->hide();
     test->hide();
-    //helper->hide();
+    helper->hide();
     about->hide();
     signUp->hide();
+    formfill->hide();
     system->show();
 }
 

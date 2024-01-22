@@ -33,9 +33,11 @@ public:
 
     void initSystem();
     void refreshUi();
+    void drawer(double x,double y);
 
     void saveMotor(QString filePath);
     void saveWeigh(QString filePath,bool clear);
+    void resetClass();
 
     static QSerialPort *myPort;
 
@@ -50,7 +52,7 @@ public:
 
     static QList<QStringList> testLog;//这是电机记录的位移和拉力模块记录的数据,每个QStringList是一对一的关系；
 
-
+    static int sampleRate;
 
     QTimer* twinker =new QTimer;
 
@@ -66,6 +68,8 @@ private slots:
 
     void on_emergency_clicked();
 
+    void on_clearTest_clicked();
+
 signals:
     void newTest();
 
@@ -77,7 +81,13 @@ private:
 
     int frameWidth,frameHeight;
 
+    QLineSeries *series = new QLineSeries();
+    QChart *chart = new QChart();
+    QValueAxis *axisY = new QValueAxis();
+    QValueAxis *axisX = new QValueAxis();
+
     QVector<QPointF> datas;
+    QVector<QPointF> DATA;
 
     QPainterPath pathNormal;
 
