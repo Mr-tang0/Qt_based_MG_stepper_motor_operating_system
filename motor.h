@@ -33,12 +33,17 @@ public:
 
     void getLength();
 
-    motorDetails detail={"",0,0.,0.,0.,0.,0.,0.,0.};
-    bool motorOpenFlag = false;
+    void modeStretch();//拉伸
+    void modeCompress();//压缩
+    void modereciprocate();//往复
+    void modeConstant();//恒力
 
+    motorDetails detail={0,0.,0.,0.,0.,0.,0.,0.};//初始化
 
 private:
-    QJsonObject motorCmdObject;//这是用json文件的读参数方法
+
+
+    QTimer *InquireTimer;//查询计时器控制停止
 
     motorCMD motorcmd;
     motorDATA motordata;
@@ -46,6 +51,7 @@ private:
 
 
 signals:
+    void MovementInPlace();//运动到位
 
 public slots:
 };

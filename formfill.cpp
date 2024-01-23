@@ -14,21 +14,11 @@ FormFill::FormFill(QWidget *parent) :
     m_snackbar->setBackgroundColor(QColor(150,150,150));
     m_snackbar->setFont(QFont("幼圆"));
 
-    connect(ui->radioBtnGroup,QOverload<int>::of(&QButtonGroup::buttonClicked),[=](int id){
-        ui->menu->setCurrentIndex(abs(id+2));
-
-
-    });
-
-
     findAvailablePort();
 
     connect(this,&FormFill::thisShow,[=](){
         resetThis();
     });
-
-
-    //connect(mainUiTest::myPort,&portUi::portConnected,&systemSet::freshPort);
 
 }
 
@@ -37,76 +27,160 @@ FormFill::~FormFill()
     delete ui;
 }
 
+void FormFill::findAvailablePort()
+{
+    QList<QSerialPortInfo> serialPorts = QSerialPortInfo::availablePorts();
+    foreach(const QSerialPortInfo &serialPortInfo, serialPorts)
+    {
+        ui->SerialPort->addItem(serialPortInfo.portName());
+    }
+
+    QStringList  baundRateList={"4800","9600","19200","28800","38400"};
+    ui->baudRate->addItems(baundRateList);
+
+
+    QStringList number = {"1","2","3"};
+    ui->driveBox->addItems(number);
+    ui->sensorBox->addItems(number);
+    ui->limits->addItems(number);
+
+    QStringList  samplingRateList;
+    for (int i = 1;i<5000;i=i+100)
+    {
+        samplingRateList.append(QString::number(i));
+    }
+    ui->samplingRate->addItems(samplingRateList);
+
+}
+
+bool FormFill::on_portConnect_clicked()
+{
+    bool openFlag = false;
+    if(ui->portConnect->text()=="连接")
+    {
+        mainUiTest::myPort->setPortName(ui->SerialPort->currentText());
+        mainUiTest::myPort->setBaudRate(ui->baudRate->currentText().toInt());
+
+        openFlag= mainUiTest::myPort->open(QIODevice::ReadWrite);
+
+        if(openFlag)ui->portConnect->setText("断开");
+    }
+    else {
+        mainUiTest::myPort->close();
+        ui->portConnect->setText("连接");
+    }
+    return openFlag;
+}
+
+
 void FormFill::saveLabel(QString filePath)//保存csv文件并且更新port、motor和weigh地址
 {
-    materialDetails  materialdetail;
-
     QList<QStringList> data;
+    //填材料信息
+    {
+    //用户
+        mainUiTest::material->userName= ui->ExperimenterEdit->text();
+    data.append({"User",ui->ExperimenterEdit->text()});
 
-    materialdetail.userName = ui->ExperimenterEdit->text();
-    data.append({"User",ui->ExperimenterEdit->text()});//用户
+    //编号
+    mainUiTest::material->selfNumber = ui->timeNumberEdit->text().toInt();
+    data.append({"Number",ui->timeNumberEdit->text()});
 
-    materialdetail.selfNumber = ui->timeNumberEdit->text().toInt();
-    data.append({"Number",ui->timeNumberEdit->text()});//编号
+    //材质
+    mainUiTest::material->material = ui->MaterialEdit->text();
+    data.append({"Material",ui->MaterialEdit->text()});
 
-    materialdetail.material = ui->MaterialEdit->text();
-    data.append({"Material",ui->MaterialEdit->text()});//材质
+    //样式
+    mainUiTest::material->materialtype = ui->sampleEdit->text();
+    data.append({"Sample",ui->sampleEdit->text()});
 
-    data.append({"Sample",ui->sampleEdit->text()});//样式
+    //很截面积
+    mainUiTest::material->materialArea = ui->areaEdit->text().toDouble();
+    data.append({"area",ui->areaEdit->text()});
 
-    mainUiTest::myMotor->detail.motorID = ui->driveBox->currentText().toInt();
-    data.append({"driveBox",ui->driveBox->currentText()});//电机地址
+    //长度
+    mainUiTest::material->materialLength = ui->lengthEdit->text().toDouble();
+    data.append({"length",ui->lengthEdit->text()});
 
-    mainUiTest::myWeigh->detail.address = ui->sensorBox->currentText().toInt();
-    data.append({"sensorBox",ui->sensorBox->currentText()});//称重传感器地址
+    //尺寸略
+    mainUiTest::material->materialCrossSectional = ui->sizeEdit->text();
+    data.append({"size",ui->sizeEdit->text()});
 
-    //限位器还没有
-    data.append({"limits",ui->limits->currentText()});//限位地址
+    //应变率
+    mainUiTest::material->strainRate = ui->strainRateEdit->text().toInt();
+    data.append({"strainRate",ui->strainRateEdit->text()});
 
-    mainUiTest::sampleRate = ui->samplingRate->currentText().toInt();
-    data.append({"samplingRate",ui->samplingRate->currentText()});//采样率
-
-
-    data.append({"CurrentTime",QDateTime::currentDateTime().toString("yyyy-MM-dd-")+ui->currentTime->text()});//当前时间
-
-    materialdetail.materialArea = ui->areaEdit->text().toDouble();
-    data.append({"area",ui->areaEdit->text()});//很截面积
-
-    materialdetail.materialLength = ui->lengthEdit->text().toDouble();
-    data.append({"length",ui->lengthEdit->text()});//长度
-
-    materialdetail.materialCrossSectional = ui->sizeEdit->text();
-    data.append({"size",ui->sizeEdit->text()});//尺寸略
-
-    materialdetail.strainRate = ui->strainRateEdit->text().toInt();
-    data.append({"strainRate",ui->strainRateEdit->text()});//应变率
-
-    data.append({"more",ui->moreEdit->text()});
-
-
-
+    //采样率
+    mainUiTest::material->sampleRate = ui->samplingRate->currentText().toInt();
+    data.append({"samplingRate",ui->samplingRate->currentText()});
 
     //操控方式↓
     QString testManner = "";
     QObject *selectBtn = ui->radioBtnGroup->checkedButton();
-    if(selectBtn)
-    {
-        testManner = selectBtn->property("text").toString();
-        int id = abs(ui->radioBtnGroup->checkedId()+2);
+    if(selectBtn)testManner = selectBtn->property("text").toString();
+    mainUiTest::material->testManner = testManner;
+    data.append({"testManner",testManner});
+
     }
-    data.append({"test_manner",testManner});
 
-    //记录不同操控方式得出的系统参数
+    //填电机信息
+    {
+        //电机地址
+        mainUiTest::myMotor->detail.motorID = ui->driveBox->currentText().toInt();
+        data.append({"driveBox",ui->driveBox->currentText()});
+
+        //电机速度
+        mainUiTest::myMotor->detail.speed = ui->motorSpeed->text().toDouble();
+        data.append({"motorSpeed",ui->motorSpeed->text()});
+
+        //电机最大速度
+        mainUiTest::myMotor->detail.maxSpeed = ui->maxMotorSpeed->text().toDouble();
+        data.append({"maxMotorSpeed",ui->maxMotorSpeed->text()});
+
+        //运动距离
+        mainUiTest::myMotor->detail.length = ui->motorLength->text().toDouble();
+        data.append({"motorLength",ui->motorLength->text()});
+
+        //最大运动距离
+        mainUiTest::myMotor->detail.maxLength = ui->maxMotorLength->text().toDouble();
+        data.append({"maxMotorLength",ui->maxMotorLength->text()});
+
+        //往返运动周期
+        mainUiTest::myMotor->detail.cycle = ui->motorCircle->text().toDouble();
+        data.append({"motorCircle",ui->motorCircle->text()});
+
+        //螺距在配置文件中初始化、
+        //当前位置时刻改变并存入配置文件
+    }
+
+    //填称重模块
+    {
+        //称重传感器地址
+        mainUiTest::myWeigh->detail.address = ui->sensorBox->currentText().toInt();
+        data.append({"sensorBox",ui->sensorBox->currentText()});
+
+        //恒力
+        mainUiTest::myWeigh->detail.force = ui->weighForce->text().toDouble();
+        data.append({"weighForce",ui->weighForce->text()});
+
+        //最大恒力
+        mainUiTest::myWeigh->detail.maxForce = ui->maxWeighForce->text().toDouble();
+        data.append({"maxWeighForce",ui->maxWeighForce->text()});
+
+        //当前质量实时更新
+    }
 
 
-//    data.append({"strainRate",ui->strainRateEdit->text()});
+    //限位器还没有
+    // data.append({"limits",ui->limits->currentText()});//限位地址
+
+    //时间
+    data.append({"CurrentTime",QDateTime::currentDateTime().toString("yyyy-MM-dd-")+ui->currentTime->text()});//当前时间
+
+    data.append({"more",ui->moreEdit->text()});
 
     saveCsvFile(filePath,data);
-
-
-
 }
-
 
 void FormFill::resetThis()
 {
@@ -169,60 +243,11 @@ void FormFill::saveCsvFile(QString filePath,QList<QStringList> data)
 }
 
 
-void FormFill::findAvailablePort()
-{
-    QList<QSerialPortInfo> serialPorts = QSerialPortInfo::availablePorts();
-    foreach(const QSerialPortInfo &serialPortInfo, serialPorts)
-    {
-        ui->SerialPort->addItem(serialPortInfo.portName());
-    }
-
-    QStringList  baundRateList={"4800","9600","19200","28800","38400"};
-    ui->baudRate->addItems(baundRateList);
-
-
-    QStringList number = {"1","2","3"};
-    ui->driveBox->addItems(number);
-    ui->sensorBox->addItems(number);
-    ui->limits->addItems(number);
-
-    QStringList  samplingRateList;
-    for (int i = 1;i<5000;i=i+100)
-    {
-        samplingRateList.append(QString::number(i));
-    }
-    ui->samplingRate->addItems(samplingRateList);
-
-}
-void FormFill::radioBtnChecked(int id)
-{
-    qDebug()<<id;
-}
-
 void FormFill::on_portRefresh_clicked()
 {
     findAvailablePort();
 }
 
-
-bool FormFill::on_portConnect_clicked()
-{
-    bool openFlag = false;
-    if(ui->portConnect->text()=="连接")
-    {
-        mainUiTest::myPort->setPortName(ui->SerialPort->currentText());
-        mainUiTest::myPort->setBaudRate(ui->baudRate->currentText().toInt());
-
-        openFlag= mainUiTest::myPort->open(QIODevice::ReadWrite);
-
-        if(openFlag)ui->portConnect->setText("断开");
-    }
-    else {
-        mainUiTest::myPort->close();
-        ui->portConnect->setText("连接");
-    }
-    return openFlag;
-}
 
 void FormFill::on_submitBtn_clicked()
 {

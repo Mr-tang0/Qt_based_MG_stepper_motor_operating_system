@@ -1,5 +1,5 @@
 #include "weigh.h"
-#include "widget.h"
+#include "test_window.h"
 weigh::weigh(QObject *parent) : QObject(parent)
 {
 
@@ -10,7 +10,7 @@ void weigh::getWeight()
 {
     int weighAddress = detail.address;
     QByteArray builtData = buildData(weighAddress,"00:00",false);
-    Widget::newworker->sendMessage(builtData);
+    mainUiTest::sendWork->sendMessage(builtData);
 }
 
 //去皮
@@ -19,17 +19,17 @@ void weigh::shelling(int weighAddress,bool shell)
     QByteArray builtData;
 
     builtData = buildData(weighAddress,"23:1",true);
-    Widget::newworker->sendMessage(builtData);//关闭写保护
+    mainUiTest::sendWork->sendMessage(builtData);//关闭写保护
 
     if(shell)
         builtData = buildData(weighAddress,"15:1",true);
     else
         builtData = buildData(weighAddress,"15:2",true);
 
-     Widget::newworker->sendMessage(builtData);
+     mainUiTest::sendWork->sendMessage(builtData);
 
     builtData = buildData(weighAddress,"23:2",true);
-     Widget::newworker->sendMessage(builtData);//开始写保护
+     mainUiTest::sendWork->sendMessage(builtData);//开始写保护
 }
 
 

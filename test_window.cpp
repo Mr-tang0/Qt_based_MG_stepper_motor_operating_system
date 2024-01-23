@@ -1,6 +1,6 @@
 #include "test_window.h"
 #include "ui_test_window.h"
-#include "mainwindow.h"
+#include "formfill.h"
 
 mainUiTest::mainUiTest(QWidget *parent) :
     QWidget(parent),
@@ -41,15 +41,15 @@ mainUiTest::mainUiTest(QWidget *parent) :
         myWeigh->detail.currentWeight = i;//x
         myMotor->detail.currentAngle = abs(i*sin(i*0.01));//y
 
-        myWeigh->getWeight();
-        myMotor->getLength();
+        // myWeigh->getWeight();
+        // myMotor->getLength();
         i+=1;
     });
     //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
 
     connect(ui->startTest,&QPushButton::clicked,[=](){
-        timer->start(50);      //查询
-        startTimer->start(5); //采样
+        timer->start(500);      //查询
+        startTimer->start(200); //采样
 
     });
 
@@ -73,10 +73,39 @@ void mainUiTest::on_startTest_clicked()
 {
      startTime = QTime::currentTime();
 
-
 //     startTimer->start(1000/sampleRate);//sampleRate设置采样率
-     myMotor->open();
-     myMotor->angleMove();
+     // myMotor->open();
+     // myMotor->modeStretch();//拉伸
+
+     if(material->testManner == "拉伸")
+     {
+         myMotor->modeStretch();//拉伸
+         qDebug()<<"拉伸";
+     }
+     else if(material->testManner == "压缩")
+     {
+         qDebug()<<material->testManner;
+         myMotor->modeCompress();//压缩
+
+     }
+     else if(material->testManner == "往复运动")
+     {
+         qDebug()<<material->testManner;
+         myMotor->modereciprocate();//往复
+
+     }
+     else if(material->testManner == "恒力加载")
+     {
+         qDebug()<<material->testManner;
+         myMotor->modeConstant();//恒力
+
+     }
+     else
+     {
+         qDebug()<<material->testManner;
+
+     }
+
      m_snackbar->addMessage(startTestFlag[ChineseOrEnglish]);
 }
 
@@ -86,12 +115,9 @@ void mainUiTest::on_newTest_clicked()
     emit newTest();
 }
 
-
-//开始测试，读电机设置，称重模块设置，测试参数（计算运动参数）
 void mainUiTest::on_saveTest_clicked()
 {
     recodeTest(FormFill::rootPath);
-
 }
 
 void mainUiTest::on_stopTest_clicked()
@@ -111,6 +137,5 @@ void mainUiTest::on_emergency_clicked()
 
 void mainUiTest::on_clearTest_clicked()
 {
-    datas.clear();
-//    pathNormal.clear();
+    resetThis();
 }

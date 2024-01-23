@@ -25,8 +25,6 @@ public:
     void delay(int time);
     void buttonTwinkling(QString btnName, QString color, bool flag);
     void saveJson(motor* givenMotor,QString filePath);
-    void loadMotorDetails(QString filePath);
-    void loadWeighDetails(QString filePath);
 
     void resetThis();
 
@@ -69,6 +67,7 @@ private slots:
 
 signals:
     void newTest();
+    void saveTest();
 
 private:
     Ui::mainUiTest *ui;
@@ -87,17 +86,17 @@ private:
 
     //以下是老代码
 
-    QPointF zero;
+    // QPointF zero;
 
-    int frameWidth,frameHeight;
+    // int frameWidth,frameHeight;
 
-    QValueAxis *axisY = new QValueAxis();
-    QValueAxis *axisX = new QValueAxis();
+    // QValueAxis *axisY = new QValueAxis();
+    // QValueAxis *axisX = new QValueAxis();
 
-    QVector<QPointF> datas;
-    QVector<QPointF> DATA;
+    // QVector<QPointF> datas;
+    // QVector<QPointF> DATA;
 
-    QPainterPath pathNormal;
+    // QPainterPath pathNormal;
 
 };
 

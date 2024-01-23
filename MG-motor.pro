@@ -37,7 +37,6 @@ SOURCES += \
     formfill.cpp \
     helper.cpp \
         main.cpp \
-    mainfunction.cpp \
     mainwindow.cpp \
     weigh.cpp \
     motor.cpp \

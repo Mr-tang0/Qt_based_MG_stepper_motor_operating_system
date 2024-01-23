@@ -22,11 +22,6 @@ int mainUiTest::sampleRate = 100;
 
 void mainUiTest::initSystem()
 {
-    QString rootPath  = QCoreApplication::applicationDirPath();
-
-    loadMotorDetails(rootPath+"/log/motor_log.json");
-    loadWeighDetails(rootPath+"/log/weigh_log.json");
-
     ui->graphicsView->setChart(chart);
 
     refreshUi();
@@ -35,33 +30,31 @@ void mainUiTest::initSystem()
 }
 void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 {
+    //载荷
     double load = myWeigh->detail.currentWeight;
+    ui->load->display(QString::number(load,'f',1));
 
-    ui->load->display(QString::number(load,'f',1));//载荷
+    //应力
+    double stress = myWeigh->detail.currentWeight/material->materialArea;
+    ui->stress->display(QString::number(stress,'f',1));
 
-    double Area= material->materialArea;
-    Area = 1;//测试代码
-    double stress = myWeigh->detail.currentWeight/Area;
-    ui->stress->display(QString::number(stress,'f',1));//应力
-
-    double speed = myMotor->detail.speed;
-    speed = 1;//测试代码
+    //计算位移,理论位移
     QTime currentTime = QTime::currentTime();
     double timeDifference = startTime.msecsTo(currentTime)/1000.0;//时间差
-    double theoreticallyLengthDifference = timeDifference*speed;
-    ui->displacement->display(QString::number(theoreticallyLengthDifference,'f',1));//计算位移,理论位移
+    double theoreticallyLengthDifference = timeDifference*myMotor->detail.speed;
+    ui->displacement->display(QString::number(theoreticallyLengthDifference,'f',1));
 
+    //传感器的实际位移
     double displacement = myMotor->detail.currentAngle;
-    ui->displacement_sensors->display(QString::number(displacement,'f',1));//传感器的实际位移
+    ui->displacement_sensors->display(QString::number(displacement,'f',1));
 
-    ui->strain->display(0);//应变
+    ui->strain->display(0);//应变????
 
-    ui->Duration->display(QString::number(timeDifference,'f',1));//耗时
+    //耗时
+    ui->Duration->display(QString::number(timeDifference,'f',1));
 
     //图像绘制
-
     drawer(myWeigh->detail.currentWeight,myMotor->detail.currentAngle);
-
 
     //实验记录
     QStringList couple = {QString::number(timeDifference),//时间
@@ -88,9 +81,6 @@ void mainUiTest::drawer(double x,double y)
 
 void mainUiTest::saveMotor(QString filePath)
 {
-//********************
-
-
     saveJson(myMotor,filePath);
     refreshUi();
 }
@@ -130,6 +120,7 @@ void mainUiTest::saveWeigh(QString filePath,bool clear)
 
 
 }
+
 
 void mainUiTest::buttonTwinkling(QString btnName,QString color,bool flag)//timer的生命周期有问题
 {
@@ -179,16 +170,16 @@ void mainUiTest::saveJson(motor* givenMotor,QString filePath)
 
     QJsonObject Object = jsonDoc.object();
 
-    Object["motorName"] = givenMotor->detail.motorname;
+    // Object["motorName"] = givenMotor->detail.motorname;
     Object["motorID"] = givenMotor->detail.motorID;
 
-    Object["powerControl"] = givenMotor->detail.powerControl;
+    // Object["powerControl"] = givenMotor->detail.powerControl;
 
     Object["speedControl"] = givenMotor->detail.speed;
     Object["maxSpeed"] = givenMotor->detail.maxSpeed;
 
     Object["angleControl"] = givenMotor->detail.length;
-    Object["angleIncrement"] = givenMotor->detail.angleIncrement;
+    // Object["angleIncrement"] = givenMotor->detail.angleIncrement;
 
 
     jsonDoc.setObject(Object);
@@ -198,64 +189,7 @@ void mainUiTest::saveJson(motor* givenMotor,QString filePath)
     motorfile.close();
 }
 
-void mainUiTest::loadWeighDetails(QString filePath)
-{
-    QFile motorfile(filePath);
 
-    try {
-        motorfile.open(QIODevice::ReadOnly);
-    }
-    catch (QFileDevice::FileError) {
-        qDebug()<<QStringLiteral("日志文件%1不存在").arg(filePath);
-        return;
-    }
-
-    QByteArray jsonData = motorfile.readAll();
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-    QJsonObject jsonObject = jsonDoc.object();
-    motorfile.close();
-
-    myWeigh->detail.address = jsonObject["weighIndex"].toInt();
-
-    for (int i =0;i<jsonObject["weightLog"].toArray().size();i++) {
-        myWeigh->weighLogList.append(jsonObject["weightLog"].toArray()[i].toString());
-    }
-
-
-}
-
-
-void mainUiTest::loadMotorDetails(QString filePath)
-{
-
-    QFile motorfile(filePath);
-
-    try {
-        motorfile.open(QIODevice::ReadOnly);
-    }
-    catch (QFileDevice::FileError) {
-        qDebug()<<QStringLiteral("日志文件%1不存在").arg(filePath);
-        return;
-    }
-
-    QByteArray jsonData = motorfile.readAll();
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
-    QJsonObject jsonObject = jsonDoc.object();
-    motorfile.close();
-
-    motorDetails detail =
-    {
-        jsonObject["motorName_"].toString(),    //motorname:
-        jsonObject["motorID_"].toInt(),         //motorID:
-        jsonObject["powerControl_"].toDouble(), //powerControl:
-        jsonObject["speedControl_"].toDouble(), //speedControl:
-        jsonObject["maxSpeed_"].toDouble(),     //maxSpeed:
-        jsonObject["angleControl_"].toDouble(), //angleControl:
-        jsonObject["angleIncrement_"].toDouble()//angleIncrement:
-    };
-    myMotor->detail = detail;
-
-}
 
 void mainUiTest::recodeTest(QString filePath)
 {
@@ -285,14 +219,14 @@ void mainUiTest::recodeTest(QString filePath)
 
  void mainUiTest::resetThis()
  {
-     factSeries->clear();
-     myMotor->detail.currentAngle = 0.;
-     myWeigh->detail.currentWeight = 0.;
+    factSeries->clear();
+    myMotor->detail.currentAngle = 0.;
+    myWeigh->detail.currentWeight = 0.;
 
-     for (auto LCD:findChildren<QLCDNumber*>())
-     {
-         LCD->display(0.);
-     }
-     testLog.clear();
+    for (auto LCD:findChildren<QLCDNumber*>())
+    {
+       LCD->display(0.);
+    }
+    testLog.clear();
  }
 

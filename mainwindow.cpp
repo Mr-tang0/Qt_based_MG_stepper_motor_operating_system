@@ -9,9 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    loadMotorAndWeigh();//导入默认电机称重文件
 
-//    motorCMD cmd;
-//    qDebug()<<cmd.clearMotorErrorCMD.arg(12);
 
 
     test = new mainUiTest();
@@ -66,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
         formfill->show();
     });
 
+
     //增加试验表单
     connect(formfill,&FormFill::saveSet,[=](QString rootPath){
         formfill->saveLabel(rootPath);
@@ -84,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
         formfill->resetThis();
         formfill->show();
     });
+
 }
 
 MainWindow::~MainWindow()
@@ -141,6 +142,71 @@ void MainWindow::on_about_clicked()
     system->hide();
 }
 
+void MainWindow::on_systemSet_clicked()
+{
+    test->hide();
+    login->hide();
+    test->hide();
+    helper->hide();
+    about->hide();
+    signUp->hide();
+    formfill->hide();
+    system->show();
+}
+
+
+void MainWindow::loadMotorAndWeigh()
+{
+    QString rootPath  = QCoreApplication::applicationDirPath();
+    QString motorAndWeighFilePath = rootPath +"/log/motorandweighlog.json";
+
+    QFile motorfile(motorAndWeighFilePath);
+    try {
+        motorfile.open(QIODevice::ReadOnly);
+    }
+    catch (QFileDevice::FileError) {
+        qDebug()<<QStringLiteral("日志文件%1不存在").arg(motorAndWeighFilePath);
+        return;
+    }
+
+    QByteArray jsonData = motorfile.readAll();
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+    QJsonObject jsonObject = jsonDoc.object();
+    motorfile.close();
+
+    motorDetails motordetail;
+    motordetail=
+        {
+            jsonObject["motorAdress"].toInt(),      //motorID
+            jsonObject["speed"].toDouble(),         //motorspeed
+            jsonObject["maxSpeed"].toDouble(),      //maxSpeed
+            jsonObject["length"].toDouble(),        //length
+            jsonObject["maxLength"].toDouble(),     //maxLength
+            jsonObject["cycle"].toDouble(),         //cycle
+            jsonObject["picth"].toDouble(),         //picth
+            jsonObject["currentAngle"].toDouble()  //currentAngle
+        };
+    mainUiTest::myMotor->detail = motordetail;
+
+    weighDetails weighdetail;
+        weighdetail =
+        {
+            jsonObject["weighID"].toInt(),          //weighID
+            jsonObject["force"].toDouble(),         //force
+            jsonObject["maxForce"].toDouble(),      //maxForce
+            jsonObject["currentWeigth"].toDouble() //currentWeigth
+        };
+    mainUiTest::myWeigh->detail = weighdetail;
+
+}
+
+void MainWindow::delay(int delayTime)
+{
+    QEventLoop loop;
+    QTimer::singleShot(delayTime,&loop,SLOT(quit()));
+    loop.exec();
+}
+
 void MainWindow::signUping()
 {
     test->hide();
@@ -186,23 +252,4 @@ void MainWindow::signUping()
 
     });
 
-}
-
-void MainWindow::on_systemSet_clicked()
-{
-    test->hide();
-    login->hide();
-    test->hide();
-    helper->hide();
-    about->hide();
-    signUp->hide();
-    formfill->hide();
-    system->show();
-}
-
-void MainWindow::delay(int delayTime)
-{
-    QEventLoop loop;
-    QTimer::singleShot(delayTime,&loop,SLOT(quit()));
-    loop.exec();
 }

@@ -59,7 +59,11 @@ private slots:
 
 private:
     QtMaterialSnackbar  *const m_snackbar;
+
     Ui::MainWindow *ui;
+
+    void loadMotorAndWeigh();
+
     QString currentUserName;
 };
 

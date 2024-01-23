@@ -6,59 +6,60 @@ motor::motor(QObject *parent) : QObject(parent)
 
 }
 
-//命令帧,参数：地址，操作字，数据帧长度
-QByteArray motor::buildCmdData(QString command)
+//拉伸
+void motor::modeStretch()
 {
+    angleMove();//开始运动
+}
 
-    QString temp_data = command;
-    while (temp_data.right(1)==" ") {
-        temp_data.remove(temp_data.length()-1,1);
-    }
-    //构建命令帧
-    QByteArray builtData;
-    bool ok;
-    for (const auto &chunk : temp_data.split(" "))
+//压缩
+void motor::modeCompress()
+{
+    detail.length = -detail.length;//反向
+
+    angleMove();//开始运动
+}
+
+//往复
+void motor::modereciprocate()
+{
+    InquireTimer->start(detail.cycle);//周期
+
+    connect(InquireTimer,&QTimer::timeout,[=]()
     {
-        uchar byteValue = uchar(chunk.toUShort(&ok, 16));
-        if (!ok)
-        {
-            // 转换失败后的操作，待定
-            qDebug() << "转换失败,数据存在错误" ;
-            return "";
-        }
-        else
-        {
-            builtData.append(char(byteValue));
-        }
-    }
-
-    //构建数据校验
-    builtData = builtData+verifySUM(temp_data);
-
-    //qDebug()<<"debug from buildCmdData"<<builtData.toHex();
-
-    return builtData;
+        angleMove();//开始运动
+        detail.length = -detail.length;//反向
+    });
 
 }
 
-QByteArray motor::verifySUM(QString data)
+//恒力
+void motor::modeConstant()
 {
-    bool ok;
-    uint num = 0;
-    QByteArray builtData;
 
-    for (const auto &chunk : data.split(" "))
+    angleMove();//开始运动
+
+    InquireTimer->start(20);
+    connect(InquireTimer,&QTimer::timeout,[=]()
     {
-        uint temp = chunk.toUInt(&ok,16);
-        if(ok)num = num + temp;
-    }
+        if(mainUiTest::myWeigh->detail.currentWeight<mainUiTest::myWeigh->detail.force)
+        {
+            angleMove();//开始运动
+        }
 
-    uchar byteValue = uchar(num) & 0x00ff;//注意这里的校验是舍弃高8位的
+        if(mainUiTest::myWeigh->detail.currentWeight>0.8*mainUiTest::myWeigh->detail.force)//当前力值大于设定值的8成
+        {
+            detail.speed = detail.speed/2;//速度减半
+        }
 
-    builtData.append(char(byteValue));
-    //qDebug()<<"debug from verifySUM"<<builtData.toHex();
-    return builtData;
+        if(mainUiTest::myWeigh->detail.currentWeight>mainUiTest::myWeigh->detail.force)//当前力值大于设定值
+        {
+            stop();//停止
+        }
+
+    });
 }
+
 
 bool motor::open()
 {
@@ -105,9 +106,9 @@ void motor::speedMove()
     //speed : mm/s        speed/pitch : r/s          36000*speed/pitch : 度%/s
 
     double speed = detail.speed;
-    speed = 0.01;
+    // speed = 0.01;
     double pitch = detail.pitch;//螺距mm
-    pitch = 0.01;
+    // pitch = 0.01;
     QString speedBit = QString::number(int(36000*speed/pitch),16);
 
     int length = 8-speedBit.length();
@@ -135,7 +136,7 @@ void motor::speedMove()
 
 }
 
-void motor::angleMove()
+void motor::angleMove()//根据motor.detail的angle和speed值进行运动，不同的运动方式应该修改其值
 {
     //指令
     int address = detail.motorID;
@@ -150,7 +151,7 @@ void motor::angleMove()
     double pitch = detail.pitch;//螺距mm
     double maxSpeed = detail.maxSpeed;//最大速度
 
-    moveLength = pitch = maxSpeed = 0.01;
+    // moveLength = pitch = maxSpeed = 0.01;
     //moveLength : mm        moveLength/pitch : r          36000*moveLength/pitch : 度%
 
     QString maxSpeedBit = QString::number(int(36000*maxSpeed/pitch),16);
@@ -190,8 +191,9 @@ void motor::angleMove()
 
 }
 
-bool motor::writeParam()
+bool motor::writeParam()//将motor detail的值发送给电机
 {
+
     int address = detail.motorID;
     QString command = motorcmd.writeParameterToROMCMD.arg(QString::number(address,16));
     QByteArray writeData = buildCmdData(command);
@@ -255,98 +257,59 @@ void motor::getLength()
 }
 
 
+//命令帧,参数：地址，操作字，数据帧长度
+QByteArray motor::buildCmdData(QString command)
+{
 
+    QString temp_data = command;
+    while (temp_data.right(1)==" ") {
+        temp_data.remove(temp_data.length()-1,1);
+    }
+    //构建命令帧
+    QByteArray builtData;
+    bool ok;
+    for (const auto &chunk : temp_data.split(" "))
+    {
+        uchar byteValue = uchar(chunk.toUShort(&ok, 16));
+        if (!ok)
+        {
+            // 转换失败后的操作，待定
+            qDebug() << "转换失败,数据存在错误" ;
+            return "";
+        }
+        else
+        {
+            builtData.append(char(byteValue));
+        }
+    }
 
+    //构建数据校验
+    builtData = builtData+verifySUM(temp_data);
 
+    //qDebug()<<"debug from buildCmdData"<<builtData.toHex();
 
+    return builtData;
 
+}
 
+QByteArray motor::verifySUM(QString data)
+{
+    bool ok;
+    uint num = 0;
+    QByteArray builtData;
 
+    for (const auto &chunk : data.split(" "))
+    {
+        uint temp = chunk.toUInt(&ok,16);
+        if(ok)num = num + temp;
+    }
 
+    uchar byteValue = uchar(num) & 0x00ff;//注意这里的校验是舍弃高8位的
 
-
-
-
-
-
-
-
-//void motor::motorPowerMove(bool direction)
-//{
-//    stopMove();
-
-//    int address = detail.motorID;
-//    QByteArray cmdData,data;
-//    cmdData = buildCmdData(address,"open_circle");
-//    Widget::newworker->sendMessage(cmdData);
-
-//    int16_t power = detail.powerControl;
-//    if(power>850) power = 850;
-//    else if(power<-850) power = -850;
-
-//    if(direction){
-//        data = buildData("open_circle",QString::number(power));
-//    }
-//    else {
-//        data = buildData("open_circle",QString::number(-power));
-//    }
-
-//    Widget::newworker->sendMessage(data);
-//}
-
-
-//数据帧,参数：操作字，数据内容
-//QByteArray motor::buildData(QString command,QString messageData)
-//{
-
-//    if(motorCmdObject[command+"_type"].isNull())//命令不存在就退出返回
-//    {
-//        qDebug()<<QStringLiteral("命令'%1'不存在。").arg(command+"_type");
-//        return "";
-//    }
-
-//    QByteArray builtData;
-//    bool ok;
-//    QString byte;
-//    QString temp_data;
-
-
-
-//    if(motorCmdObject[command+"_type"].toString()=="int_16t")
-//    {
-//        byte = QString::number(messageData.toInt(),16);
-//    }
-//    else if (motorCmdObject[command+"_type"].toString()=="int_32t") {
-//        byte = QString::number(messageData.toInt(),32);
-//    }
-//    else if (motorCmdObject[command+"_type"].toString()=="int_64t") {
-//        byte = QString::number(messageData.toInt(),64);
-//    }
-//    else if (motorCmdObject[command+"_type"].toString()=="int_64t+int_32t") {
-//        byte = QString::number(messageData.toInt(),64);
-//    }
-
-//    double len = byte.length();
-
-//    for(int i = 0;i<qCeil(len/2);i++)
-//    {
-//        uchar byteValue = byte.right(2).toUShort(&ok, 16);
-//        if(ok)
-//        {
-//            temp_data =temp_data+byte.right(2)+" ";
-//            builtData.append(byteValue);
-//        }
-//        else return "";
-//        byte = QString::number(messageData.toInt(),16).remove(byte.length()-2,2);
-//    }
-
-//    builtData = builtData+verifySUM(temp_data);
-
-//    //qDebug()<<"debug from buildData"<<builtData.toHex();
-
-//    return builtData;
-//}
-
+    builtData.append(char(byteValue));
+    //qDebug()<<"debug from verifySUM"<<builtData.toHex();
+    return builtData;
+}
 
 
 

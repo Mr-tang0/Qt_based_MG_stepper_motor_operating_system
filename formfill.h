@@ -34,7 +34,6 @@ private slots:
 
     void on_cancelBtn_clicked();
 
-    void radioBtnChecked(int id);
 
 signals:
     void saveSet(QString rootPath);

@@ -62,21 +62,17 @@ QT_CHARTS_USE_NAMESPACE
 //电机信息
 struct motorDetails
 {
-    QString motorname;
-    int motorID;
+    int motorID;//地址
 
-
-    double powerControl;
-
-    double speed;
-
+    double speed;//速度
     double maxSpeed;//最大速度设置
-    double pitch;//螺距
-
     double length;//运动距离
-    double angleIncrement;
+    double maxLength;//最大运动距离
 
-    double currentAngle;
+    double cycle;//往返运动周期
+
+    double pitch;//螺距
+    double currentAngle;//当前运动距离
 
 };
 
@@ -84,28 +80,32 @@ struct motorDetails
 //称重模块信息
 struct weighDetails
 {
-    int address;
+    int address;//地址
 
-    double currentWeight;
+    double force;//恒力模式恒力
+    double maxForce;//恒力模式最大恒力
 
-    QList<QString> weighLogList;
-
+    double currentWeight;//当前力
 
 };
 
 //材料信息
 struct materialDetails
 {
-    QString userName;
-    QString TimeNumber;
-
-    int selfNumber;
-
+    QString userName;//用户名
+    int selfNumber;//编号
     QString material;//材质
-    QString materialCrossSectional;//材料尺寸
-    double materialLength;//材料长
+    QString materialtype;//材质样式
+
     double materialArea;//材料横截面积
+    double materialLength;//材料长
+    QString materialCrossSectional;//材料尺寸
     double strainRate;//应变率
+
+    QString other;// 其他
+    int sampleRate;//采样率
+
+    QString testManner;//试验方式
 
 };
 
