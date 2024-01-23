@@ -6,8 +6,9 @@ weigh::weigh(QObject *parent) : QObject(parent)
 }
 
 //实时重量
-void weigh::getWeight(int weighAddress)
+void weigh::getWeight()
 {
+    int weighAddress = detail.address;
     QByteArray builtData = buildData(weighAddress,"00:00",false);
     Widget::newworker->sendMessage(builtData);
 }

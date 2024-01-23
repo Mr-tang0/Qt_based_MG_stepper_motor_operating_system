@@ -32,7 +32,7 @@ void Widget::refreshUi()
         findChild<QLineEdit*>("setPositon_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.length));
         findChild<QLineEdit*>("powerControl_"+QString::number(i+1))->setText(QString::number(myMotorList[i]->detail.powerControl));
     }
-    findChild<QLineEdit*>("weighAddress")->setText(QString::number(myweigh->address));
+    findChild<QLineEdit*>("weighAddress")->setText(QString::number(myweigh->detail.address));
 
     ui->weightText->clear();
     for (int i =0;i<myweigh->weighLogList.length();i++) {
@@ -70,7 +70,7 @@ void Widget::saveWeigh(QString filePath,bool clear)
     QJsonObject Object = jsonDoc.object();
     weighfile.close();
 
-    Object["weighIndex"] = myweigh->address;
+    Object["weighIndex"] = myweigh->detail.address;
 
     QString currentTime = QTime::currentTime().toString();
     QString currentDate = QDateTime::currentDateTime().toString("yyyy-MM-dd");
@@ -182,7 +182,7 @@ void Widget::loadWeighDetails(QString filePath)
     QJsonObject jsonObject = jsonDoc.object();
     motorfile.close();
 
-    myweigh->address = jsonObject["weighIndex"].toInt();
+    myweigh->detail.address = jsonObject["weighIndex"].toInt();
     for (int i =0;i<jsonObject["weightLog"].toArray().size();i++) {
         myweigh->weighLogList.append(jsonObject["weightLog"].toArray()[i].toString());
     }

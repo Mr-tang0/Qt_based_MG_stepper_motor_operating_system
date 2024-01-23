@@ -24,12 +24,7 @@ FormFill::FormFill(QWidget *parent) :
     findAvailablePort();
 
     connect(this,&FormFill::thisShow,[=](){
-        showTime = QDateTime::currentDateTime().toString("yyyyMMddhhmm");
-        ui->timeNumberEdit->setText(showTime);
-        ui->currentTime->setText(QTime::currentTime().toString());
-        rootPath  = QCoreApplication::applicationDirPath()+QStringLiteral("/data/%1.csv").arg(showTime);
-        ui->filePathEdit->setText(rootPath);
-        ui->ExperimenterEdit->setText("UserName");
+        resetThis();
     });
 
 
@@ -113,7 +108,7 @@ void FormFill::saveLabel(QString filePath)//保存csv文件并且更新port、mo
 }
 
 
-void FormFill::resetClass()
+void FormFill::resetThis()
 {
     for (auto edit:findChildren<QLineEdit*>())
     {
@@ -124,9 +119,13 @@ void FormFill::resetClass()
     {
         Box->clear();
     }
+
     showTime = QDateTime::currentDateTime().toString("yyyyMMddhhmm");
+    ui->timeNumberEdit->setText(showTime);
+    ui->currentTime->setText(QTime::currentTime().toString());
     rootPath  = QCoreApplication::applicationDirPath()+QStringLiteral("/data/%1.csv").arg(showTime);
     ui->filePathEdit->setText(rootPath);
+    ui->ExperimenterEdit->setText("UserName");
 }
 
 

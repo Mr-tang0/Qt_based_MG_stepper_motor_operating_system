@@ -71,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
         formfill->saveLabel(rootPath);
         delay(800);
         formfill->hide();
+        test->resetThis();
         test->show();
     });
 
@@ -80,15 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //新建试验，原界面更新一点问题，新建界面会掉信号绑定
     connect(test,&mainUiTest::newTest,[=](){
         test->hide();
-        empty->hide();
-        login->hide();
-        about->hide();
-        signUp->hide();
+        formfill->resetThis();
         formfill->show();
-        system->hide();
-        helper->hide();
-//        test = new mainUiTest();
-
     });
 }
 

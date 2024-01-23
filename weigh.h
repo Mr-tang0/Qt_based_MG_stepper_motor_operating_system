@@ -10,13 +10,13 @@ class weigh : public QObject
 public:
     explicit weigh(QObject *parent = nullptr);
     
-    void getWeight(int weighAddress);
+    void getWeight();
     void shelling(int weighAddress,bool shell);
 
 
-    weighDetails detail;
+    weighDetails detail = {0,};
 
-    int address;
+//    int address;
     double currentWeight;
     QList<QString> weighLogList;
 

@@ -31,6 +31,8 @@ public:
     bool readState3();
     bool clearError();
 
+    void getLength();
+
     motorDetails detail={"",0,0.,0.,0.,0.,0.,0.,0.};
     bool motorOpenFlag = false;
 

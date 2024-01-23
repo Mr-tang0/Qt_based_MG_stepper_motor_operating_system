@@ -21,7 +21,7 @@ public:
     void saveCsvFile(QString filePath,QList<QStringList> data);
 
     void findAvailablePort();
-    void resetClass();
+    void resetThis();
 
     static QString rootPath;
 

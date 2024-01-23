@@ -7,7 +7,9 @@ Qbout::Qbout(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QFile txtFile("D:/appfile/QT/Qtcode/MG-motor/log/aboutme.txt");
+    QString rootPath  = QCoreApplication::applicationDirPath();
+
+    QFile txtFile(rootPath+"/log/about.txt");
     txtFile.open(QIODevice::ReadOnly);
     QTextStream txt(&txtFile);
     txt.setCodec("UTF-8");

@@ -245,6 +245,15 @@ bool motor::clearError()
 }
 
 
+void motor::getLength()
+{
+    int address = detail.motorID;
+    QString command = motorcmd.readmotorangleCMD.arg(QString::number(address,16));
+    QByteArray readmotorangleData = buildCmdData(command);
+
+    mainUiTest::sendWork->sendMessage(readmotorangleData);
+}
+
 
 
 

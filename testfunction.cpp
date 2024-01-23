@@ -27,18 +27,10 @@ void mainUiTest::initSystem()
     loadMotorDetails(rootPath+"/log/motor_log.json");
     loadWeighDetails(rootPath+"/log/weigh_log.json");
 
-//    int windowWidth = this->width();
-//    int windowHeight = this->height();
-//    zero  = QPointF(-windowWidth/2+50,-windowHeight/2+50);
-//    qDebug()<<zero;
-
-//    pathNormal.moveTo(zero);
-
     ui->graphicsView->setChart(chart);
 
     refreshUi();
 
-    //buttonTwinkling("motor_1","yellow",true);
 
 }
 void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
@@ -84,54 +76,15 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 
 void mainUiTest::drawer(double x,double y)
 {
-    QPointF data = QPointF(x,y);//pointTraslater(zero,QPointF(x,y));//画布坐标转换为世界坐标
-    *series<<data;
-    if(!chart->series().isEmpty())chart->removeSeries(series);
-    chart->addSeries(series);
+    QPointF data = QPointF(x,y);
+    *factSeries<<data;
+    if(!chart->series().isEmpty())chart->removeSeries(factSeries);
+    chart->addSeries(factSeries);
     chart->legend()->hide();
     chart->createDefaultAxes();
 
-
-
 }
 
-void mainUiTest::paintEvent(QPaintEvent *)
-{
-
-//    QPainter painter(this);
-//    painter.setRenderHint(QPainter::Antialiasing);
-//    painter.translate(width() / 2, height() / 2);
-//    painter.scale(1, -1);
-
-
-//    //绘制画布
-
-//    frameWidth = this->width()-ui->verticalLayout_5->geometry().width()-100;
-//    frameHeight =ui->horizontalLayout_4->geometry().height()-50;
-
-//    painter.setPen(Qt::black);
-//    painter.setBrush(Qt::gray);
-
-//    QRectF rectangle(zero,pointTraslater(zero,QPointF(frameWidth,frameHeight)));
-//    painter.drawRect(rectangle);
-
-//    //画原点
-//    painter.setBrush(Qt::black);
-//    painter.drawEllipse(zero, 3, 3);
-
-//    //画线
-//    painter.setPen(Qt::white);
-//    painter.setBrush(Qt::NoBrush);
-//    painter.drawPath(pathNormal);
-
-}
-
-QPointF mainUiTest::pointTraslater(QPointF zero,QPointF point)
-{
-//    QPointF traslaterPoint = zero+point;
-
-//    return traslaterPoint;
-}
 
 void mainUiTest::saveMotor(QString filePath)
 {
@@ -152,7 +105,7 @@ void mainUiTest::saveWeigh(QString filePath,bool clear)
     QJsonObject Object = jsonDoc.object();
     weighfile.close();
 
-    Object["weighIndex"] = myWeigh->address;
+    Object["weighIndex"] = myWeigh->detail.address;
 
     QString currentTime = QTime::currentTime().toString();
     QString currentDate = QDateTime::currentDateTime().toString("yyyy-MM-dd");
@@ -262,7 +215,7 @@ void mainUiTest::loadWeighDetails(QString filePath)
     QJsonObject jsonObject = jsonDoc.object();
     motorfile.close();
 
-    myWeigh->address = jsonObject["weighIndex"].toInt();
+    myWeigh->detail.address = jsonObject["weighIndex"].toInt();
 
     for (int i =0;i<jsonObject["weightLog"].toArray().size();i++) {
         myWeigh->weighLogList.append(jsonObject["weightLog"].toArray()[i].toString());
@@ -329,9 +282,17 @@ void mainUiTest::recodeTest(QString filePath)
     qDebug()<<testLog;
 }
 
-void mainUiTest::mageDrawing()
-{
 
-}
+ void mainUiTest::resetThis()
+ {
+     factSeries->clear();
+     myMotor->detail.currentAngle = 0.;
+     myWeigh->detail.currentWeight = 0.;
 
+     for (auto LCD:findChildren<QLCDNumber*>())
+     {
+         LCD->display(0.);
+     }
+     testLog.clear();
+ }
 

@@ -25,40 +25,40 @@ mainUiTest::mainUiTest(QWidget *parent) :
 
     initSystem();
 
-
-
     //图表绘制加采样
     connect(startTimer,&QTimer::timeout,[=]()
     {
         refreshUi();
     });
 
-
-
     //↓这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
     QTimer *timer = new QTimer;
 
-    static int i =1;
 
+    static int i =1;
     connect(timer,&QTimer::timeout,[=](){
         //正常这两个值是decode里修改的，这里为了演示在计时器里更新，
         myWeigh->detail.currentWeight = i;//x
         myMotor->detail.currentAngle = abs(i*sin(i*0.01));//y
 
+        myWeigh->getWeight();
+        myMotor->getLength();
         i+=1;
     });
+    //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
 
     connect(ui->startTest,&QPushButton::clicked,[=](){
-        timer->start(50);
-        startTimer->start(50);
+        timer->start(50);      //查询
+        startTimer->start(5); //采样
 
     });
 
     connect(ui->stopTest,&QPushButton::clicked,[=](){
         timer->stop();
+        i =1;
     });
 
-     //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
+
 
 }
 
@@ -66,7 +66,6 @@ mainUiTest::~mainUiTest()
 {
     delete ui;
 }
-
 
 
 
@@ -87,21 +86,6 @@ void mainUiTest::on_newTest_clicked()
     emit newTest();
 }
 
-void mainUiTest::resetClass()
-{
-    for (auto edit:findChildren<QLineEdit*>())
-    {
-        edit->clear();
-    }
-
-    for (auto Box:findChildren<QDoubleSpinBox*>())
-    {
-        Box->clear();
-    }
-//    showTime = QDateTime::currentDateTime().toString("yyyyMMddhhmm");
-//    rootPath  = QCoreApplication::applicationDirPath()+QStringLiteral("/data/%1.csv").arg(showTime);
-//    ui->filePathEdit->setText(rootPath);
-}
 
 //开始测试，读电机设置，称重模块设置，测试参数（计算运动参数）
 void mainUiTest::on_saveTest_clicked()
@@ -128,5 +112,5 @@ void mainUiTest::on_emergency_clicked()
 void mainUiTest::on_clearTest_clicked()
 {
     datas.clear();
-    pathNormal.clear();
+//    pathNormal.clear();
 }
