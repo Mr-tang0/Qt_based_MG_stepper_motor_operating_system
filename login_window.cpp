@@ -1,6 +1,8 @@
 #include "login_window.h"
 #include "ui_login_window.h"
 
+QString Login::currentName = "";
+
 Login::Login(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Login),
@@ -46,23 +48,9 @@ QByteArray Login::hashEncode(QString data)
     return result;
 }
 
-void Login::messageBox(QString message)
-{
-    QMessageBox msgBox;
-    msgBox.setStyleSheet("QLabel{"
-                          "min-width: 200px;"
-                          "min-height: 100px; "
-                          "}");
-
-    msgBox.setWindowTitle("提示");
-    msgBox.setText(message);
-    msgBox.exec();
-}
 
 void Login::on_loginBtn_clicked()
 {
-
-    qDebug()<<ChineseOrEnglish;
     QString userName = ui->userName->text();
     QString passWord = ui->passWord->text();
 
@@ -78,6 +66,7 @@ void Login::on_loginBtn_clicked()
     {
 
         m_snackbar->addMessage(logined[ChineseOrEnglish]);
+        currentName = userName;
         emit Logined(userName);
         return;
     }

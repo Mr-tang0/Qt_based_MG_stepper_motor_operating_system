@@ -11,6 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     loadMotorAndWeigh();//导入默认电机称重文件
 
+    ui->login->setForegroundColor(QColor(140, 140, 255));
+    ui->test->setForegroundColor(QColor(140, 140, 255));
+    ui->systemSet->setForegroundColor(QColor(140, 140, 255));
+    ui->about->setForegroundColor(QColor(140, 140, 255));
+    ui->help->setForegroundColor(QColor(140, 140, 255));
+
 
 
     test = new mainUiTest();
@@ -44,8 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     system->hide();
     helper->hide();
 
-//    ui->test->setEnabled(false);
-//    ui->systemSet->setEnabled(false);
+    ui->test->setEnabled(false);
+    ui->systemSet->setEnabled(false);
 
     ui->widget->setLayout(layout);
 
@@ -158,7 +164,7 @@ void MainWindow::on_systemSet_clicked()
 void MainWindow::loadMotorAndWeigh()
 {
     QString rootPath  = QCoreApplication::applicationDirPath();
-    QString motorAndWeighFilePath = rootPath +"/log/motorandweighlog.json";
+    QString motorAndWeighFilePath = rootPath +"/users/log/motorandweighlog.json";
 
     QFile motorfile(motorAndWeighFilePath);
     try {

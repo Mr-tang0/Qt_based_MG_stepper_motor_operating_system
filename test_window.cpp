@@ -34,12 +34,11 @@ mainUiTest::mainUiTest(QWidget *parent) :
     //↓这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
     QTimer *timer = new QTimer;
 
-
     static int i =1;
     connect(timer,&QTimer::timeout,[=](){
         //正常这两个值是decode里修改的，这里为了演示在计时器里更新，
         myWeigh->detail.currentWeight = i;//x
-        myMotor->detail.currentAngle = abs(i*sin(i*0.01));//y
+        myMotor->detail.currentAngle = abs(i*sin(i));//y
 
         // myWeigh->getWeight();
         // myMotor->getLength();
@@ -48,13 +47,15 @@ mainUiTest::mainUiTest(QWidget *parent) :
     //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
 
     connect(ui->startTest,&QPushButton::clicked,[=](){
-        timer->start(500);      //查询
-        startTimer->start(200); //采样
+
+        timer->start(1000/material->sampleRate);      //查询
+        startTimer->start(1000/material->sampleRate); //采样
 
     });
 
     connect(ui->stopTest,&QPushButton::clicked,[=](){
         timer->stop();
+        startTimer->stop();
         i =1;
     });
 
@@ -123,7 +124,6 @@ void mainUiTest::on_saveTest_clicked()
 void mainUiTest::on_stopTest_clicked()
 {
     myMotor->stop();
-    startTimer->stop();
     m_snackbar->addMessage(stopTestFlag[ChineseOrEnglish]);
 }
 

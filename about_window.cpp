@@ -9,7 +9,7 @@ Qbout::Qbout(QWidget *parent) :
 
     QString rootPath  = QCoreApplication::applicationDirPath();
 
-    QFile txtFile(rootPath+"/log/about.txt");
+    QFile txtFile(rootPath+"/users/log/about.txt");
     txtFile.open(QIODevice::ReadOnly);
     QTextStream txt(&txtFile);
     txt.setCodec("UTF-8");

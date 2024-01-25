@@ -9,7 +9,7 @@ Helper::Helper(QWidget *parent) :
 
     QString rootPath  = QCoreApplication::applicationDirPath();
 
-    QFile txtFile(rootPath+"/log/helper.txt");
+    QFile txtFile(rootPath+"/users/log/helper.txt");
     txtFile.open(QIODevice::ReadOnly);
     QTextStream txt(&txtFile);
     txt.setCodec("UTF-8");

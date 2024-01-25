@@ -17,10 +17,10 @@ public:
     explicit Login(QWidget *parent = nullptr);
     ~Login();
 
-    bool loginflag = true;
-    void messageBox(QString message);
     QByteArray hashEncode(QString data);
     QJsonObject loginObject;
+
+    static QString currentName;
 
 private slots:
     void on_signUpBtn_clicked();
@@ -34,8 +34,6 @@ signals:
 
 private:
     Ui::Login *ui;
-
-
 
     QtMaterialSnackbar  *const m_snackbar;
 };

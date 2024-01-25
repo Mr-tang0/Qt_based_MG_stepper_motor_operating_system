@@ -25,6 +25,8 @@ public:
 
     static QString rootPath;
 
+    static void setRootPath(const QString &newRootPath);
+
 private slots:
     void on_submitBtn_clicked();
 
@@ -49,9 +51,8 @@ protected:
 private:
     Ui::FormFill *ui;
     QtMaterialSnackbar  *const m_snackbar;
-    QButtonGroup *btnGroup;
-
     QString showTime;
+    QString currentName = "";
 
 };
 

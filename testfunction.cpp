@@ -15,9 +15,10 @@ weigh* mainUiTest::myWeigh = new weigh;
 motor* mainUiTest::myMotor = new motor;
 materialDetails*  mainUiTest::material = new materialDetails;
 
-QList<QStringList> mainUiTest::testLog = {{"time","stress","Theoretical displacement","Actual displacement"}};
+QList<QStringList> mainUiTest::testLog = {};
 
 int mainUiTest::sampleRate = 100;
+
 //静态成员初始化区
 
 void mainUiTest::initSystem()
@@ -57,12 +58,14 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
     drawer(myWeigh->detail.currentWeight,myMotor->detail.currentAngle);
 
     //实验记录
+    qDebug()<<testLog;
     QStringList couple = {QString::number(timeDifference),//时间
                           QString::number(stress),//应力
                           QString::number(theoreticallyLengthDifference),//理论位移
                           QString::number(displacement)//实际位移
                          };
     testLog.append(couple);
+
 
 }
 
@@ -193,6 +196,7 @@ void mainUiTest::saveJson(motor* givenMotor,QString filePath)
 
 void mainUiTest::recodeTest(QString filePath)
 {
+
     QFile labelFile(filePath);
     if(!labelFile.open(QIODevice::Append|QIODevice::Text))
     {
@@ -227,6 +231,6 @@ void mainUiTest::recodeTest(QString filePath)
     {
        LCD->display(0.);
     }
-    testLog.clear();
+    testLog = {{"time","stress","Theoretical displacement","Actual displacement"}};
  }
 

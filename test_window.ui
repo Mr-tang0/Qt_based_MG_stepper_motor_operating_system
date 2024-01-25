@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>802</height>
+    <height>892</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,9 +15,9 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="1" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_6">
+    <layout class="QVBoxLayout" name="verticalLayout_6" stretch="2,8">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="6,0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="8,0,2">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3">
          <item>
@@ -41,6 +41,7 @@
               <widget class="QLCDNumber" name="load">
                <property name="styleSheet">
                 <string notr="true">QLabel{
+	background-color: rgb(255, 0, 0);
 color: rgb(255, 0, 4);
 }
 </string>
@@ -186,7 +187,7 @@ background-color: rgb(255, 131, 131);</string>
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="80,5">
+      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="8,2">
        <item>
         <widget class="QChartView" name="graphicsView"/>
        </item>
@@ -289,49 +290,10 @@ background-color: rgb(255, 131, 131);</string>
          <item>
           <widget class="QWidget" name="widget" native="true">
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0">
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="2">
-             <spacer name="horizontalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="1" rowspan="2">
+            <item row="0" column="0" rowspan="2">
              <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,11,0,0,0,0">
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
                 <item>
                  <widget class="QSpinBox" name="spinBox">
                   <property name="minimumSize">

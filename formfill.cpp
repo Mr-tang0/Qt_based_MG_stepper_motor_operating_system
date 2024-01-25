@@ -1,6 +1,7 @@
 #include "formfill.h"
 #include "ui_formfill.h"
 #include "test_window.h"
+#include "login_window.h"
 
 QString FormFill::rootPath = "";
 
@@ -14,10 +15,13 @@ FormFill::FormFill(QWidget *parent) :
     m_snackbar->setBackgroundColor(QColor(150,150,150));
     m_snackbar->setFont(QFont("幼圆"));
 
+
+    resetThis();
     findAvailablePort();
 
     connect(this,&FormFill::thisShow,[=](){
         resetThis();
+
     });
 
 }
@@ -45,7 +49,7 @@ void FormFill::findAvailablePort()
     ui->limits->addItems(number);
 
     QStringList  samplingRateList;
-    for (int i = 1;i<5000;i=i+100)
+    for (int i = 20;i<=400;i=i+20)
     {
         samplingRateList.append(QString::number(i));
     }
@@ -184,6 +188,9 @@ void FormFill::saveLabel(QString filePath)//保存csv文件并且更新port、mo
 
 void FormFill::resetThis()
 {
+    currentName = Login::currentName;
+    qDebug()<<currentName;
+
     for (auto edit:findChildren<QLineEdit*>())
     {
         edit->clear();
@@ -197,9 +204,9 @@ void FormFill::resetThis()
     showTime = QDateTime::currentDateTime().toString("yyyyMMddhhmm");
     ui->timeNumberEdit->setText(showTime);
     ui->currentTime->setText(QTime::currentTime().toString());
-    rootPath  = QCoreApplication::applicationDirPath()+QStringLiteral("/data/%1.csv").arg(showTime);
+    rootPath  = QCoreApplication::applicationDirPath()+QStringLiteral("/users/data/%1_%2.csv").arg(currentName).arg(showTime);
     ui->filePathEdit->setText(rootPath);
-    ui->ExperimenterEdit->setText("UserName");
+    ui->ExperimenterEdit->setText(currentName);
 }
 
 
