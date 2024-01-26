@@ -1,4 +1,4 @@
-#include "test_window.h"
+﻿#include "test_window.h"
 #include "ui_test_window.h"
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
@@ -23,6 +23,26 @@ int mainUiTest::sampleRate = 100;
 
 void mainUiTest::initSystem()
 {
+    m_snackbar->setParent(this);
+    m_snackbar->setBackgroundColor(QColor(150,150,150));
+    m_snackbar->setFont(QFont("幼圆"));
+
+    QThread *sendThread = new QThread;
+    sendWork->moveToThread(sendThread);//sendWork进入子线程，有关于收发的函数均在子线程中执行
+    sendWork->openReseiveChannal();//开接收
+
+    QThread *decodeThread = new QThread;
+    decodeWork->moveToThread(decodeThread);//decodeWork进入子线程，有关于解码的函数均在子线程中执行
+    connect(sendWork,&Worker::ReseiveMassage,[=](QString massage){
+        decodeWork->decodeMessage(massage);
+    });
+
+
+    // connect(ui->colorBtnGrp,&QButtonGroup::buttonToggled,[=]()
+    // {
+    //     qDebug()<<"ui->colorBtnGrp->checkedButton()->text()";
+    // });
+
     ui->graphicsView->setChart(chart);
 
     refreshUi();
@@ -103,7 +123,7 @@ void mainUiTest::saveWeigh(QString filePath,bool clear)
     QString currentTime = QTime::currentTime().toString();
     QString currentDate = QDateTime::currentDateTime().toString("yyyy-MM-dd");
 
-    QString dateLog = QString::number(myWeigh->currentWeight)+QStringLiteral("_kg_%1_%2").arg(currentDate).arg(currentTime);
+    QString dateLog = QString::number(myWeigh->detail.currentWeight)+QStringLiteral("_kg_%1_%2").arg(currentDate).arg(currentTime);
     Object["leastWeight"] = dateLog;
 
 
@@ -200,7 +220,7 @@ void mainUiTest::recodeTest(QString filePath)
     QFile labelFile(filePath);
     if(!labelFile.open(QIODevice::Append|QIODevice::Text))
     {
-        m_snackbar->addMessage(filePathError[ChineseOrEnglish]);
+        m_snackbar->addMessage("指定位置不存在!");
     }
     else {
         QTextStream out(&labelFile);
@@ -216,7 +236,7 @@ void mainUiTest::recodeTest(QString filePath)
         }
         labelFile.close();
     }
-    m_snackbar->addMessage(saveSucess[ChineseOrEnglish]);
+    m_snackbar->addMessage("保存成功！");
     qDebug()<<testLog;
 }
 

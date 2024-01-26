@@ -7,6 +7,8 @@
 QT       += core gui
 QT       += serialport
 QT       += charts
+# QT       += webengine
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -82,3 +84,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resousefile.qrc
+
+win32-msvc*: {
+    QMAKE_CFLAGS *= /utf-8
+    QMAKE_CXXFLAGS *= /utf-8
+}

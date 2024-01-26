@@ -1,8 +1,9 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 //mainUiTest *MainWindow::test = new mainUiTest();
 
+int MainWindow::ChineseOrEnglish = 0;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_snackbar(new QtMaterialSnackbar),
@@ -50,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     system->hide();
     helper->hide();
 
-    ui->test->setEnabled(false);
-    ui->systemSet->setEnabled(false);
+    // ui->test->setEnabled(false);
+    // ui->systemSet->setEnabled(false);
 
     ui->widget->setLayout(layout);
 
@@ -234,11 +235,11 @@ void MainWindow::signUping()
 
         if(!login->loginObject[hashUserName].isNull())
         {
-            signUp->m_snackbar->addMessage(signUpError[ChineseOrEnglish]);
+            signUp->m_snackbar->addMessage("用户已存在!");
         }
         else
         {
-            signUp->m_snackbar->addMessage(signUpDone[ChineseOrEnglish]);
+            signUp->m_snackbar->addMessage("注册成功!");
             delay(500);
 
             signUp->hide();
@@ -248,6 +249,8 @@ void MainWindow::signUping()
             findChild<QLineEdit*>("passWord")->clear();
 
             login->loginObject[hashUserName] = hashPassWord;
+            // login->loginObject[]
+
             QJsonDocument jsonDoc;
             jsonDoc.setObject(login->loginObject);
             QString temp  = jsonDoc.toJson();

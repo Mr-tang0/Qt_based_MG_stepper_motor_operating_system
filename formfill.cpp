@@ -214,7 +214,7 @@ void FormFill::saveCsvFile(QString filePath,QList<QStringList> data)
 {
     if(filePath.mid(filePath.length()-3,-1)!="csv")
     {
-        m_snackbar->addMessage(fileError[ChineseOrEnglish]);
+        m_snackbar->addMessage("文件格式错误!");
         return;
     }
 
@@ -224,15 +224,15 @@ void FormFill::saveCsvFile(QString filePath,QList<QStringList> data)
     {
         if(!labelFile.open(QIODevice::WriteOnly))
         {
-            m_snackbar->addMessage(filePathError[ChineseOrEnglish]);
+            m_snackbar->addMessage("指定位置不存在!");
             return;
         }
         else {
-            m_snackbar->addMessage(saveSucess[ChineseOrEnglish]);
+            m_snackbar->addMessage("保存成功！");
         }
     }
     else {
-        m_snackbar->addMessage(alreadyHaveFile[ChineseOrEnglish]);
+        m_snackbar->addMessage("当前位置已存在文件,不可覆盖！");
         return;
     }
 

@@ -1,4 +1,4 @@
-#ifndef WEIGH_H
+﻿#ifndef WEIGH_H
 #define WEIGH_H
 
 #include <QObject>
@@ -9,23 +9,18 @@ class weigh : public QObject
     Q_OBJECT
 public:
     explicit weigh(QObject *parent = nullptr);
-    
-    void getWeight();
-    void shelling(int weighAddress,bool shell);
 
-
-    weighDetails detail = {0,};
-
-//    int address;
-    double currentWeight;
-    QList<QString> weighLogList;
-
-    QByteArray buildData(int weighAddress,QString data,bool optWork);
     QByteArray CRC16(QByteArray data);
+    
+    void getWeight();//读质量信息
 
-    QJsonObject weighObject;
+    void shelling(int weighAddress,bool shell);//去皮操作
+
+    weighDetails detail = {0,0.,0.,0.};
+
 private:
 
+    QByteArray buildData(int weighAddress,QString data,bool optWork);
 
 
 

@@ -1,4 +1,4 @@
-#include "motor.h"
+﻿#include "motor.h"
 #include "test_window.h"
 
 motor::motor(QObject *parent) : QObject(parent)
@@ -191,20 +191,61 @@ void motor::angleMove()//根据motor.detail的angle和speed值进行运动，不
 
 }
 
-bool motor::writeParam()//将motor detail的值发送给电机
+bool motor::writeSpeedParam()//将motor detail的值发送给电机
 {
-
     int address = detail.motorID;
     QString command = motorcmd.writeParameterToROMCMD.arg(QString::number(address,16));
     QByteArray writeData = buildCmdData(command);
 
     bool writeFlag = mainUiTest::sendWork->sendMessage(writeData);
 
+    //写速度参数
+    {
+        int anglePid = 36000*detail.speed/detail.pitch;//转angle速度，一定为int
+        QString speedStr = QString::number(anglePid,16);
+        for (int i = 0;i<12-speedStr.length();i++)
+        {
+            speedStr  = "0" + speedStr;
+        }
+        for (int i = 0; i<6;i++)
+        {
+            motordata.speedPid = motordata.speedPid +  " " +speedStr.right(2);
+            speedStr.remove(speedStr.length()-2,2);
+        }
+        QByteArray speedParamData = buildCmdData(speedStr);
 
-
-    //参数还未写入
+        if(writeFlag) writeFlag = mainUiTest::sendWork->sendMessage(speedParamData);
+    }
     return writeFlag;
 }
+
+bool motor::writeMaxAngleParam()
+{
+    int address = detail.motorID;
+    QString command = motorcmd.writeParameterToROMCMD.arg(QString::number(address,16));
+    QByteArray writeData = buildCmdData(command);
+
+    bool writeFlag = mainUiTest::sendWork->sendMessage(writeData);
+
+    //写最大速度参数
+    {    int maxanglePid = 36000*detail.maxSpeed/detail.pitch;//转angle速度，一定为int
+        QString maxspeedStr = QString::number(maxanglePid,16);
+        for (int i = 0;i<12-maxspeedStr.length();i++)
+        {
+            maxspeedStr  = "0" + maxspeedStr;
+        }
+        for (int i = 0; i<6;i++)
+        {
+            motordata.maxSpeed = motordata.maxSpeed +  " " +maxspeedStr.right(2);
+            maxspeedStr.remove(maxspeedStr.length()-2,2);
+        }
+        QByteArray maxSpeedParamData = buildCmdData(maxspeedStr);
+
+        if(writeFlag) writeFlag = mainUiTest::sendWork->sendMessage(maxSpeedParamData);
+    }
+    return writeFlag;
+}
+
 
 bool motor::readState1()
 {

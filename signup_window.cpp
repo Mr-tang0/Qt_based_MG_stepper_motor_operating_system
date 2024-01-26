@@ -1,5 +1,6 @@
-#include "signup_window.h"
+﻿#include "signup_window.h"
 #include "ui_signup_window.h"
+#include "mainwindow.h"
 
 signup::signup(QWidget *parent) :
     QWidget(parent),
@@ -21,20 +22,20 @@ void signup::on_confirm_clicked()
     QString passWord = ui->passWord_1->text();
     QString passWord2 = ui->passWord_2->text();
 
-    if(userName=="" or passWord=="" or passWord2=="")
+    if(userName=="" || passWord=="" || passWord2=="")
     {
-        m_snackbar->addMessage(emptyEdit[ChineseOrEnglish]);
+        m_snackbar->addMessage(emptyEdit[MainWindow::ChineseOrEnglish]);
         return;
     }
 
     if(passWord!=passWord2)
     {
-        m_snackbar->addMessage(inconsistency[ChineseOrEnglish]);
+        m_snackbar->addMessage(inconsistency[MainWindow::ChineseOrEnglish]);
         return;
     }
-    if(passWord.length()<=5)
+    if(passWord.length()<6)
     {
-        m_snackbar->addMessage(shortPassword[ChineseOrEnglish]);
+        m_snackbar->addMessage(shortPassword[MainWindow::ChineseOrEnglish]);
         return;
     }
     else

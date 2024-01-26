@@ -1,5 +1,6 @@
-#include "login_window.h"
+﻿#include "login_window.h"
 #include "ui_login_window.h"
+#include "mainwindow.h"
 
 QString Login::currentName = "";
 
@@ -10,8 +11,8 @@ Login::Login(QWidget *parent) :
 {
     ui->setupUi(this);
     m_snackbar->setParent(this);
-    m_snackbar->setBackgroundColor(QColor(150,150,150));
-    m_snackbar->setFont(QFont("幼圆"));
+    // m_snackbar->setBackgroundColor(QColor(150,150,150));
+    // m_snackbar->setFont(QFont("幼圆"));
 
     QString rootPath  = QCoreApplication::applicationDirPath();
     QFile file(rootPath+"/users/users.users");
@@ -32,6 +33,17 @@ Login::Login(QWidget *parent) :
 
     }
     file.close();
+
+
+    ui->signUpBtn->setEnabled(false);
+
+    if(loginObject[hashEncode("admin")].isNull())//管理员权限判断
+    {
+        ui->signUpBtn->setText("无权限注册");
+        ui->loginBtn->setText("无权限登录");
+        ui->loginBtn->setEnabled(false);
+    }
+
 }
 
 Login::~Login()
@@ -53,27 +65,33 @@ void Login::on_loginBtn_clicked()
 {
     QString userName = ui->userName->text();
     QString passWord = ui->passWord->text();
+    ui->passWord->clear();
 
     QString hashPassWord = hashEncode(passWord);
     QString hashUserName = hashEncode(userName);
 
-    if(userName=="" or passWord=="")
+    if(userName=="" || passWord=="")
     {
-        m_snackbar->addMessage(emptyEdit[ChineseOrEnglish]);
+        qDebug()<<MainWindow::ChineseOrEnglish;
+        m_snackbar->addMessage(emptyEdit[MainWindow::ChineseOrEnglish]);
         return;
     }
     if(hashPassWord==loginObject[hashUserName].toString())
     {
 
-        m_snackbar->addMessage(logined[ChineseOrEnglish]);
+        m_snackbar->addMessage(logined[MainWindow::ChineseOrEnglish]);
         currentName = userName;
+
+        if(userName=="admin")//管理员登录才可注册
+        {
+            ui->signUpBtn->setEnabled(true);
+        }
+
         emit Logined(userName);
         return;
     }
-    else
-    {
-        m_snackbar->addMessage(unlogined[ChineseOrEnglish]);
-    }
+    else m_snackbar->addMessage(unlogined[MainWindow::ChineseOrEnglish]);
+
 
 }
 

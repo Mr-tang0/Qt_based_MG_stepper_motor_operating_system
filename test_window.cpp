@@ -1,4 +1,4 @@
-#include "test_window.h"
+﻿#include "test_window.h"
 #include "ui_test_window.h"
 #include "formfill.h"
 
@@ -9,21 +9,8 @@ mainUiTest::mainUiTest(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_snackbar->setParent(this);
-    m_snackbar->setBackgroundColor(QColor(150,150,150));
-    m_snackbar->setFont(QFont("幼圆"));
-
-    QThread *sendThread = new QThread;
-    sendWork->moveToThread(sendThread);//sendWork进入子线程，有关于收发的函数均在子线程中执行
-    sendWork->openReseiveChannal();//开接收
-
-    QThread *decodeThread = new QThread;
-    decodeWork->moveToThread(decodeThread);//decodeWork进入子线程，有关于解码的函数均在子线程中执行
-    connect(sendWork,&Worker::ReseiveMassage,[=](QString massage){
-        decodeWork->decodeMessage(massage);
-    });
-
     initSystem();
+
 
     //图表绘制加采样
     connect(startTimer,&QTimer::timeout,[=]()
@@ -107,7 +94,7 @@ void mainUiTest::on_startTest_clicked()
 
      }
 
-     m_snackbar->addMessage(startTestFlag[ChineseOrEnglish]);
+     m_snackbar->addMessage("测试开始！");
 }
 
 
@@ -124,7 +111,7 @@ void mainUiTest::on_saveTest_clicked()
 void mainUiTest::on_stopTest_clicked()
 {
     myMotor->stop();
-    m_snackbar->addMessage(stopTestFlag[ChineseOrEnglish]);
+    m_snackbar->addMessage("测试已停止！");
 }
 
 void mainUiTest::on_emergency_clicked()
@@ -132,7 +119,7 @@ void mainUiTest::on_emergency_clicked()
     myMotor->stop();
     myMotor->close();
     startTimer->stop();
-    m_snackbar->addMessage(stopTestFlag[ChineseOrEnglish]);
+    m_snackbar->addMessage("测试已停止！");
 }
 
 void mainUiTest::on_clearTest_clicked()

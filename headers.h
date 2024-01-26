@@ -1,4 +1,4 @@
-#ifndef HEADERS_H
+﻿#ifndef HEADERS_H
 #define HEADERS_H
 
 #include"command.h"
@@ -111,27 +111,28 @@ struct materialDetails
 
 
 
-//语料库
-static QList<QString> logined = {"登录成功！","Login successful!"};
-static QList<QString> unlogined = {"用户名或密码错误!","Wrong username or password!"};
-static QList<QString> emptyEdit = {"请输入用户名或密码!","Please enter your username or password!"};
+// 语料库QString
+static QStringList logined = {"登录成功！","Login successful!"};
 
-static QList<QString> signUpError = {"用户已存在!","The user already exists!"};
-static QList<QString> signUpDone = {"注册成功!","Registration is successful!"};
+static QStringList unlogined = {"用户名或密码错误!","Wrong username or password!"};
+static QStringList emptyEdit = {"请输入用户名或密码!","Please enter your username or password!"};
 
-static QList<QString> inconsistency = {"两次密码输入不一致!","The password is inconsistent twice!"};
-static QList<QString> shortPassword = {"密码不少于6位!","The password is not less than 6 digits!"};
-static QList<QString> filePathError = {"指定位置不存在!","The specified location does not exist!"};
-static QList<QString> fileError = {"文件格式错误!","File format error!"};
-static QList<QString> saveSucess = {"保存成功！","Save successfully!"};
-static QList<QString> alreadyHaveFile = {"当前位置已存在文件,不可覆盖！","The file already exists in the current location and cannot be overwritten!"};
+static QStringList signUpError = {"用户已存在!","The user already exists!"};
+static QStringList signUpDone = {"注册成功!","Registration is successful!"};
 
-static QList<QString>openAndClosee ={ "当前位置已存在文件,不可覆盖！","The file already exists in the current location and cannot be overwritten!"};
+static QStringList inconsistency = {"两次密码输入不一致!","The password is inconsistent twice!"};
+static QStringList shortPassword = {"密码不少于6位!","The password is not less than 6 digits!"};
+static QStringList filePathError = {"指定位置不存在!","The specified location does not exist!"};
+static QStringList fileError = {"文件格式错误!","File format error!"};
+static QStringList saveSucess = {"保存成功！","Save successfully!"};
+static QStringList alreadyHaveFile = {"当前位置已存在文件,不可覆盖！","The file already exists in the current location and cannot be overwritten!"};
 
-static QList<QString> startTestFlag = {"测试开始！","The test begins!"};
-static QList<QString> stopTestFlag = {"测试已停止！","Testing has been stopped!"};
+static QStringList startTestFlag = {"测试开始！","The test begins!"};
+static QStringList stopTestFlag = {"测试已停止！","Testing has been stopped!"};
 
-static int ChineseOrEnglish = 0; //预料切换,用不了
+
+
+
 
 
 
