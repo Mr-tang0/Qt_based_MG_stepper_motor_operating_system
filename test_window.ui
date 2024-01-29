@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>892</height>
+    <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -286,7 +286,7 @@ background-color: rgb(255, 131, 131);</string>
                 <string notr="true">font: 10pt &quot;幼圆&quot;;</string>
                </property>
                <property name="text">
-                <string>清除当前</string>
+                <string>还原当前</string>
                </property>
               </widget>
              </item>
@@ -321,12 +321,18 @@ background-color: rgb(255, 131, 131);</string>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_2">
                 <item>
-                 <widget class="QSpinBox" name="spinBox">
+                 <widget class="QDoubleSpinBox" name="matulSpeed">
                   <property name="minimumSize">
                    <size>
                     <width>100</width>
                     <height>40</height>
                    </size>
+                  </property>
+                  <property name="minimum">
+                   <double>0.010000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>5.000000000000000</double>
                   </property>
                  </widget>
                 </item>
@@ -403,6 +409,24 @@ background-color: rgb(255, 131, 131);</string>
                 </property>
                 <property name="text">
                  <string>下</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QPushButton" name="setLengthZero">
+                <property name="text">
+                 <string>设置0点</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="setWeighZero">
+                <property name="text">
+                 <string>去皮</string>
                 </property>
                </widget>
               </item>

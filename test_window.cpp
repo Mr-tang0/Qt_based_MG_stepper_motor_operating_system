@@ -24,12 +24,14 @@ mainUiTest::mainUiTest(QWidget *parent) :
     static int i =1;
     connect(timer,&QTimer::timeout,[=](){
         //正常这两个值是decode里修改的，这里为了演示在计时器里更新，
-        myWeigh->detail.currentWeight = i;//x
-        myMotor->detail.currentAngle = abs(i*sin(i));//y
+        // myWeigh->detail.currentWeight = i;//x
+        // myMotor->detail.currentAngle = abs(i*sin(i));//y
+        // i+=1;
 
-        // myWeigh->getWeight();
-        // myMotor->getLength();
-        i+=1;
+        //查询位置和力
+        myWeigh->getWeight();
+        myMotor->getLength();
+
     });
     //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
 
@@ -41,9 +43,11 @@ mainUiTest::mainUiTest(QWidget *parent) :
     });
 
     connect(ui->stopTest,&QPushButton::clicked,[=](){
-        timer->stop();
-        startTimer->stop();
-        i =1;
+        myMotor->stop();
+        // timer->stop();//查询
+        // startTimer->stop();//采样
+        // i =1;
+        // m_snackbar->addMessage("测试已停止！");
     });
 
 
@@ -110,8 +114,7 @@ void mainUiTest::on_saveTest_clicked()
 
 void mainUiTest::on_stopTest_clicked()
 {
-    myMotor->stop();
-    m_snackbar->addMessage("测试已停止！");
+
 }
 
 void mainUiTest::on_emergency_clicked()
@@ -126,3 +129,35 @@ void mainUiTest::on_clearTest_clicked()
 {
     resetThis();
 }
+
+void mainUiTest::on_setLengthZero_clicked()
+{
+    myMotor->detail.zero = myMotor->detail.currentAngle;
+}
+
+
+void mainUiTest::on_setWeighZero_clicked()
+{
+    myWeigh->shelling(myWeigh->detail.address,true);
+}
+
+
+void mainUiTest::on_UP_clicked()
+{
+    double speed = ui->matulSpeed->text().toDouble();
+    myMotor->speedMove(speed);
+}
+
+
+void mainUiTest::on_Down_clicked()
+{
+    double speed = ui->matulSpeed->text().toDouble();
+    myMotor->speedMove(-speed);
+}
+
+
+void mainUiTest::on_stop_clicked()
+{
+    myMotor->stop();
+}
+

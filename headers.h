@@ -74,6 +74,9 @@ struct motorDetails
     double pitch;//螺距
     double currentAngle;//当前运动距离
 
+    double zero;//约定0点
+    double Backlash;//背隙补偿值
+
 };
 
 

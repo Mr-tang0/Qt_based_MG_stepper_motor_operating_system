@@ -243,14 +243,24 @@ void mainUiTest::recodeTest(QString filePath)
 
  void mainUiTest::resetThis()
  {
-    factSeries->clear();
-    myMotor->detail.currentAngle = 0.;
-    myWeigh->detail.currentWeight = 0.;
+    myMotor->getLength();//读当前位置
+    delay(10);
+    double moveLength = myMotor->detail.zero - myMotor->detail.currentAngle;//与规定0点差值
+    myMotor->angleMove(moveLength);//归0
 
+    //测试代码
+    // myMotor->detail.currentAngle = 0.;
+    // myWeigh->detail.currentWeight = 0.;
+
+    //所有显示模块归零
     for (auto LCD:findChildren<QLCDNumber*>())
     {
        LCD->display(0.);
     }
+
+    //临时数据储存删除
     testLog = {{"time","stress","Theoretical displacement","Actual displacement"}};
+    //图像序列删除
+    factSeries->clear();
  }
 

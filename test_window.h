@@ -1,4 +1,4 @@
-#ifndef MAINUITEST_H
+﻿#ifndef MAINUITEST_H
 #define MAINUITEST_H
 
 #include <QWidget>
@@ -64,6 +64,16 @@ private slots:
     void on_emergency_clicked();
 
     void on_clearTest_clicked();
+
+    void on_setLengthZero_clicked();
+
+    void on_setWeighZero_clicked();
+
+    void on_UP_clicked();
+
+    void on_Down_clicked();
+
+    void on_stop_clicked();
 
 signals:
     void newTest();

@@ -9,15 +9,15 @@ motor::motor(QObject *parent) : QObject(parent)
 //拉伸
 void motor::modeStretch()
 {
-    angleMove();//开始运动
+    angleMove(detail.length);//开始运动
 }
 
 //压缩
 void motor::modeCompress()
 {
-    detail.length = -detail.length;//反向
+    // detail.length = -detail.length;//反向
 
-    angleMove();//开始运动
+    angleMove(-detail.length);//开始运动
 }
 
 //往复
@@ -25,10 +25,11 @@ void motor::modereciprocate()
 {
     InquireTimer->start(detail.cycle);//周期
 
-    connect(InquireTimer,&QTimer::timeout,[=]()
+    int i = 1;
+    connect(InquireTimer,&QTimer::timeout,[=,&i]()
     {
-        angleMove();//开始运动
-        detail.length = -detail.length;//反向
+        angleMove(i*detail.length);//开始运动
+        i = -i;
     });
 
 }
@@ -37,19 +38,20 @@ void motor::modereciprocate()
 void motor::modeConstant()
 {
 
-    angleMove();//开始运动
+    speedMove(detail.speed);//开始运动
 
     InquireTimer->start(20);
+
     connect(InquireTimer,&QTimer::timeout,[=]()
     {
         if(mainUiTest::myWeigh->detail.currentWeight<mainUiTest::myWeigh->detail.force)
         {
-            angleMove();//开始运动
+            speedMove(detail.speed);//开始运动
         }
 
         if(mainUiTest::myWeigh->detail.currentWeight>0.8*mainUiTest::myWeigh->detail.force)//当前力值大于设定值的8成
         {
-            detail.speed = detail.speed/2;//速度减半
+            speedMove(detail.speed/2);//开始运动
         }
 
         if(mainUiTest::myWeigh->detail.currentWeight>mainUiTest::myWeigh->detail.force)//当前力值大于设定值
@@ -89,12 +91,15 @@ bool motor::stop()
     int address = detail.motorID;
     QString command = motorcmd.motorStopCMD.arg(QString::number(address,16));
     QByteArray stopData = buildCmdData(command);
-
+    // if(InquireTimer->isActive())
+    // {
+    //     InquireTimer->stop();
+    // }
     bool stopFlag = mainUiTest::sendWork->sendMessage(stopData);
     return stopFlag;
 }
 
-void motor::speedMove()
+void motor::speedMove(double moveSpeed)
 {
     int address = detail.motorID;
     QString command = motorcmd.speedConcrolCMD.arg(QString::number(address,16));
@@ -105,7 +110,7 @@ void motor::speedMove()
 
     //speed : mm/s        speed/pitch : r/s          36000*speed/pitch : 度%/s
 
-    double speed = detail.speed;
+    double speed = moveSpeed;
     // speed = 0.01;
     double pitch = detail.pitch;//螺距mm
     // pitch = 0.01;
@@ -136,7 +141,7 @@ void motor::speedMove()
 
 }
 
-void motor::angleMove()//根据motor.detail的angle和speed值进行运动，不同的运动方式应该修改其值
+void motor::angleMove(double moveLen)//根据motor.detail的angle和speed值进行运动，不同的运动方式应该修改其值
 {
     //指令
     int address = detail.motorID;
@@ -147,7 +152,7 @@ void motor::angleMove()//根据motor.detail的angle和speed值进行运动，不
     mainUiTest::sendWork->sendMessage(moveCMD);
 
     //数据
-    double moveLength = detail.length;//运动距离
+    double moveLength = moveLen + detail.zero + detail.Backlash;//实际  运动距离
     double pitch = detail.pitch;//螺距mm
     double maxSpeed = detail.maxSpeed;//最大速度
 
@@ -348,7 +353,9 @@ QByteArray motor::verifySUM(QString data)
     uchar byteValue = uchar(num) & 0x00ff;//注意这里的校验是舍弃高8位的
 
     builtData.append(char(byteValue));
+
     //qDebug()<<"debug from verifySUM"<<builtData.toHex();
+
     return builtData;
 }
 

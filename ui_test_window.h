@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLCDNumber>
@@ -19,7 +20,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -72,12 +72,15 @@ public:
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
     QHBoxLayout *horizontalLayout_2;
-    QSpinBox *spinBox;
+    QDoubleSpinBox *matulSpeed;
     QPushButton *UP;
     QSpacerItem *verticalSpacer_3;
     QPushButton *stop;
     QSpacerItem *verticalSpacer_4;
     QPushButton *Down;
+    QHBoxLayout *horizontalLayout_6;
+    QPushButton *setLengthZero;
+    QPushButton *setWeighZero;
     QSpacerItem *verticalSpacer_2;
     QSpacerItem *horizontalSpacer;
     QRadioButton *blue;
@@ -90,7 +93,7 @@ public:
     {
         if (mainUiTest->objectName().isEmpty())
             mainUiTest->setObjectName(QString::fromUtf8("mainUiTest"));
-        mainUiTest->resize(1200, 892);
+        mainUiTest->resize(1200, 900);
         gridLayout_2 = new QGridLayout(mainUiTest);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -314,11 +317,13 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        spinBox = new QSpinBox(widget);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
-        spinBox->setMinimumSize(QSize(100, 40));
+        matulSpeed = new QDoubleSpinBox(widget);
+        matulSpeed->setObjectName(QString::fromUtf8("matulSpeed"));
+        matulSpeed->setMinimumSize(QSize(100, 40));
+        matulSpeed->setMinimum(0.010000000000000);
+        matulSpeed->setMaximum(5.000000000000000);
 
-        horizontalLayout_2->addWidget(spinBox);
+        horizontalLayout_2->addWidget(matulSpeed);
 
 
         verticalLayout_2->addLayout(horizontalLayout_2);
@@ -355,6 +360,21 @@ public:
         verticalLayout_2->setStretch(1, 11);
 
         gridLayout->addLayout(verticalLayout_2, 0, 0, 2, 1);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setObjectName(QString::fromUtf8("horizontalLayout_6"));
+        setLengthZero = new QPushButton(widget);
+        setLengthZero->setObjectName(QString::fromUtf8("setLengthZero"));
+
+        horizontalLayout_6->addWidget(setLengthZero);
+
+        setWeighZero = new QPushButton(widget);
+        setWeighZero->setObjectName(QString::fromUtf8("setWeighZero"));
+
+        horizontalLayout_6->addWidget(setWeighZero);
+
+
+        gridLayout->addLayout(horizontalLayout_6, 2, 0, 1, 1);
 
 
         verticalLayout_5->addWidget(widget);
@@ -423,11 +443,13 @@ public:
         newTest->setText(QCoreApplication::translate("mainUiTest", "\346\226\260\345\273\272\346\265\213\350\257\225", nullptr));
         startTest->setText(QCoreApplication::translate("mainUiTest", "\345\274\200\345\247\213", nullptr));
         stopTest->setText(QCoreApplication::translate("mainUiTest", "\345\201\234\346\255\242", nullptr));
-        clearTest->setText(QCoreApplication::translate("mainUiTest", "\346\270\205\351\231\244\345\275\223\345\211\215", nullptr));
+        clearTest->setText(QCoreApplication::translate("mainUiTest", "\350\277\230\345\216\237\345\275\223\345\211\215", nullptr));
         saveTest->setText(QCoreApplication::translate("mainUiTest", "\344\277\235\345\255\230\345\275\223\345\211\215", nullptr));
         UP->setText(QCoreApplication::translate("mainUiTest", "\344\270\212", nullptr));
         stop->setText(QCoreApplication::translate("mainUiTest", "\345\201\234", nullptr));
         Down->setText(QCoreApplication::translate("mainUiTest", "\344\270\213", nullptr));
+        setLengthZero->setText(QCoreApplication::translate("mainUiTest", "\350\256\276\347\275\2560\347\202\271", nullptr));
+        setWeighZero->setText(QCoreApplication::translate("mainUiTest", "\345\216\273\347\232\256", nullptr));
         blue->setText(QCoreApplication::translate("mainUiTest", "blue", nullptr));
         red->setText(QCoreApplication::translate("mainUiTest", "red", nullptr));
         black->setText(QCoreApplication::translate("mainUiTest", "black", nullptr));

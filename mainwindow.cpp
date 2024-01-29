@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     loadMotorAndWeigh();//导入默认电机称重文件
+    ui->appVersion->setText("3.1.0.240129");
 
     ui->login->setForegroundColor(QColor(140, 140, 255));
     ui->test->setForegroundColor(QColor(140, 140, 255));
@@ -85,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //取消增加试验
     connect(formfill,&FormFill::cancelSet,[=](){on_test_clicked();});
 
-    //新建试验，原界面更新一点问题，新建界面会掉信号绑定
+    //新建试验
     connect(test,&mainUiTest::newTest,[=](){
         test->hide();
         formfill->resetThis();
