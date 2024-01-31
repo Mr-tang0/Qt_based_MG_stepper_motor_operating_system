@@ -1,4 +1,4 @@
-#include "decodethread.h"
+﻿#include "decodethread.h"
 #include "test_window.h"
 
 decodeThread::decodeThread(QObject *parent) : QObject(parent)
@@ -11,37 +11,39 @@ decodeThread::decodeThread(QObject *parent) : QObject(parent)
 //解码完毕后，发出信号，通知主线程处理ui、更新motor和weigh的信息
 void decodeThread::decodeMessage(QString reseivedMessage)
 {
+\
     //若来自motor，查询motor配置表，解码motor信息
     if(reseivedMessage.left(2)=="3e")
     {
-        qDebug()<<reseivedMessage;
-        QString verify = reseivedMessage.mid(8,2);
-        reseivedMessage = reseivedMessage.remove(reseivedMessage.length()-2,2);
-        int len = reseivedMessage.length()/2;
-        for (int i = 0;i<len;i++) {
-            reseivedMessage.insert(2*i+i," ");
-        }
-        QString reseiveVerify = tempMotor->verifySUM(reseivedMessage).toHex();
+        // qDebug()<<"orignal"<<reseivedMessage;
+        // QString verify = reseivedMessage.mid(8,2);
+        // QString temp = reseivedMessage.mid(0,8);
+        // QString reseiveVerify = tempMotor->verifySUM(temp).toHex();
 
-        //判断数据完整
-        if(verify==reseiveVerify)
+        // if(verify!=reseiveVerify) return;//信息错误，退出解码
+
+        //信息无错误：继续进行
+
+        //多圈角度信息
+        if(reseivedMessage.mid(2,2)=="92")
         {
-            //进入解码
-            reseivedMessage.remove(0,2);
-            if(reseivedMessage.left(2)=="92")//多圈角度信息
-            {
-                double length = mutiAngleDecode(reseivedMessage);
-                mainUiTest::myMotor->detail.currentAngle = length;
-                emit currentLength(length);
-            }
-            else if (reseivedMessage.left(2)=="9A") //电机状态信息
-            {
+            reseivedMessage = reseivedMessage.remove(0,10);//去除指令数据
+            // qDebug()<<"remove"<<reseivedMessage;
+            //判断数据有误错误略
 
-            }
+            //计算距离
+            double length = mutiAngleDecode(reseivedMessage);
+            mainUiTest::myMotor->detail.currentAngle = length;
+            qDebug()<<length;
+            emit currentLength(length);
+
+        }
+        if(reseivedMessage.left(2)=="9A")
+        {
 
         }
         else {
-            emit motorError(-1); //motor数据错误
+            emit motorError(false); //motor数据错误
         }
     }
 
@@ -84,21 +86,30 @@ void decodeThread::delay(int delayTime)
 
 double decodeThread::mutiAngleDecode(QString message)
 {
-    QString usefulMessage = message.mid(8,16);
-    QString verify = message.right(2);
-    if(verify!=tempMotor->verifySUM(message))
-    {
-        return -1;
-    }
+    QString usefulMessage = message.mid(0,16);//前十六位为数据
 
-    QString changeUsefulMessage = "";//接收数据高位在后，需反转
+    // QString verify = message.right(2);//后二为验证
+
+    //信息错误:退出解码
+    // if(verify!=tempMotor->verifySUM(message))
+    // {
+    //     return NULL;
+    // }
+    //信息无错误：继续进行
+
+    //接收数据高位在后，需反转
+    QString changeUsefulMessage = "";
     for(int i = 0;i<usefulMessage.length()/2;i++)
     {
-        changeUsefulMessage = usefulMessage.mid(i*2,2)+" "+changeUsefulMessage;
+        changeUsefulMessage = usefulMessage.mid(i*2,2)+changeUsefulMessage;
     }
-    bool ok;
-    int angle = changeUsefulMessage.toInt(&ok,16);
 
+
+    bool ok;
+
+    //转换为10进制
+    int angle = changeUsefulMessage.toInt(&ok,16);
+    qDebug()<<"length"<<usefulMessage<<angle<<ok;
     double pitch = mainUiTest::myMotor->detail.pitch;
 
     double length = pitch*angle/36000.;

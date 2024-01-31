@@ -78,7 +78,6 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
     drawer(myWeigh->detail.currentWeight,myMotor->detail.currentAngle);
 
     //实验记录
-    qDebug()<<testLog;
     QStringList couple = {QString::number(timeDifference),//时间
                           QString::number(stress),//应力
                           QString::number(theoreticallyLengthDifference),//理论位移
@@ -245,8 +244,9 @@ void mainUiTest::recodeTest(QString filePath)
  {
     myMotor->getLength();//读当前位置
     delay(10);
-    double moveLength = myMotor->detail.zero - myMotor->detail.currentAngle;//与规定0点差值
-    myMotor->angleMove(moveLength);//归0
+
+    // double moveLength = myMotor->detail.zero - myMotor->detail.currentAngle;//与规定0点差值
+    // myMotor->angleMove(moveLength);//归0
 
     //测试代码
     // myMotor->detail.currentAngle = 0.;

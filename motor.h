@@ -20,7 +20,7 @@ public:
     bool stop();//电机停止
 
     void speedMove(double moveSpeed);//电机按照给定速度运动
-    void angleMove(double moveLength);//电机按照给定长度运动，需带方向
+    void angleMove(double moveLength,double moveSpeed);//电机按照给定长度运动，需带方向
 
     bool writeSpeedParam();//设置电机速度
     bool writeMaxAngleParam();//设置电机最大速度
@@ -35,15 +35,16 @@ public:
 
     void modeStretch();//拉伸运动
     void modeCompress();//压缩运动
-    void modereciprocate();//往复运动
+    void modereciprocate(double cycle);//往复运动
     void modeConstant();//恒力保持(准备加入pid算法)
 
-    motorDetails detail={0,0.,0.,0.,0.,0.,0.,0.,0.};//初始化
+    motorDetails detail={0,0.,0.,0.,0.,1.0,0.,0.,0.,0.};//初始化
 
 private:
     QByteArray buildCmdData(QString command);//构建发送数据，带校验
 
-    QTimer *InquireTimer;//查询计时器控制停止
+    QTimer *InquireTimer = new QTimer;//周期查询计时器控制停止
+    bool Timerflag= false;
 
     motorCMD motorcmd;
     motorDATA motordata;

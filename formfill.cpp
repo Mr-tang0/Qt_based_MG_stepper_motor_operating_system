@@ -1,4 +1,4 @@
-#include "formfill.h"
+﻿#include "formfill.h"
 #include "ui_formfill.h"
 #include "test_window.h"
 #include "login_window.h"
@@ -39,7 +39,7 @@ void FormFill::findAvailablePort()
         ui->SerialPort->addItem(serialPortInfo.portName());
     }
 
-    QStringList  baundRateList={"4800","9600","19200","28800","38400"};
+    QStringList  baundRateList={"4800","9600","19200","28800","38400","115200"};
     ui->baudRate->addItems(baundRateList);
 
 
@@ -150,7 +150,7 @@ void FormFill::saveLabel(QString filePath)//保存csv文件并且更新port、mo
         data.append({"maxMotorLength",ui->maxMotorLength->text()});
 
         //往返运动周期
-        mainUiTest::myMotor->detail.cycle = ui->motorCircle->text().toDouble();
+        mainUiTest::myMotor->detail.cycle = ui->motorCircle->text().toDouble()*1000;
         data.append({"motorCircle",ui->motorCircle->text()});
 
         //螺距在配置文件中初始化、

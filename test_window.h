@@ -75,6 +75,8 @@ private slots:
 
     void on_stop_clicked();
 
+    void on_moveTo_clicked();
+
 signals:
     void newTest();
     void saveTest();
@@ -89,10 +91,12 @@ private:
 
     void recodeTest(QString filePath);
 
-    QTimer *startTimer = new QTimer;
-    QTime startTime;
+    QTimer *startTimer = new QTimer;//ui刷新计时器
+    QTimer *sendTimer = new QTimer;//位置查询计时器
 
-    QString filePath;
+    QTime startTime;//测试开始时间
+
+    QString filePath;//文件保存位置
 
     //以下是老代码
 

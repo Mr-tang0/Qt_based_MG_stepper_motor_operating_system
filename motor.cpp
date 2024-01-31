@@ -9,29 +9,37 @@ motor::motor(QObject *parent) : QObject(parent)
 //拉伸
 void motor::modeStretch()
 {
-    angleMove(detail.length);//开始运动
+
+    qDebug()<<"modeStretch"<<detail.length<<detail.speed;
+    angleMove(detail.length,detail.speed);//开始运动
 }
 
 //压缩
 void motor::modeCompress()
 {
-    // detail.length = -detail.length;//反向
 
-    angleMove(-detail.length);//开始运动
+    angleMove(-detail.length,detail.speed);//开始运动
 }
 
 //往复
-void motor::modereciprocate()
+void motor::modereciprocate(double cycle)
 {
-    InquireTimer->start(detail.cycle);//周期
-
-    int i = 1;
-    connect(InquireTimer,&QTimer::timeout,[=,&i]()
+    connect(InquireTimer,&QTimer::timeout,[=]()
     {
-        angleMove(i*detail.length);//开始运动
-        i = -i;
+        if(Timerflag)
+        {
+            qDebug()<<"正转";
+            angleMove(detail.length,detail.speed);//开始运动
+        }
+        else
+        {
+           qDebug()<<"反转";
+           angleMove(-detail.length,detail.speed);//开始运动
+        }
+        // angleMove(i*detail.length,detail.speed);//开始运动
+        Timerflag = !Timerflag;
     });
-
+    InquireTimer->start(cycle);//周期
 }
 
 //恒力
@@ -108,12 +116,13 @@ void motor::speedMove(double moveSpeed)
 
     mainUiTest::sendWork->sendMessage(moveCMD);
 
+
     //speed : mm/s        speed/pitch : r/s          36000*speed/pitch : 度%/s
 
     double speed = moveSpeed;
-    // speed = 0.01;
+
     double pitch = detail.pitch;//螺距mm
-    // pitch = 0.01;
+
     QString speedBit = QString::number(int(36000*speed/pitch),16);
 
     int length = 8-speedBit.length();
@@ -130,7 +139,7 @@ void motor::speedMove(double moveSpeed)
     {
         speedChange.prepend((speedBit).mid(i*2,2));
     }
-    qDebug()<<speedChange<<speedBit;
+    // qDebug()<<speedChange<<speedBit;
 //    QStringList speedChange = {speedBit.mid(6,2),speedBit.mid(4,2),speedBit.mid(2,2),speedBit.mid(0,2)};
 
     QString temp = motordata.speedConcrolDATA.arg(speedChange[0]).arg(speedChange[1]).arg(speedChange[2]).arg(speedChange[3]);
@@ -139,10 +148,12 @@ void motor::speedMove(double moveSpeed)
 
     mainUiTest::sendWork->sendMessage(moveData);
 
+
 }
 
-void motor::angleMove(double moveLen)//根据motor.detail的angle和speed值进行运动，不同的运动方式应该修改其值
+void motor::angleMove(double moveLen,double moveSpeed)
 {
+    qDebug()<<"angleMove"<<moveLen<<moveSpeed;
     //指令
     int address = detail.motorID;
     QString command = motorcmd.angleConcrolCMD2.arg(QString::number(address,16));
@@ -152,44 +163,54 @@ void motor::angleMove(double moveLen)//根据motor.detail的angle和speed值进�
     mainUiTest::sendWork->sendMessage(moveCMD);
 
     //数据
-    double moveLength = moveLen + detail.zero + detail.Backlash;//实际  运动距离
+    double moveLength = moveLen;//实际  运动距离
+
     double pitch = detail.pitch;//螺距mm
-    double maxSpeed = detail.maxSpeed;//最大速度
 
-    // moveLength = pitch = maxSpeed = 0.01;
-    //moveLength : mm        moveLength/pitch : r          36000*moveLength/pitch : 度%
-
-    QString maxSpeedBit = QString::number(int(36000*maxSpeed/pitch),16);
-
-    int length = 8-maxSpeedBit.length();
-    if (length>0)
-    for(int i = 0;i<length;i++)
-    {
-        maxSpeedBit = "0"+maxSpeedBit;
-    }
-
+    //转换为16进制并取倒置
     QString lengthBit = QString::number(int(36000*moveLength/pitch),16);
 
-    length = 16-lengthBit.length();
-    if (length>0)
-    for(int i = 0;i<length;i++)
+    //补0
+    int temp = lengthBit.length();
+
+    for(int i = 0;i<16-temp;i++)
     {
         lengthBit = "0"+lengthBit;
     }
 
-
-    QStringList angleConcrolChange;
-    for(int i = 0; i<(lengthBit+maxSpeedBit).length()/2;i++)
+    //反转
+    QString changelengthBit = "";
+    for (int i = 0; i<lengthBit.length()/2;i++)
     {
-        angleConcrolChange.prepend((lengthBit+maxSpeedBit).mid(i*2,2));
-    }
-    QString temp;
-    for(int i = 0; i<(lengthBit+maxSpeedBit).length()/2;i++)
-    {
-        temp = temp+angleConcrolChange[i]+" ";
+        changelengthBit = lengthBit.mid(i*2,2)+changelengthBit;
     }
 
-    QByteArray moveData = buildCmdData(temp);
+    QString speedBit = QString::number(int(36000*moveSpeed/pitch),16);
+
+    //补0
+    int temp2 = speedBit.length();
+
+    for(int i = 0;i<8-temp2;i++)
+    {
+        speedBit = "0"+speedBit;
+    }
+    //反转
+    QString changeSpeedBit = "";
+    for (int i = 0; i<speedBit.length()/2;i++)
+    {
+        changeSpeedBit = speedBit.mid(i*2,2)+changeSpeedBit;
+    }
+
+    QString data = changelengthBit+changeSpeedBit;
+
+    //补空位
+    int temp3 = data.length();
+    for (int i = 0;i<temp3/2;i++)
+    {
+        data.insert(2*i+i," ");
+    }
+
+    QByteArray moveData = buildCmdData(data);
 
     mainUiTest::sendWork->sendMessage(moveData);
 
@@ -311,6 +332,9 @@ QByteArray motor::buildCmdData(QString command)
     while (temp_data.right(1)==" ") {
         temp_data.remove(temp_data.length()-1,1);
     }
+    while (temp_data.left(1)==" ") {
+        temp_data.remove(0,1);
+    }
     //构建命令帧
     QByteArray builtData;
     bool ok;
@@ -344,6 +368,7 @@ QByteArray motor::verifySUM(QString data)
     uint num = 0;
     QByteArray builtData;
 
+
     for (const auto &chunk : data.split(" "))
     {
         uint temp = chunk.toUInt(&ok,16);
@@ -354,7 +379,7 @@ QByteArray motor::verifySUM(QString data)
 
     builtData.append(char(byteValue));
 
-    //qDebug()<<"debug from verifySUM"<<builtData.toHex();
+    // qDebug()<<"debug from verifySUM"<<builtData.toHex();
 
     return builtData;
 }

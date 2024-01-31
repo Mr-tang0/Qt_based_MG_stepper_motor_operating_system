@@ -19,37 +19,43 @@ mainUiTest::mainUiTest(QWidget *parent) :
     });
 
     //↓这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
-    QTimer *timer = new QTimer;
 
     static int i =1;
-    connect(timer,&QTimer::timeout,[=](){
+    connect(sendTimer,&QTimer::timeout,[=](){
         //正常这两个值是decode里修改的，这里为了演示在计时器里更新，
-        // myWeigh->detail.currentWeight = i;//x
-        // myMotor->detail.currentAngle = abs(i*sin(i));//y
-        // i+=1;
+        myWeigh->detail.currentWeight = i;//x
 
         //查询位置和力
-        myWeigh->getWeight();
+        // myWeigh->getWeight();
         myMotor->getLength();
 
+        i+=1;
+
     });
+
     //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
 
-    connect(ui->startTest,&QPushButton::clicked,[=](){
+    // connect(ui->startTest,&QPushButton::clicked,[=](){
 
-        timer->start(1000/material->sampleRate);      //查询
-        startTimer->start(1000/material->sampleRate); //采样
+    //     timer->start(1000/material->sampleRate);      //查询
+    //     startTimer->start(1000/material->sampleRate); //采样
 
-    });
+    // });
 
-    connect(ui->stopTest,&QPushButton::clicked,[=](){
-        myMotor->stop();
-        // timer->stop();//查询
-        // startTimer->stop();//采样
-        // i =1;
-        // m_snackbar->addMessage("测试已停止！");
-    });
+    // connect(ui->stopTest,&QPushButton::clicked,[=](){
+    //     myMotor->stop();
+    //     timer->stop();//查询
+    //     startTimer->stop();//采样
+    //     i =1;
+    //     m_snackbar->addMessage("测试已停止！");
 
+
+    // });
+
+    // connect(ui->UP,&QPushButton::clicked,[=](){
+    //     timer->start(1000/material->sampleRate);      //查询
+    //     startTimer->start(1000/material->sampleRate); //采样
+    // });
 
 
 }
@@ -63,42 +69,42 @@ mainUiTest::~mainUiTest()
 
 void mainUiTest::on_startTest_clicked()
 {
-     startTime = QTime::currentTime();
+    startTime = QTime::currentTime();//get start time
+    startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
 
-//     startTimer->start(1000/sampleRate);//sampleRate设置采样率
-     // myMotor->open();
-     // myMotor->modeStretch();//拉伸
+    myMotor->open();// open motor
 
-     if(material->testManner == "拉伸")
-     {
-         myMotor->modeStretch();//拉伸
-         qDebug()<<"拉伸";
-     }
-     else if(material->testManner == "压缩")
-     {
-         qDebug()<<material->testManner;
-         myMotor->modeCompress();//压缩
 
-     }
-     else if(material->testManner == "往复运动")
-     {
-         qDebug()<<material->testManner;
-         myMotor->modereciprocate();//往复
+    ui->stateBox->append(material->testManner+"中");
+    if(material->testManner == "拉伸")
+    {
+        myMotor->modeStretch();//拉伸
+    }
 
-     }
-     else if(material->testManner == "恒力加载")
-     {
-         qDebug()<<material->testManner;
-         myMotor->modeConstant();//恒力
+    else if(material->testManner == "压缩")
+    {
+        myMotor->modeCompress();//压缩
+    }
 
-     }
-     else
-     {
-         qDebug()<<material->testManner;
+    else if(material->testManner == "往复加载")
+    {
+        qDebug()<<material->testManner;
+        myMotor->modereciprocate(myMotor->detail.cycle);//往复
 
-     }
+    }
+    else if(material->testManner == "恒力加载")
+    {
+        qDebug()<<material->testManner;
+        myMotor->modeConstant();//恒力
 
-     m_snackbar->addMessage("测试开始！");
+    }
+    else
+    {
+        qDebug()<<material->testManner;
+
+    }
+
+m_snackbar->addMessage("测试开始！");
 }
 
 
@@ -159,5 +165,13 @@ void mainUiTest::on_Down_clicked()
 void mainUiTest::on_stop_clicked()
 {
     myMotor->stop();
+}
+
+
+
+void mainUiTest::on_moveTo_clicked()
+{
+    double length = ui->moveToEdit->text().toDouble();
+    myMotor->angleMove(length,myMotor->detail.speed);
 }
 

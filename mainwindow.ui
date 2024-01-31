@@ -37,7 +37,7 @@
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-image: url(:/new/prefix1/icon/header.png);</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -263,7 +263,7 @@ color: rgb(140, 140, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>1563</width>
-     <height>29</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

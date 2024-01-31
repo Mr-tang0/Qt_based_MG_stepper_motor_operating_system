@@ -10,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     loadMotorAndWeigh();//导入默认电机称重文件
+
     ui->appVersion->setText("3.1.0.240129");
 
     ui->login->setForegroundColor(QColor(140, 140, 255));
@@ -185,24 +187,29 @@ void MainWindow::loadMotorAndWeigh()
     motorDetails motordetail;
     motordetail=
         {
-            jsonObject["motorAdress"].toInt(),      //motorID
-            jsonObject["speed"].toDouble(),         //motorspeed
-            jsonObject["maxSpeed"].toDouble(),      //maxSpeed
-            jsonObject["length"].toDouble(),        //length
-            jsonObject["maxLength"].toDouble(),     //maxLength
-            jsonObject["cycle"].toDouble(),         //cycle
-            jsonObject["picth"].toDouble(),         //picth
-            jsonObject["currentAngle"].toDouble()  //currentAngle
+            jsonObject["motorAdress"].toString().toInt(),      //motorID
+            jsonObject["speed"].toString().toDouble(),         //motorspeed
+            jsonObject["maxSpeed"].toString().toDouble(),      //maxSpeed
+            jsonObject["length"].toString().toDouble(),        //length
+            jsonObject["maxLength"].toString().toDouble(),     //maxLength
+            jsonObject["cycle"].toString().toDouble(),         //cycle
+            jsonObject["picth"].toString().toDouble(),         //picth
+
+            jsonObject["currentAngle"].toString().toDouble(),  //currentAngle
+            jsonObject["zero"].toString().toDouble(),//约定0点
+            jsonObject["Backlash"].toString().toDouble()//背隙补偿值
+
         };
-    mainUiTest::myMotor->detail = motordetail;
+
+   mainUiTest::myMotor->detail = motordetail;
 
     weighDetails weighdetail;
         weighdetail =
         {
-            jsonObject["weighID"].toInt(),          //weighID
-            jsonObject["force"].toDouble(),         //force
-            jsonObject["maxForce"].toDouble(),      //maxForce
-            jsonObject["currentWeigth"].toDouble() //currentWeigth
+            jsonObject["weighID"].toString().toInt(),          //weighID
+            jsonObject["force"].toString().toDouble(),         //force
+            jsonObject["maxForce"].toString().toDouble(),      //maxForce
+            jsonObject["currentWeigth"].toString().toDouble() //currentWeigth
         };
     mainUiTest::myWeigh->detail = weighdetail;
 

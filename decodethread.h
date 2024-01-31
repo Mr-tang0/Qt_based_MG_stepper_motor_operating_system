@@ -1,4 +1,4 @@
-#ifndef DECODETHREAD_H
+﻿#ifndef DECODETHREAD_H
 #define DECODETHREAD_H
 
 #include <QObject>
@@ -33,7 +33,7 @@ signals:
     void currentWeight(double weight);
 
     void weighError(int weighID);
-    void motorError(int motorID);
+    void motorError(bool error);
 };
 
 #endif // DECODETHREAD_H

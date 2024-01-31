@@ -1,4 +1,4 @@
-#include "worker.h"
+﻿#include "worker.h"
 #include "test_window.h"
 
 weigh *Worker::tempweigh = new weigh;
@@ -21,7 +21,6 @@ bool Worker::openReseiveChannal()
         QByteArray reseivedMessage =mainUiTest::myPort->readLine();
         QString temp = reseivedMessage.toHex();
         delay(10);
-        qDebug()<<"something received:"<<reseivedMessage;
         emit ReseiveMassage(temp);
     });
     return true;
