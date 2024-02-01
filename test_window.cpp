@@ -11,25 +11,21 @@ mainUiTest::mainUiTest(QWidget *parent) :
 
     initSystem();
 
-
     //图表绘制加采样
-    connect(startTimer,&QTimer::timeout,[=]()
+    connect(startTimer,&QTimer::timeout,this,[=]()
     {
         refreshUi();
     });
 
     //↓这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
 
-    static int i =1;
-    connect(sendTimer,&QTimer::timeout,[=](){
-        //正常这两个值是decode里修改的，这里为了演示在计时器里更新，
-        myWeigh->detail.currentWeight = i;//x
 
+    connect(sendTimer,&QTimer::timeout,this,[=](){
         //查询位置和力
-        // myWeigh->getWeight();
+        myWeigh->getWeight();
+        delay(15);
         myMotor->getLength();
-
-        i+=1;
+        delay(15);
 
     });
 
@@ -69,11 +65,14 @@ mainUiTest::~mainUiTest()
 
 void mainUiTest::on_startTest_clicked()
 {
+
     startTime = QTime::currentTime();//get start time
+
     startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
+    sendTimer->start(1000/material->sampleRate);//开启查询计时器
 
     myMotor->open();// open motor
-
+    delay(5);
 
     ui->stateBox->append(material->testManner+"中");
     if(material->testManner == "拉伸")
@@ -88,23 +87,18 @@ void mainUiTest::on_startTest_clicked()
 
     else if(material->testManner == "往复加载")
     {
-        qDebug()<<material->testManner;
+
         myMotor->modereciprocate(myMotor->detail.cycle);//往复
 
     }
     else if(material->testManner == "恒力加载")
     {
-        qDebug()<<material->testManner;
+
         myMotor->modeConstant();//恒力
 
     }
-    else
-    {
-        qDebug()<<material->testManner;
 
-    }
-
-m_snackbar->addMessage("测试开始！");
+    m_snackbar->addMessage("测试开始！");
 }
 
 
@@ -120,7 +114,8 @@ void mainUiTest::on_saveTest_clicked()
 
 void mainUiTest::on_stopTest_clicked()
 {
-
+    startTimer->stop();
+    sendTimer->stop();
 }
 
 void mainUiTest::on_emergency_clicked()
@@ -144,7 +139,7 @@ void mainUiTest::on_setLengthZero_clicked()
 
 void mainUiTest::on_setWeighZero_clicked()
 {
-    myWeigh->shelling(myWeigh->detail.address,true);
+    myWeigh->shelling();
 }
 
 

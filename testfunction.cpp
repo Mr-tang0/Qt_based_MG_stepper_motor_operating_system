@@ -67,6 +67,9 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 
     //传感器的实际位移
     double displacement = myMotor->detail.currentAngle;
+
+
+
     ui->displacement_sensors->display(QString::number(displacement,'f',1));
 
     ui->strain->display(0);//应变????

@@ -9,7 +9,6 @@ motor::motor(QObject *parent) : QObject(parent)
 //拉伸
 void motor::modeStretch()
 {
-
     qDebug()<<"modeStretch"<<detail.length<<detail.speed;
     angleMove(detail.length,detail.speed);//开始运动
 }

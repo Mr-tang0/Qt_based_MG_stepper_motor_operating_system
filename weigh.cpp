@@ -9,30 +9,54 @@ weigh::weigh(QObject *parent) : QObject(parent)
 void weigh::getWeight()
 {
     int weighAddress = detail.address;
-    QByteArray builtData = buildData(weighAddress,"00:00",false);
+    QString getWeighCMD =  weighcmd.weighgetWeigh.arg(QString::number(weighAddress,16));
+    QByteArray builtData = buildData(getWeighCMD);
+    // QByteArray builtData = buildData(weighAddress,"00:00",false);
     mainUiTest::sendWork->sendMessage(builtData);
 }
 
 //去皮
-void weigh::shelling(int weighAddress,bool shell)
+void weigh::shelling()
 {
-    QByteArray builtData;
+    int weighAddress = detail.address;
+    QString closeWirteProtectCMD = weighcmd.closeWirteProtect.arg(QString::number(weighAddress,16));
+    QByteArray closeWirteProtectData = buildData(closeWirteProtectCMD);
+    mainUiTest::sendWork->sendMessage(closeWirteProtectData);
 
-    builtData = buildData(weighAddress,"23:1",true);
-    mainUiTest::sendWork->sendMessage(builtData);//关闭写保护
-
-    if(shell)
-        builtData = buildData(weighAddress,"15:1",true);
-    else
-        builtData = buildData(weighAddress,"15:2",true);
-
-     mainUiTest::sendWork->sendMessage(builtData);
-
-    builtData = buildData(weighAddress,"23:2",true);
-     mainUiTest::sendWork->sendMessage(builtData);//开始写保护
+    QString shellingCMD =  weighcmd.shelling.arg(QString::number(weighAddress,16));
+    QByteArray shellingData = buildData(shellingCMD);
+    mainUiTest::sendWork->sendMessage(shellingData);
 }
 
+QByteArray weigh::buildData(QString orignalData)
+{
 
+    QByteArray builtData;
+
+    bool ok = false;
+    for (const auto &chunk : orignalData.split(" "))
+    {
+        uchar byteValue = uchar(chunk.toUShort(&ok, 16));
+        if (!ok)
+        {
+            // 转换失败后的操作，待定
+            qDebug() << "转换失败,数据存在错误" ;
+            builtData.clear();
+            continue;
+        }
+        else
+        {
+            builtData.append(char(byteValue));
+        }
+    }
+
+    //数据校验
+
+    if(ok) builtData = builtData+CRC16(builtData);
+
+    return builtData;
+
+}
 
 //数据构建
 QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1

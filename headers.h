@@ -59,6 +59,7 @@
 QT_CHARTS_USE_NAMESPACE
 
 
+
 //电机信息
 struct motorDetails
 {
@@ -89,6 +90,7 @@ struct weighDetails
     double maxForce;//恒力模式最大恒力
 
     double currentWeight;//当前力
+    double resolution;//分辨率
 
 };
 

@@ -93,7 +93,20 @@ struct motorDATA
 
 };
 
+struct weighCMD
+{
+    QString weighgetWeigh = "%1 03 00 00 00 02";
 
+    QString closeWirteProtect = "%1 06 00 17 00 01";
+
+    QString openWriteProtect = "%1 06 00 17 00 02";
+
+    QString writeBaudrate = "%1 06 00 10 00 08";
+
+    QString shelling ="%1 06 00 15 00 01";
+
+    QString unShelling ="%1 06 00 15 00 02";
+};
 
 
 

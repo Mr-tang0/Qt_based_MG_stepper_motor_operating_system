@@ -14,14 +14,15 @@ public:
     
     void getWeight();//读质量信息
 
-    void shelling(int weighAddress,bool shell);//去皮操作
+    void shelling();//去皮操作
 
-    weighDetails detail = {0,0.,0.,0.};
+    weighDetails detail = {0,0.,0.,0.,0};
 
 private:
 
     QByteArray buildData(int weighAddress,QString data,bool optWork);
-
+    QByteArray buildData(QString orignalData);
+    weighCMD weighcmd;
 
 
 signals:
