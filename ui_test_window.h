@@ -17,7 +17,6 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
@@ -31,6 +30,9 @@ QT_BEGIN_NAMESPACE
 class Ui_mainUiTest
 {
 public:
+    QRadioButton *blue;
+    QRadioButton *red;
+    QRadioButton *black;
     QGridLayout *gridLayout_2;
     QVBoxLayout *verticalLayout_6;
     QHBoxLayout *horizontalLayout_3;
@@ -59,8 +61,6 @@ public:
     QHBoxLayout *horizontalLayout_4;
     QChartView *graphicsView;
     QVBoxLayout *verticalLayout_12;
-    QLineEdit *moveToEdit;
-    QPushButton *moveTo;
     QVBoxLayout *verticalLayout_5;
     QPushButton *newTest;
     QVBoxLayout *verticalLayout_3;
@@ -83,16 +83,27 @@ public:
     QHBoxLayout *horizontalLayout_6;
     QPushButton *setLengthZero;
     QPushButton *setWeighZero;
-    QRadioButton *blue;
-    QRadioButton *red;
-    QRadioButton *black;
     QButtonGroup *colorBtnGrp;
 
     void setupUi(QWidget *mainUiTest)
     {
         if (mainUiTest->objectName().isEmpty())
             mainUiTest->setObjectName(QString::fromUtf8("mainUiTest"));
-        mainUiTest->resize(1200, 900);
+        mainUiTest->resize(1200, 800);
+        blue = new QRadioButton(mainUiTest);
+        colorBtnGrp = new QButtonGroup(mainUiTest);
+        colorBtnGrp->setObjectName(QString::fromUtf8("colorBtnGrp"));
+        colorBtnGrp->addButton(blue);
+        blue->setObjectName(QString::fromUtf8("blue"));
+        blue->setGeometry(QRect(309, 760, 71, 27));
+        red = new QRadioButton(mainUiTest);
+        colorBtnGrp->addButton(red);
+        red->setObjectName(QString::fromUtf8("red"));
+        red->setGeometry(QRect(605, 760, 62, 27));
+        black = new QRadioButton(mainUiTest);
+        colorBtnGrp->addButton(black);
+        black->setObjectName(QString::fromUtf8("black"));
+        black->setGeometry(QRect(900, 760, 79, 27));
         gridLayout_2 = new QGridLayout(mainUiTest);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         verticalLayout_6 = new QVBoxLayout();
@@ -229,7 +240,7 @@ public:
 
         emergency = new QPushButton(mainUiTest);
         emergency->setObjectName(QString::fromUtf8("emergency"));
-        emergency->setMinimumSize(QSize(120, 120));
+        emergency->setMinimumSize(QSize(120, 100));
         emergency->setStyleSheet(QString::fromUtf8("font: 20pt \"\345\271\274\345\234\206\";\n"
 "background-color: rgb(255, 131, 131);"));
 
@@ -249,18 +260,6 @@ public:
 
         verticalLayout_12 = new QVBoxLayout();
         verticalLayout_12->setObjectName(QString::fromUtf8("verticalLayout_12"));
-        moveToEdit = new QLineEdit(mainUiTest);
-        moveToEdit->setObjectName(QString::fromUtf8("moveToEdit"));
-
-        verticalLayout_12->addWidget(moveToEdit);
-
-        moveTo = new QPushButton(mainUiTest);
-        moveTo->setObjectName(QString::fromUtf8("moveTo"));
-        moveTo->setMinimumSize(QSize(120, 75));
-        moveTo->setStyleSheet(QString::fromUtf8("font: 12pt \"\345\271\274\345\234\206\";"));
-
-        verticalLayout_12->addWidget(moveTo);
-
 
         horizontalLayout_4->addLayout(verticalLayout_12);
 
@@ -269,7 +268,7 @@ public:
         verticalLayout_5->setSizeConstraint(QLayout::SetFixedSize);
         newTest = new QPushButton(mainUiTest);
         newTest->setObjectName(QString::fromUtf8("newTest"));
-        newTest->setMinimumSize(QSize(100, 50));
+        newTest->setMinimumSize(QSize(100, 40));
         newTest->setStyleSheet(QString::fromUtf8("font: 10pt \"\345\271\274\345\234\206\";"));
 
         verticalLayout_5->addWidget(newTest);
@@ -278,14 +277,14 @@ public:
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         startTest = new QPushButton(mainUiTest);
         startTest->setObjectName(QString::fromUtf8("startTest"));
-        startTest->setMinimumSize(QSize(120, 75));
+        startTest->setMinimumSize(QSize(120, 50));
         startTest->setStyleSheet(QString::fromUtf8("font: 12pt \"\345\271\274\345\234\206\";"));
 
         verticalLayout_3->addWidget(startTest);
 
         stopTest = new QPushButton(mainUiTest);
         stopTest->setObjectName(QString::fromUtf8("stopTest"));
-        stopTest->setMinimumSize(QSize(120, 75));
+        stopTest->setMinimumSize(QSize(120, 50));
         stopTest->setStyleSheet(QString::fromUtf8("font: 12pt \"\345\271\274\345\234\206\";"));
 
         verticalLayout_3->addWidget(stopTest);
@@ -397,27 +396,7 @@ public:
 
         verticalLayout_6->setStretch(0, 2);
 
-        gridLayout_2->addLayout(verticalLayout_6, 0, 0, 2, 4);
-
-        blue = new QRadioButton(mainUiTest);
-        colorBtnGrp = new QButtonGroup(mainUiTest);
-        colorBtnGrp->setObjectName(QString::fromUtf8("colorBtnGrp"));
-        colorBtnGrp->addButton(blue);
-        blue->setObjectName(QString::fromUtf8("blue"));
-
-        gridLayout_2->addWidget(blue, 1, 1, 1, 1);
-
-        red = new QRadioButton(mainUiTest);
-        colorBtnGrp->addButton(red);
-        red->setObjectName(QString::fromUtf8("red"));
-
-        gridLayout_2->addWidget(red, 1, 2, 1, 1);
-
-        black = new QRadioButton(mainUiTest);
-        colorBtnGrp->addButton(black);
-        black->setObjectName(QString::fromUtf8("black"));
-
-        gridLayout_2->addWidget(black, 1, 3, 1, 1);
+        gridLayout_2->addLayout(verticalLayout_6, 0, 0, 1, 1);
 
 
         retranslateUi(mainUiTest);
@@ -428,6 +407,9 @@ public:
     void retranslateUi(QWidget *mainUiTest)
     {
         mainUiTest->setWindowTitle(QCoreApplication::translate("mainUiTest", "Form", nullptr));
+        blue->setText(QCoreApplication::translate("mainUiTest", "blue", nullptr));
+        red->setText(QCoreApplication::translate("mainUiTest", "red", nullptr));
+        black->setText(QCoreApplication::translate("mainUiTest", "black", nullptr));
         label->setText(QCoreApplication::translate("mainUiTest", "\350\275\275\350\215\267", nullptr));
         label_7->setText(QCoreApplication::translate("mainUiTest", "\345\272\224\345\212\233", nullptr));
         label_9->setText(QCoreApplication::translate("mainUiTest", "\350\256\241\347\256\227\344\275\215\347\247\273", nullptr));
@@ -435,7 +417,6 @@ public:
         label_10->setText(QCoreApplication::translate("mainUiTest", "\345\272\224\345\217\230", nullptr));
         label_11->setText(QCoreApplication::translate("mainUiTest", "\346\227\266\351\225\277", nullptr));
         emergency->setText(QCoreApplication::translate("mainUiTest", "\346\200\245\345\201\234", nullptr));
-        moveTo->setText(QCoreApplication::translate("mainUiTest", "\350\277\220\345\212\250\345\210\260", nullptr));
         newTest->setText(QCoreApplication::translate("mainUiTest", "\346\226\260\345\273\272\346\265\213\350\257\225", nullptr));
         startTest->setText(QCoreApplication::translate("mainUiTest", "\345\274\200\345\247\213", nullptr));
         stopTest->setText(QCoreApplication::translate("mainUiTest", "\345\201\234\346\255\242", nullptr));
@@ -446,9 +427,6 @@ public:
         Down->setText(QCoreApplication::translate("mainUiTest", "\344\270\213", nullptr));
         setLengthZero->setText(QCoreApplication::translate("mainUiTest", "\350\256\276\347\275\2560\347\202\271", nullptr));
         setWeighZero->setText(QCoreApplication::translate("mainUiTest", "\345\216\273\347\232\256", nullptr));
-        blue->setText(QCoreApplication::translate("mainUiTest", "blue", nullptr));
-        red->setText(QCoreApplication::translate("mainUiTest", "red", nullptr));
-        black->setText(QCoreApplication::translate("mainUiTest", "black", nullptr));
     } // retranslateUi
 
 };

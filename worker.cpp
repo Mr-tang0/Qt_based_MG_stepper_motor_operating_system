@@ -8,6 +8,7 @@ Worker::Worker(QObject *parent) : QObject(parent)
 {
 
 }
+//需要添加buffer,否则信息错乱
 bool Worker::sendMessage(QByteArray message)
 {
     bool sendFlag = mainUiTest::myPort->write(message);
@@ -16,11 +17,13 @@ bool Worker::sendMessage(QByteArray message)
 
 bool Worker::openReseiveChannal()
 {
+
+
     connect(mainUiTest::myPort,&QSerialPort::readyRead,[=]()
     {
-        QByteArray reseivedMessage =mainUiTest::myPort->readLine();
+        QByteArray reseivedMessage =mainUiTest::myPort->readAll();
         QString temp = reseivedMessage.toHex();
-        delay(10);
+
         emit ReseiveMassage(temp);
     });
     return true;

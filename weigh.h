@@ -19,7 +19,7 @@ public:
     weighDetails detail = {0,0.,0.,0.,0};
 
 private:
-
+    void delay(int delayTime);
     QByteArray buildData(int weighAddress,QString data,bool optWork);
     QByteArray buildData(QString orignalData);
     weighCMD weighcmd;

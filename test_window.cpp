@@ -17,42 +17,15 @@ mainUiTest::mainUiTest(QWidget *parent) :
         refreshUi();
     });
 
-    //↓这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
-
 
     connect(sendTimer,&QTimer::timeout,this,[=](){
         //查询位置和力
         myWeigh->getWeight();
-        delay(15);
+        delay(1000/material->sampleRate/3);
         myMotor->getLength();
-        delay(15);
+        delay(1000/material->sampleRate/3);
 
     });
-
-    //↑这是测试代码，timer的时间为上位机向下位机的状态查询周期，此周期必须小于采样周期，否则会失真
-
-    // connect(ui->startTest,&QPushButton::clicked,[=](){
-
-    //     timer->start(1000/material->sampleRate);      //查询
-    //     startTimer->start(1000/material->sampleRate); //采样
-
-    // });
-
-    // connect(ui->stopTest,&QPushButton::clicked,[=](){
-    //     myMotor->stop();
-    //     timer->stop();//查询
-    //     startTimer->stop();//采样
-    //     i =1;
-    //     m_snackbar->addMessage("测试已停止！");
-
-
-    // });
-
-    // connect(ui->UP,&QPushButton::clicked,[=](){
-    //     timer->start(1000/material->sampleRate);      //查询
-    //     startTimer->start(1000/material->sampleRate); //采样
-    // });
-
 
 }
 
@@ -123,6 +96,7 @@ void mainUiTest::on_emergency_clicked()
     myMotor->stop();
     myMotor->close();
     startTimer->stop();
+    sendTimer->stop();
     m_snackbar->addMessage("测试已停止！");
 }
 
@@ -145,6 +119,11 @@ void mainUiTest::on_setWeighZero_clicked()
 
 void mainUiTest::on_UP_clicked()
 {
+    if(!startTimer->isActive())
+        startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
+    if(!sendTimer->isActive())
+        sendTimer->start(1000/material->sampleRate);//开启查询计时器
+
     double speed = ui->matulSpeed->text().toDouble();
     myMotor->speedMove(speed);
 }
@@ -152,6 +131,11 @@ void mainUiTest::on_UP_clicked()
 
 void mainUiTest::on_Down_clicked()
 {
+    if(!startTimer->isActive())
+        startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
+    if(!sendTimer->isActive())
+        sendTimer->start(1000/material->sampleRate);//开启查询计时器
+
     double speed = ui->matulSpeed->text().toDouble();
     myMotor->speedMove(-speed);
 }
@@ -160,13 +144,10 @@ void mainUiTest::on_Down_clicked()
 void mainUiTest::on_stop_clicked()
 {
     myMotor->stop();
+
+    startTimer->stop();
+    sendTimer->stop();
 }
 
 
-
-void mainUiTest::on_moveTo_clicked()
-{
-    double length = ui->moveToEdit->text().toDouble();
-    myMotor->angleMove(length,myMotor->detail.speed);
-}
 

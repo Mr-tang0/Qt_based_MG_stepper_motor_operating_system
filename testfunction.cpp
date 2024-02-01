@@ -53,29 +53,29 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 {
     //载荷
     double load = myWeigh->detail.currentWeight;
-    ui->load->display(QString::number(load,'f',1));
+    ui->load->display(QString::number(load,'f',2));
 
     //应力
     double stress = myWeigh->detail.currentWeight/material->materialArea;
-    ui->stress->display(QString::number(stress,'f',1));
+    ui->stress->display(QString::number(stress,'f',2));
 
     //计算位移,理论位移
     QTime currentTime = QTime::currentTime();
     double timeDifference = startTime.msecsTo(currentTime)/1000.0;//时间差
     double theoreticallyLengthDifference = timeDifference*myMotor->detail.speed;
-    ui->displacement->display(QString::number(theoreticallyLengthDifference,'f',1));
+    ui->displacement->display(QString::number(theoreticallyLengthDifference,'f',2));
 
     //传感器的实际位移
     double displacement = myMotor->detail.currentAngle;
 
 
 
-    ui->displacement_sensors->display(QString::number(displacement,'f',1));
+    ui->displacement_sensors->display(QString::number(displacement,'f',2));
 
     ui->strain->display(0);//应变????
 
     //耗时
-    ui->Duration->display(QString::number(timeDifference,'f',1));
+    ui->Duration->display(QString::number(timeDifference,'f',2));
 
     //图像绘制
     drawer(myWeigh->detail.currentWeight,myMotor->detail.currentAngle);

@@ -12,6 +12,8 @@ decodeThread::decodeThread(QObject *parent) : QObject(parent)
 //解码完毕后，发出信号，通知主线程处理ui、更新motor和weigh的信息
 void decodeThread::decodeMessage(QString reseivedMessage)
 {
+    qDebug()<<reseivedMessage;
+
 
     //若来自motor，查询motor配置表，解码motor信息
     if(reseivedMessage.left(2)=="3e")
@@ -30,17 +32,15 @@ void decodeThread::decodeMessage(QString reseivedMessage)
         if(reseivedMessage.mid(2,2)=="92")
         {
             reseivedMessage = reseivedMessage.remove(0,10);//去除指令数据
-            // qDebug()<<"remove"<<reseivedMessage;
+
             //判断数据有误错误略
 
             //计算距离
             double length = mutiAngleDecode(reseivedMessage);
-
-            // if(length==NULL)//错误值
-            // {
-            //     qDebug()<<"错误值";
-            //     length = mainUiTest::myMotor->detail.currentAngle;
-            // }
+            if(length==NULL)
+            {
+                length = mainUiTest::myMotor->detail.currentAngle;
+            }
 
             mainUiTest::myMotor->detail.currentAngle = length;
             emit currentLength(length);
@@ -100,67 +100,73 @@ double decodeThread::mutiAngleDecode(QString message)
 {
     QString usefulMessage = message.mid(0,16);//前十六位为数据
 
-    QString verify = message.right(2);//后二为验证
+    //验证
+    if(usefulMessage.length()<8)
+    {
+        qDebug()<<"motor错误";
+        return NULL;
+    }
+    // QString verify = message.mid(16,2);//后二为验证
+    // QString verifyMessage = usefulMessage;
+    // int verifyMessageLength = verifyMessage.length();
+    // for(int i = 0; i<verifyMessageLength/2;i++)
+    // {
+    //     verifyMessage = verifyMessage.insert(i*2+i," ");
+    // }
+    // if(verify!=mainUiTest::myMotor->verifySUM(verifyMessage).toHex())
+    // {
+    //     qDebug()<<"verify Error"<<verifyMessage;
+    //     return NULL;
+    // }
 
-
-    //接收数据高位在后，需反转
+    //小端转化为大端
     QString changeUsefulMessage = "";
     for(int i = 0;i<usefulMessage.length()/2;i++)
     {
         changeUsefulMessage = usefulMessage.mid(i*2,2)+changeUsefulMessage;
     }
 
-    // QString temp = usefulMessage;
-    // int len = temp.length();
-    // for(int i = 0; i<len/2;i++)
-    // {
-    //     temp = temp.insert(i*2+i," ");
-
-    // }
-    // qDebug()<<"验证不对"<<verify<<tempMotor->verifySUM(temp).toHex();
-    // if(verify!=tempMotor->verifySUM(temp).toHex())
-    // {
-    //     qDebug()<<"验证不对"<<verify<<tempMotor->verifySUM(temp).toHex();
-    //     return NULL;
-    // }
-
-    //转换为10进制
+    //转化
+    QByteArray byteArray = QByteArray::fromHex(changeUsefulMessage.toLatin1());
     bool ok;
-    int angle;
-    angle = changeUsefulMessage.toInt(&ok,16);
-    double pitch = mainUiTest::myMotor->detail.pitch;
-    double length = pitch*angle/36000.;
-    return length;
+    //正数
+    qDebug()<<changeUsefulMessage.left(1);
+    if(changeUsefulMessage.left(1)!="f")
+    {
 
-    // try {
-    //     angle = changeUsefulMessage.toInt(&ok,16);
-    // } catch (...)
-    // {
-    //     qDebug()<<"负数";
-    // }
+        int currentAngle = changeUsefulMessage.toInt(&ok,16);
+        double pitch = mainUiTest::myMotor->detail.pitch;
+        double length = pitch*currentAngle/36000.;
+        return length;
+    }
+    //负数
+    else
+    {
+        QByteArray invertedArr(byteArray.size(), Qt::Uninitialized);
+        for(int i = 0;i<byteArray.size();i++)
+        {
+            char originalByte = static_cast<char>(byteArray.at(i));
+            char invertedByte = ~originalByte;  // 取反操作
+            invertedArr[i] = invertedByte;
+        }
 
-    // if(ok)
-    // {
-    //     // 正数
-    //     double pitch = mainUiTest::myMotor->detail.pitch;
-    //     double length = pitch*angle/36000.;
-    //     return length;
+        int _currentAngle = -invertedArr.toHex().toUInt(&ok,16);
 
-    // }
-    // else
-    // {
-    //     //64位负数??????
-    //     qDebug()<<"“负数";
-    //     return NULL;
-
-    // }
-
+        double pitch = mainUiTest::myMotor->detail.pitch;
+        double length = pitch*_currentAngle/36000.;
+        return length;
+    }
 
 }
 
 double decodeThread::decodeCurrentWeight(QString message)
 {
     QString weightString = message.mid(6,8);
+
+    if(weightString.length()<8)
+    {
+        qDebug()<<"weigh错误";
+    }
     weightString = weightString.mid(4,4)+weightString.mid(0,4);
     double weight;
 
@@ -172,7 +178,6 @@ double decodeThread::decodeCurrentWeight(QString message)
     {
         qDebug()<<"负数";
     }
-
     if(ok)
     {
         // 正数

@@ -75,8 +75,6 @@ private slots:
 
     void on_stop_clicked();
 
-    void on_moveTo_clicked();
-
 signals:
     void newTest();
     void saveTest();

@@ -4,6 +4,13 @@ weigh::weigh(QObject *parent) : QObject(parent)
 {
 
 }
+void weigh::delay(int delayTime)
+{
+    QEventLoop loop;
+    QTimer::singleShot(delayTime,&loop,SLOT(quit()));
+    loop.exec();
+
+}
 
 //实时重量
 void weigh::getWeight()
@@ -22,7 +29,7 @@ void weigh::shelling()
     QString closeWirteProtectCMD = weighcmd.closeWirteProtect.arg(QString::number(weighAddress,16));
     QByteArray closeWirteProtectData = buildData(closeWirteProtectCMD);
     mainUiTest::sendWork->sendMessage(closeWirteProtectData);
-
+    delay(20);
     QString shellingCMD =  weighcmd.shelling.arg(QString::number(weighAddress,16));
     QByteArray shellingData = buildData(shellingCMD);
     mainUiTest::sendWork->sendMessage(shellingData);

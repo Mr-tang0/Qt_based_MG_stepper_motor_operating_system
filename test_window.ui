@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>900</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0" rowspan="2" colspan="4">
+   <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="2,0">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="8,0,2">
@@ -172,7 +172,7 @@ color: rgb(255, 0, 4);
          <property name="minimumSize">
           <size>
            <width>120</width>
-           <height>120</height>
+           <height>100</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -192,27 +192,7 @@ background-color: rgb(255, 131, 131);</string>
         <widget class="QChartView" name="graphicsView"/>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_12">
-         <item>
-          <widget class="QLineEdit" name="moveToEdit"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="moveTo">
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>75</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font: 12pt &quot;幼圆&quot;;</string>
-           </property>
-           <property name="text">
-            <string>运动到</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QVBoxLayout" name="verticalLayout_12"/>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -224,7 +204,7 @@ background-color: rgb(255, 131, 131);</string>
            <property name="minimumSize">
             <size>
              <width>100</width>
-             <height>50</height>
+             <height>40</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -242,7 +222,7 @@ background-color: rgb(255, 131, 131);</string>
              <property name="minimumSize">
               <size>
                <width>120</width>
-               <height>75</height>
+               <height>50</height>
               </size>
              </property>
              <property name="styleSheet">
@@ -258,7 +238,7 @@ background-color: rgb(255, 131, 131);</string>
              <property name="minimumSize">
               <size>
                <width>120</width>
-               <height>75</height>
+               <height>50</height>
               </size>
              </property>
              <property name="styleSheet">
@@ -438,37 +418,55 @@ background-color: rgb(255, 131, 131);</string>
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
-    <widget class="QRadioButton" name="blue">
-     <property name="text">
-      <string>blue</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">colorBtnGrp</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="QRadioButton" name="red">
-     <property name="text">
-      <string>red</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">colorBtnGrp</string>
-     </attribute>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QRadioButton" name="black">
-     <property name="text">
-      <string>black</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">colorBtnGrp</string>
-     </attribute>
-    </widget>
-   </item>
   </layout>
+  <widget class="QRadioButton" name="blue">
+   <property name="geometry">
+    <rect>
+     <x>309</x>
+     <y>760</y>
+     <width>71</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>blue</string>
+   </property>
+   <attribute name="buttonGroup">
+    <string notr="true">colorBtnGrp</string>
+   </attribute>
+  </widget>
+  <widget class="QRadioButton" name="red">
+   <property name="geometry">
+    <rect>
+     <x>605</x>
+     <y>760</y>
+     <width>62</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>red</string>
+   </property>
+   <attribute name="buttonGroup">
+    <string notr="true">colorBtnGrp</string>
+   </attribute>
+  </widget>
+  <widget class="QRadioButton" name="black">
+   <property name="geometry">
+    <rect>
+     <x>900</x>
+     <y>760</y>
+     <width>79</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>black</string>
+   </property>
+   <attribute name="buttonGroup">
+    <string notr="true">colorBtnGrp</string>
+   </attribute>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
