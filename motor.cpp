@@ -113,7 +113,7 @@ void motor::speedMove(double moveSpeed)
 
     QByteArray moveCMD = buildCmdData(command);
 
-    mainUiTest::sendWork->sendMessage(moveCMD);
+    // mainUiTest::sendWork->sendMessage(moveCMD);
 
 
     //speed : mm/s        speed/pitch : r/s          36000*speed/pitch : 度%/s
@@ -145,7 +145,7 @@ void motor::speedMove(double moveSpeed)
 
     QByteArray moveData = buildCmdData(temp);
 
-    mainUiTest::sendWork->sendMessage(moveData);
+    mainUiTest::sendWork->sendMessage(moveCMD+moveData);
 
 
 }
@@ -343,7 +343,7 @@ QByteArray motor::buildCmdData(QString command)
         if (!ok)
         {
             // 转换失败后的操作，待定
-            qDebug() << "转换失败,数据存在错误" ;
+            qDebug() << "motor编码转换失败,数据存在错误" ;
             return "";
         }
         else

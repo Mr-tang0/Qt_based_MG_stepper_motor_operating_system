@@ -49,7 +49,7 @@ void FormFill::findAvailablePort()
     ui->limits->addItems(number);
 
     QStringList  samplingRateList;
-    for (int i = 10;i<=50;i+=2)
+    for (int i = 2;i<=100;i+=2)
     {
         samplingRateList.append(QString::number(i));
     }

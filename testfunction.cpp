@@ -17,31 +17,40 @@ materialDetails*  mainUiTest::material = new materialDetails;
 
 QList<QStringList> mainUiTest::testLog = {};
 
-int mainUiTest::sampleRate = 100;
 
+
+int mainUiTest::freshrate = 0;
 //静态成员初始化区
 
 void mainUiTest::initSystem()
 {
+
     m_snackbar->setParent(this);
     m_snackbar->setBackgroundColor(QColor(150,150,150));
     m_snackbar->setFont(QFont("幼圆"));
 
+    sendWork->sendTimer->start(2);
     QThread *sendThread = new QThread;
     sendWork->moveToThread(sendThread);//sendWork进入子线程，有关于收发的函数均在子线程中执行
     sendWork->openReseiveChannal();//开接收
 
-    QThread *decodeThread = new QThread;
-    decodeWork->moveToThread(decodeThread);//decodeWork进入子线程，有关于解码的函数均在子线程中执行
-    connect(sendWork,&Worker::ReseiveMassage,[=](QString massage){
+    QThread *decoThread = new QThread;
+    decodeWork->moveToThread(decoThread);//decodeWork进入子线程，有关于解码的函数均在子线程中执行
+
+    connect(sendWork,&Worker::ReseiveMassage,this,[=](QString massage){
         decodeWork->decodeMessage(massage);
     });
 
+    connect(decodeWork,&decodeThread::currentLength,this,[=](double length){
+        myMotor->detail.currentAngle = length;
+        lengthList.append(length);
 
-    // connect(ui->colorBtnGrp,&QButtonGroup::buttonToggled,[=]()
-    // {
-    //     qDebug()<<"ui->colorBtnGrp->checkedButton()->text()";
-    // });
+    });
+    connect(decodeWork,&decodeThread::currentWeight,this,[=](double weight){
+        myWeigh->detail.currentWeight = weight;
+        weightList.append(weight);
+
+    });
 
     ui->graphicsView->setChart(chart);
 
@@ -49,11 +58,11 @@ void mainUiTest::initSystem()
 
 
 }
-void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
+void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据(no!!)
 {
     //载荷
     double load = myWeigh->detail.currentWeight;
-    ui->load->display(QString::number(load,'f',2));
+    ui->load->display(QString::number(load/100,'f',2));
 
     //应力
     double stress = myWeigh->detail.currentWeight/material->materialArea;
@@ -61,24 +70,27 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 
     //计算位移,理论位移
     QTime currentTime = QTime::currentTime();
+
     double timeDifference = startTime.msecsTo(currentTime)/1000.0;//时间差
+
     double theoreticallyLengthDifference = timeDifference*myMotor->detail.speed;
     ui->displacement->display(QString::number(theoreticallyLengthDifference,'f',2));
 
     //传感器的实际位移
     double displacement = myMotor->detail.currentAngle;
 
-
-
     ui->displacement_sensors->display(QString::number(displacement,'f',2));
 
     ui->strain->display(0);//应变????
+    //刷新
 
+
+    ui->refreshRate->display(QString::number(freshrate/timeDifference,'f',2));
     //耗时
     ui->Duration->display(QString::number(timeDifference,'f',2));
 
     //图像绘制
-    drawer(myWeigh->detail.currentWeight,myMotor->detail.currentAngle);
+    drawer();
 
     //实验记录
     QStringList couple = {QString::number(timeDifference),//时间
@@ -92,12 +104,30 @@ void mainUiTest::refreshUi()//依靠此来更新界面同时记录数据
 }
 
 
-void mainUiTest::drawer(double x,double y)
+void mainUiTest::drawer()
 {
-    QPointF data = QPointF(x,y);
-    *factSeries<<data;
-    if(!chart->series().isEmpty())chart->removeSeries(factSeries);
+    factSeries = new QLineSeries();
+    int lengthListLen = lengthList.length();
+    int weightListLen = weightList.length();
+
+
+    int circleLen;
+    if(lengthListLen<weightListLen)
+    {
+        circleLen = lengthListLen;
+    }
+    else {
+        circleLen = weightListLen;
+    }
+    for(int i =0;i<circleLen;i++)
+    {
+        QPointF data = QPointF(lengthList[i],weightList[i]);
+        *factSeries<<data;
+    }
+    // if(!chart->series().isEmpty())chart->removeSeries(Al);
+
     chart->addSeries(factSeries);
+
     chart->legend()->hide();
     chart->createDefaultAxes();
 
@@ -239,13 +269,15 @@ void mainUiTest::recodeTest(QString filePath)
         labelFile.close();
     }
     m_snackbar->addMessage("保存成功！");
-    qDebug()<<testLog;
+    // qDebug()<<testLog;
 }
 
 
  void mainUiTest::resetThis()
  {
+    freshrate = 0;
     myMotor->getLength();//读当前位置
+    myWeigh->getWeight();//读当前位置
     delay(10);
 
     // double moveLength = myMotor->detail.zero - myMotor->detail.currentAngle;//与规定0点差值

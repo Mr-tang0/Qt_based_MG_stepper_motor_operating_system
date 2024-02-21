@@ -24,13 +24,12 @@ private:
 
 signals:
     void currentLength(double Length);
+    void currentWeight(double weight);
 
     void currentSpeed(int motorID,double speed);
     void currentVoltage(int motorID,double voltage);
     void currentCurrent(int motorID,double current);
     void currentTemperature(int motorID,double temperature);
-
-    void currentWeight(double weight);
 
     void weighError(int weighID);
     void motorError(bool error);

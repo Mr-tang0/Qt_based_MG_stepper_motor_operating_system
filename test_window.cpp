@@ -11,7 +11,7 @@ mainUiTest::mainUiTest(QWidget *parent) :
 
     initSystem();
 
-    //图表绘制加采样
+    //图表绘制
     connect(startTimer,&QTimer::timeout,this,[=]()
     {
         refreshUi();
@@ -21,10 +21,7 @@ mainUiTest::mainUiTest(QWidget *parent) :
     connect(sendTimer,&QTimer::timeout,this,[=](){
         //查询位置和力
         myWeigh->getWeight();
-        delay(1000/material->sampleRate/3);
         myMotor->getLength();
-        delay(1000/material->sampleRate/3);
-
     });
 
 }
@@ -41,11 +38,10 @@ void mainUiTest::on_startTest_clicked()
 
     startTime = QTime::currentTime();//get start time
 
-    startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
-    sendTimer->start(1000/material->sampleRate);//开启查询计时器
+    startTimer->start(20); //ui固定刷新
+    sendTimer->start(1000/material->sampleRate);//开启查询计时器（按照采样率）
 
     myMotor->open();// open motor
-    delay(5);
 
     ui->stateBox->append(material->testManner+"中");
     if(material->testManner == "拉伸")
@@ -119,11 +115,16 @@ void mainUiTest::on_setWeighZero_clicked()
 
 void mainUiTest::on_UP_clicked()
 {
+    startTime = QTime::currentTime();//get start time
     if(!startTimer->isActive())
-        startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
+    {
+        startTimer->start(20); //ui固定刷新
+    }
     if(!sendTimer->isActive())
-        sendTimer->start(1000/material->sampleRate);//开启查询计时器
-
+    {
+        sendTimer->start(1000/material->sampleRate);//开启查询计时器（按照采样率）
+        qDebug()<<0.5*1000/material->sampleRate;
+    }
     double speed = ui->matulSpeed->text().toDouble();
     myMotor->speedMove(speed);
 }
@@ -131,10 +132,15 @@ void mainUiTest::on_UP_clicked()
 
 void mainUiTest::on_Down_clicked()
 {
+    startTime = QTime::currentTime();//get start time
     if(!startTimer->isActive())
-        startTimer->start(1000/material->sampleRate); //开始采样更新ui:sampleRate设置采样率
+    {
+        startTimer->start(20); //ui固定刷新
+    }
     if(!sendTimer->isActive())
-        sendTimer->start(1000/material->sampleRate);//开启查询计时器
+    {
+        sendTimer->start(1000/material->sampleRate);//开启查询计时器（按照采样率）
+    }
 
     double speed = ui->matulSpeed->text().toDouble();
     myMotor->speedMove(-speed);

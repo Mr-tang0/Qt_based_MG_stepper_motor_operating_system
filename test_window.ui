@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="2,0">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="8,0,2">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="8,0,0,2">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="3">
          <item>
@@ -151,6 +151,26 @@ color: rgb(255, 0, 4);
             </layout>
            </item>
           </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <item>
+          <widget class="QLabel" name="label_12">
+           <property name="styleSheet">
+            <string notr="true">font: 15pt &quot;幼圆&quot;;</string>
+           </property>
+           <property name="text">
+            <string>刷新</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="refreshRate"/>
          </item>
         </layout>
        </item>

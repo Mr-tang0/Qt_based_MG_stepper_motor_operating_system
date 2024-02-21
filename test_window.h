@@ -38,17 +38,22 @@ public:
 
     static QList<QStringList> testLog;//这是电机记录的位移和拉力模块记录的数据,每个QStringList是一对一的关系；
 
-    static int sampleRate;
+    QList<double> lengthList;
+    QList<double> weightList;
 
     QTimer* twinker =new QTimer;
+
+    static int freshrate;
 
 protected:
     void initSystem();
     void refreshUi();
-    void drawer(double x,double y);
+    void drawer();
 
     void saveMotor(QString filePath);
     void saveWeigh(QString filePath,bool clear);
+
+
 
 
 private slots:

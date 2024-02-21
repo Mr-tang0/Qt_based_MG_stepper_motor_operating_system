@@ -23,6 +23,7 @@ void weigh::getWeight()
 }
 
 //去皮
+
 void weigh::shelling()
 {
     int weighAddress = detail.address;
@@ -47,7 +48,7 @@ QByteArray weigh::buildData(QString orignalData)
         if (!ok)
         {
             // 转换失败后的操作，待定
-            qDebug() << "转换失败,数据存在错误" ;
+            qDebug() << "weigh编码转换失败,数据存在错误" ;
             builtData.clear();
             continue;
         }
@@ -127,7 +128,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
         if (!ok)
         {
             // 转换失败后的操作，待定
-            qDebug() << "转换失败,数据存在错误" ;
+            qDebug() << "weigh转换失败,数据存在错误" ;
             builtData.clear();
             continue;
         }
@@ -138,7 +139,7 @@ QByteArray weigh::buildData(int weighAddress,QString data,bool optWork)//data= 1
     }
 
     //数据校验
-    qDebug()<<builtData<<CRC16(builtData);
+    // qDebug()<<builtData<<CRC16(builtData);
     if(ok) builtData = builtData+CRC16(builtData);
 
 
@@ -183,7 +184,7 @@ QByteArray weigh::CRC16(QByteArray data)
         if (!ok)
         {
             // 转换失败后的操作，待定
-            qDebug() << "转换失败,数据存在错误" ;
+            qDebug() << "weigh转换失败,数据存在错误" ;
             return "";
         }
         else

@@ -72,7 +72,7 @@ void Login::on_loginBtn_clicked()
 
     if(userName=="" || passWord=="")
     {
-        qDebug()<<MainWindow::ChineseOrEnglish;
+        // qDebug()<<MainWindow::ChineseOrEnglish;
         m_snackbar->addMessage(emptyEdit[MainWindow::ChineseOrEnglish]);
         return;
     }

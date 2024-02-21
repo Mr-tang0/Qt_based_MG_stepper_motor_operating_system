@@ -12,8 +12,9 @@ decodeThread::decodeThread(QObject *parent) : QObject(parent)
 //解码完毕后，发出信号，通知主线程处理ui、更新motor和weigh的信息
 void decodeThread::decodeMessage(QString reseivedMessage)
 {
-    qDebug()<<reseivedMessage;
-
+    mainUiTest::freshrate++;
+    // qDebug()<<reseivedMessage;
+    // qDebug()<<"";
 
     //若来自motor，查询motor配置表，解码motor信息
     if(reseivedMessage.left(2)=="3e")
@@ -37,14 +38,8 @@ void decodeThread::decodeMessage(QString reseivedMessage)
 
             //计算距离
             double length = mutiAngleDecode(reseivedMessage);
-            if(length==NULL)
-            {
-                length = mainUiTest::myMotor->detail.currentAngle;
-            }
 
-            mainUiTest::myMotor->detail.currentAngle = length;
             emit currentLength(length);
-
         }
         if(reseivedMessage.left(2)=="9A")
         {
@@ -69,6 +64,8 @@ void decodeThread::decodeMessage(QString reseivedMessage)
 
         //判断数据完整无误
         int address = reseivedMessage.left(2).toInt();
+
+
         if(verify==reseiveVerify)
         {
             //力回复
@@ -76,11 +73,12 @@ void decodeThread::decodeMessage(QString reseivedMessage)
             {
 
                 double weight = decodeCurrentWeight(reseivedMessage);
-                mainUiTest::myWeigh->detail.currentWeight = weight;
+
                 emit currentWeight(weight);
             }
         }
         else {
+
             emit weighError(address);//weigh数据错误
         }
     }
@@ -103,8 +101,7 @@ double decodeThread::mutiAngleDecode(QString message)
     //验证
     if(usefulMessage.length()<8)
     {
-        qDebug()<<"motor错误";
-        return NULL;
+        return mainUiTest::myMotor->detail.currentAngle;
     }
     // QString verify = message.mid(16,2);//后二为验证
     // QString verifyMessage = usefulMessage;
@@ -130,7 +127,7 @@ double decodeThread::mutiAngleDecode(QString message)
     QByteArray byteArray = QByteArray::fromHex(changeUsefulMessage.toLatin1());
     bool ok;
     //正数
-    qDebug()<<changeUsefulMessage.left(1);
+    // qDebug()<<changeUsefulMessage.left(1);
     if(changeUsefulMessage.left(1)!="f")
     {
 

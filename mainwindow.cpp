@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //增加试验表单
     connect(formfill,&FormFill::saveSet,[=](QString rootPath){
         formfill->saveLabel(rootPath);
-        delay(800);
+        delay(1000);
         formfill->hide();
         test->resetThis();
         test->show();
@@ -212,7 +212,8 @@ void MainWindow::loadMotorAndWeigh()
         jsonObject["currentWeigth"].toString().toDouble(), //currentWeigth
         jsonObject["resolution"].toString().toDouble()//resolution
     };
-    weighdetail.resolution = 0.1;//测试
+
+    weighdetail.resolution = 0.01;//测试
     mainUiTest::myWeigh->detail = weighdetail;
 
 }

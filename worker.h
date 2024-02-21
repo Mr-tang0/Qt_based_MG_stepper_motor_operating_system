@@ -15,11 +15,17 @@ public:
     bool sendMessage(QByteArray message);
     bool openReseiveChannal();
 
+    static QTimer *sendTimer;
+
 
 private:
     void delay(int delayTime);
     static motor *tempMotor;
     static weigh *tempweigh;
+
+    QList<QByteArray> sendMessageList;
+
+    bool sendFlag;
 
 signals:
     void ReseiveMassage(QString temp);
