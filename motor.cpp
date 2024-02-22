@@ -9,14 +9,13 @@ motor::motor(QObject *parent) : QObject(parent)
 //拉伸
 void motor::modeStretch()
 {
-    qDebug()<<"modeStretch"<<detail.length<<detail.speed;
+
     angleMove(detail.length,detail.speed);//开始运动
 }
 
 //压缩
 void motor::modeCompress()
 {
-
     angleMove(-detail.length,detail.speed);//开始运动
 }
 
@@ -145,6 +144,7 @@ void motor::speedMove(double moveSpeed)
 
     QByteArray moveData = buildCmdData(temp);
 
+    qDebug()<<moveCMD.toHex()+moveData.toHex();
     mainUiTest::sendWork->sendMessage(moveCMD+moveData);
 
 
@@ -158,8 +158,6 @@ void motor::angleMove(double moveLen,double moveSpeed)
     QString command = motorcmd.angleConcrolCMD2.arg(QString::number(address,16));
 
     QByteArray moveCMD = buildCmdData(command);
-
-    mainUiTest::sendWork->sendMessage(moveCMD);
 
     //数据
     double moveLength = moveLen;//实际  运动距离
@@ -211,7 +209,8 @@ void motor::angleMove(double moveLen,double moveSpeed)
 
     QByteArray moveData = buildCmdData(data);
 
-    mainUiTest::sendWork->sendMessage(moveData);
+    qDebug()<<moveCMD.toHex()+moveData.toHex();
+    mainUiTest::sendWork->sendMessage(moveCMD+moveData);
 
 
 }

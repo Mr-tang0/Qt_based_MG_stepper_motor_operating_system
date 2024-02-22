@@ -35,6 +35,7 @@ CONFIG += c++11
 
 SOURCES += \
     chart.cpp \
+    datasave.cpp \
     decodethread.cpp \
     formfill.cpp \
     helper.cpp \
@@ -53,6 +54,7 @@ SOURCES += \
 HEADERS += \
     chart.h \
     command.h \
+    datasave.h \
     decodethread.h \
     formfill.h \
     headers.h \

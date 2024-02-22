@@ -8,6 +8,7 @@
 #include"motor.h"
 #include"worker.h"
 #include "decodethread.h"
+#include "datasave.h"
 
 namespace Ui {
 class mainUiTest;
@@ -36,10 +37,7 @@ public:
     static Worker *sendWork;
     static decodeThread *decodeWork;
 
-    static QList<QStringList> testLog;//这是电机记录的位移和拉力模块记录的数据,每个QStringList是一对一的关系；
 
-    QList<double> lengthList;
-    QList<double> weightList;
 
     QTimer* twinker =new QTimer;
 
@@ -101,19 +99,8 @@ private:
 
     QString filePath;//文件保存位置
 
-    //以下是老代码
+    dataSave *datasave = new dataSave;
 
-    // QPointF zero;
-
-    // int frameWidth,frameHeight;
-
-    // QValueAxis *axisY = new QValueAxis();
-    // QValueAxis *axisX = new QValueAxis();
-
-    // QVector<QPointF> datas;
-    // QVector<QPointF> DATA;
-
-    // QPainterPath pathNormal;
 
 };
 

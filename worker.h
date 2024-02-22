@@ -1,4 +1,4 @@
-#ifndef WORKER_H
+﻿#ifndef WORKER_H
 #define WORKER_H
 
 #include <QObject>
@@ -20,11 +20,10 @@ public:
 
 private:
     void delay(int delayTime);
-    static motor *tempMotor;
-    static weigh *tempweigh;
 
     QList<QByteArray> sendMessageList;
 
+    QString readBuffer = "";
     bool sendFlag;
 
 signals:

@@ -12,10 +12,6 @@ decodeThread::decodeThread(QObject *parent) : QObject(parent)
 //解码完毕后，发出信号，通知主线程处理ui、更新motor和weigh的信息
 void decodeThread::decodeMessage(QString reseivedMessage)
 {
-    mainUiTest::freshrate++;
-    // qDebug()<<reseivedMessage;
-    // qDebug()<<"";
-
     //若来自motor，查询motor配置表，解码motor信息
     if(reseivedMessage.left(2)=="3e")
     {
@@ -33,12 +29,9 @@ void decodeThread::decodeMessage(QString reseivedMessage)
         if(reseivedMessage.mid(2,2)=="92")
         {
             reseivedMessage = reseivedMessage.remove(0,10);//去除指令数据
-
-            //判断数据有误错误略
-
             //计算距离
             double length = mutiAngleDecode(reseivedMessage);
-
+            mainUiTest::myMotor->detail.currentAngle = length;
             emit currentLength(length);
         }
         if(reseivedMessage.left(2)=="9A")
@@ -71,9 +64,8 @@ void decodeThread::decodeMessage(QString reseivedMessage)
             //力回复
             if (reseivedMessage.mid(2,2)=="03")
             {
-
-                double weight = decodeCurrentWeight(reseivedMessage);
-
+                double weight = decodeCurrentWeight(reseivedMessage)/100;
+                mainUiTest::myWeigh->detail.currentWeight = weight;
                 emit currentWeight(weight);
             }
         }
@@ -82,6 +74,7 @@ void decodeThread::decodeMessage(QString reseivedMessage)
             emit weighError(address);//weigh数据错误
         }
     }
+
 }
 
 
@@ -91,7 +84,6 @@ void decodeThread::delay(int delayTime)
     QEventLoop loop;
     QTimer::singleShot(delayTime,&loop,SLOT(quit()));
     loop.exec();
-
 }
 
 double decodeThread::mutiAngleDecode(QString message)
@@ -103,18 +95,7 @@ double decodeThread::mutiAngleDecode(QString message)
     {
         return mainUiTest::myMotor->detail.currentAngle;
     }
-    // QString verify = message.mid(16,2);//后二为验证
-    // QString verifyMessage = usefulMessage;
-    // int verifyMessageLength = verifyMessage.length();
-    // for(int i = 0; i<verifyMessageLength/2;i++)
-    // {
-    //     verifyMessage = verifyMessage.insert(i*2+i," ");
-    // }
-    // if(verify!=mainUiTest::myMotor->verifySUM(verifyMessage).toHex())
-    // {
-    //     qDebug()<<"verify Error"<<verifyMessage;
-    //     return NULL;
-    // }
+
 
     //小端转化为大端
     QString changeUsefulMessage = "";
@@ -127,7 +108,6 @@ double decodeThread::mutiAngleDecode(QString message)
     QByteArray byteArray = QByteArray::fromHex(changeUsefulMessage.toLatin1());
     bool ok;
     //正数
-    // qDebug()<<changeUsefulMessage.left(1);
     if(changeUsefulMessage.left(1)!="f")
     {
 

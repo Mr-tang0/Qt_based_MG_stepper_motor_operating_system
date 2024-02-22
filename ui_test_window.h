@@ -56,9 +56,6 @@ public:
     QVBoxLayout *verticalLayout_11;
     QLabel *label_11;
     QLCDNumber *Duration;
-    QVBoxLayout *verticalLayout_13;
-    QLabel *label_12;
-    QLCDNumber *refreshRate;
     QSpacerItem *horizontalSpacer_3;
     QPushButton *emergency;
     QHBoxLayout *horizontalLayout_4;
@@ -133,6 +130,7 @@ public:
 "color: rgb(255, 0, 4);\n"
 "}\n"
 ""));
+        load->setDigitCount(6);
 
         verticalLayout->addWidget(load);
 
@@ -150,6 +148,7 @@ public:
 
         stress = new QLCDNumber(mainUiTest);
         stress->setObjectName(QString::fromUtf8("stress"));
+        stress->setDigitCount(6);
 
         verticalLayout_7->addWidget(stress);
 
@@ -167,6 +166,7 @@ public:
 
         displacement = new QLCDNumber(mainUiTest);
         displacement->setObjectName(QString::fromUtf8("displacement"));
+        displacement->setDigitCount(6);
 
         verticalLayout_9->addWidget(displacement);
 
@@ -184,6 +184,7 @@ public:
 
         displacement_sensors = new QLCDNumber(mainUiTest);
         displacement_sensors->setObjectName(QString::fromUtf8("displacement_sensors"));
+        displacement_sensors->setDigitCount(6);
 
         verticalLayout_8->addWidget(displacement_sensors);
 
@@ -201,6 +202,7 @@ public:
 
         strain = new QLCDNumber(mainUiTest);
         strain->setObjectName(QString::fromUtf8("strain"));
+        strain->setDigitCount(6);
 
         verticalLayout_10->addWidget(strain);
 
@@ -218,6 +220,7 @@ public:
 
         Duration = new QLCDNumber(mainUiTest);
         Duration->setObjectName(QString::fromUtf8("Duration"));
+        Duration->setDigitCount(6);
 
         verticalLayout_11->addWidget(Duration);
 
@@ -237,23 +240,6 @@ public:
 
         horizontalLayout_3->addLayout(verticalLayout_4);
 
-        verticalLayout_13 = new QVBoxLayout();
-        verticalLayout_13->setObjectName(QString::fromUtf8("verticalLayout_13"));
-        label_12 = new QLabel(mainUiTest);
-        label_12->setObjectName(QString::fromUtf8("label_12"));
-        label_12->setStyleSheet(QString::fromUtf8("font: 15pt \"\345\271\274\345\234\206\";"));
-        label_12->setAlignment(Qt::AlignCenter);
-
-        verticalLayout_13->addWidget(label_12);
-
-        refreshRate = new QLCDNumber(mainUiTest);
-        refreshRate->setObjectName(QString::fromUtf8("refreshRate"));
-
-        verticalLayout_13->addWidget(refreshRate);
-
-
-        horizontalLayout_3->addLayout(verticalLayout_13);
-
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_3->addItem(horizontalSpacer_3);
@@ -267,7 +253,7 @@ public:
         horizontalLayout_3->addWidget(emergency);
 
         horizontalLayout_3->setStretch(0, 8);
-        horizontalLayout_3->setStretch(3, 2);
+        horizontalLayout_3->setStretch(2, 2);
 
         verticalLayout_6->addLayout(horizontalLayout_3);
 
@@ -436,7 +422,6 @@ public:
         label_8->setText(QCoreApplication::translate("mainUiTest", "\344\275\215\347\247\273\344\274\240\346\204\237\345\231\250", nullptr));
         label_10->setText(QCoreApplication::translate("mainUiTest", "\345\272\224\345\217\230", nullptr));
         label_11->setText(QCoreApplication::translate("mainUiTest", "\346\227\266\351\225\277", nullptr));
-        label_12->setText(QCoreApplication::translate("mainUiTest", "\345\210\267\346\226\260", nullptr));
         emergency->setText(QCoreApplication::translate("mainUiTest", "\346\200\245\345\201\234", nullptr));
         newTest->setText(QCoreApplication::translate("mainUiTest", "\346\226\260\345\273\272\346\265\213\350\257\225", nullptr));
         startTest->setText(QCoreApplication::translate("mainUiTest", "\345\274\200\345\247\213", nullptr));

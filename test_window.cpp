@@ -16,13 +16,15 @@ mainUiTest::mainUiTest(QWidget *parent) :
     {
         refreshUi();
     });
+    startTimer->start(20); //ui固定刷新
 
+    // connect(sendTimer,&QTimer::timeout,this,[=](){
+    //     //查询位置和力
 
-    connect(sendTimer,&QTimer::timeout,this,[=](){
-        //查询位置和力
-        myWeigh->getWeight();
-        myMotor->getLength();
-    });
+    //     myWeigh->getWeight();
+    //     myMotor->getLength();
+
+    // });
 
 }
 
@@ -35,15 +37,12 @@ mainUiTest::~mainUiTest()
 
 void mainUiTest::on_startTest_clicked()
 {
-
     startTime = QTime::currentTime();//get start time
 
-    startTimer->start(20); //ui固定刷新
-    sendTimer->start(1000/material->sampleRate);//开启查询计时器（按照采样率）
+    datasave->runFunc(1000/material->sampleRate,true);//开启查询计时器（按照采样率）
 
-    myMotor->open();// open motor
 
-    ui->stateBox->append(material->testManner+"中");
+
     if(material->testManner == "拉伸")
     {
         myMotor->modeStretch();//拉伸
@@ -67,8 +66,18 @@ void mainUiTest::on_startTest_clicked()
 
     }
 
-    m_snackbar->addMessage("测试开始！");
+    m_snackbar->addMessage(material->testManner+"中");
 }
+
+void mainUiTest::on_stopTest_clicked()
+{
+    datasave->runFunc(false);
+    myMotor->stop();
+    QTime temp;
+    startTime = temp;
+
+}
+
 
 
 void mainUiTest::on_newTest_clicked()
@@ -81,11 +90,7 @@ void mainUiTest::on_saveTest_clicked()
     recodeTest(FormFill::rootPath);
 }
 
-void mainUiTest::on_stopTest_clicked()
-{
-    startTimer->stop();
-    sendTimer->stop();
-}
+
 
 void mainUiTest::on_emergency_clicked()
 {
@@ -115,43 +120,39 @@ void mainUiTest::on_setWeighZero_clicked()
 
 void mainUiTest::on_UP_clicked()
 {
-    startTime = QTime::currentTime();//get start time
-    if(!startTimer->isActive())
-    {
-        startTimer->start(20); //ui固定刷新
-    }
-    if(!sendTimer->isActive())
-    {
-        sendTimer->start(1000/material->sampleRate);//开启查询计时器（按照采样率）
-        qDebug()<<0.5*1000/material->sampleRate;
-    }
+    datasave->runFunc(1000/material->sampleRate,true);
     double speed = ui->matulSpeed->text().toDouble();
     myMotor->speedMove(speed);
+
+    if(!startTimer->isActive())
+    {
+        startTimer->start(24); //ui固定刷新
+    }
+
+
 }
 
 
 void mainUiTest::on_Down_clicked()
 {
-    startTime = QTime::currentTime();//get start time
-    if(!startTimer->isActive())
-    {
-        startTimer->start(20); //ui固定刷新
-    }
-    if(!sendTimer->isActive())
-    {
-        sendTimer->start(1000/material->sampleRate);//开启查询计时器（按照采样率）
-    }
+    datasave->runFunc(1000/material->sampleRate,true);
 
     double speed = ui->matulSpeed->text().toDouble();
     myMotor->speedMove(-speed);
+
+
+    if(!startTimer->isActive())
+    {
+        startTimer->start(24); //ui固定刷新
+    }
+
 }
 
 
 void mainUiTest::on_stop_clicked()
 {
+    datasave->runFunc(false);
     myMotor->stop();
-
-    startTimer->stop();
     sendTimer->stop();
 }
 

@@ -1,32 +1,29 @@
 ﻿#include "worker.h"
 #include "test_window.h"
 
-weigh *Worker::tempweigh = new weigh;
-motor *Worker::tempMotor = new motor;
 QTimer *Worker::sendTimer = new QTimer;
 
 Worker::Worker(QObject *parent) : QObject(parent)
 {
 
-}
 
-//需要添加buffer,否则信息错乱
+}
 
 bool Worker::sendMessage(QByteArray message)
 {
-    // sendMessageList.append(message);
+    QString temp = message.toHex();
 
-    if(message.toHex().mid(2,2)=="92" or message.toHex().mid(0,1)=="0")
+    if(temp.left(4)=="3e92" or  temp.left(4)=="0203")
     {
         sendMessageList.append(message);
     }
-    else {
+    else
+    {
         sendMessageList.prepend(message);
     }
-    return true;
+
+    return sendFlag;
 }
-
-
 
 bool Worker::openReseiveChannal()
 {
@@ -36,21 +33,50 @@ bool Worker::openReseiveChannal()
             sendFlag = mainUiTest::myPort->write(sendMessageList.first());
             sendMessageList.removeFirst();
         }
+
+        mainUiTest::myMotor->getLength();
+        mainUiTest::myWeigh->getWeight();
+
+
+        QString temp;
+        if(readBuffer.length()<18)return;
+
+        if(readBuffer.left(2)=="3e")
+        {
+            temp = readBuffer.left(28);
+            readBuffer.remove(0,28);
+        }
+        else {
+            temp  = readBuffer.left(18);
+            readBuffer.remove(0,18);
+        }
+
+        emit ReseiveMassage(temp);
+        mainUiTest::freshrate++;
+
+        if(readBuffer.length()>200)
+        {
+            sendTimer->stop();
+            sendTimer->start(20);
+        }
+        else {
+            sendTimer->stop();
+            sendTimer->start(10);
+        }
+
     });
+    sendTimer->start(10);
+
 
     connect(mainUiTest::myPort,&QSerialPort::readyRead,[=]()
     {
 
-        QByteArray reseivedMessage =mainUiTest::myPort->readAll();
-
+        QByteArray reseivedMessage =mainUiTest::myPort->readLine();
         QString temp = reseivedMessage.toHex();
-
-        emit ReseiveMassage(temp);
+        readBuffer = readBuffer+temp;
     });
     return true;
 }
-
-
 
 void Worker::delay(int delayTime)
 {

@@ -6,9 +6,9 @@
 "maxLength":"10",
 "cycle":"10",
 "picth":"10",
-"currentAngle":"1234",
+"currentAngle":"0",
 "weighID":"2",
 "force":"10",
 "maxForce":"100",
-"currentWeigth":"50"
+"currentWeigth":"0"
 }
