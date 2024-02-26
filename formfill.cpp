@@ -4,6 +4,7 @@
 #include "login_window.h"
 
 QString FormFill::rootPath = "";
+QString FormFill::orginalPath = "";
 
 FormFill::FormFill(QWidget *parent) :
     QWidget(parent),
@@ -14,14 +15,13 @@ FormFill::FormFill(QWidget *parent) :
     m_snackbar->setParent(this);
     m_snackbar->setBackgroundColor(QColor(150,150,150));
     m_snackbar->setFont(QFont("幼圆"));
-
+    orginalPath = QCoreApplication::applicationDirPath()+"/users/data";
 
     resetThis();
     findAvailablePort();
 
     connect(this,&FormFill::thisShow,[=](){
         resetThis();
-
     });
 
 }
@@ -67,10 +67,18 @@ bool FormFill::on_portConnect_clicked()
 
         openFlag= mainUiTest::myPort->open(QIODevice::ReadWrite);
 
-        if(openFlag)ui->portConnect->setText("断开");
+        if(openFlag)
+        {
+            ui->portConnect->setText("断开");
+            ui->portConnect->setStyleSheet({"background:yellow;"
+                                            "font: 12pt 幼圆"});
+        }
+
     }
     else {
         mainUiTest::myPort->close();
+        ui->portConnect->setStyleSheet({"background:white;"
+                                        "font:12pt 幼圆"});
         ui->portConnect->setText("连接");
     }
     return openFlag;
@@ -204,7 +212,10 @@ void FormFill::resetThis()
     showTime = QDateTime::currentDateTime().toString("yyyyMMddhhmm");
     ui->timeNumberEdit->setText(showTime);
     ui->currentTime->setText(QTime::currentTime().toString());
-    rootPath  = QCoreApplication::applicationDirPath()+QStringLiteral("/users/data/%1_%2.csv").arg(currentName).arg(showTime);
+
+
+    rootPath  = orginalPath+QStringLiteral("/%1_%2.csv").arg(currentName).arg(showTime);
+
     ui->filePathEdit->setText(rootPath);
     ui->ExperimenterEdit->setText(currentName);
 }

@@ -106,8 +106,19 @@ struct weighCMD
     QString shelling ="%1 06 00 15 00 01";
 
     QString unShelling ="%1 06 00 15 00 02";
+
+    QString startSetSensitivity = "%1 06 00 18 00 FF";
+
+    QString setRange = "%1 06 00 23 %2 %3";
+
+    QString setSensitivity = "%1 06 00 24 %2 %3";
 };
 
+struct WE20xCMD
+{
+    QString WE20x_ReadMutiSwitchsCMD = "%1 02 00 00 00 04";//地址
+    QString WE20x_WriteMutiRegisterCMD = "%1 0F 00 00 00 04 01 %2";//地址,状态（大端
+};
 
 
 

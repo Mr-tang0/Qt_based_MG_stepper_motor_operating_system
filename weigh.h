@@ -14,6 +14,8 @@ public:
     
     void getWeight();//读质量信息
 
+    void setSensitivity(int Range, int sensitivity);
+
     void shelling();//去皮操作
 
     weighDetails detail = {0,0.,0.,0.,0};

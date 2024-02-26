@@ -39,6 +39,7 @@ Login::Login(QWidget *parent) :
 
     if(loginObject[hashEncode("admin")].isNull())//管理员权限判断
     {
+        qDebug()<<"admin";
         ui->signUpBtn->setText("无权限注册");
         ui->loginBtn->setText("无权限登录");
         ui->loginBtn->setEnabled(false);

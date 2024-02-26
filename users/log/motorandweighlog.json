@@ -7,8 +7,11 @@
 "cycle":"10",
 "picth":"10",
 "currentAngle":"0",
+"zero":"0",
+"Backlash":"0",
 "weighID":"2",
 "force":"10",
 "maxForce":"100",
-"currentWeigth":"0"
+"currentWeigth":"0",
+"resolution":"1.667"
 }

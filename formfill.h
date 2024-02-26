@@ -1,4 +1,4 @@
-#ifndef FORMFILL_H
+﻿#ifndef FORMFILL_H
 #define FORMFILL_H
 
 #include <QWidget>
@@ -24,6 +24,7 @@ public:
     void resetThis();
 
     static QString rootPath;
+    static QString orginalPath;
 
     static void setRootPath(const QString &newRootPath);
 

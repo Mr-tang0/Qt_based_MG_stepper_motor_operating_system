@@ -9,6 +9,7 @@
 #include"worker.h"
 #include "decodethread.h"
 #include "datasave.h"
+#include "we20x.h"
 
 namespace Ui {
 class mainUiTest;
@@ -33,6 +34,7 @@ public:
     static motor* myMotor;
     static weigh* myWeigh;
     static materialDetails *material;
+    static WE20x *we20x;
 
     static Worker *sendWork;
     static decodeThread *decodeWork;

@@ -41,6 +41,7 @@ SOURCES += \
     helper.cpp \
         main.cpp \
     mainwindow.cpp \
+    we20x.cpp \
     weigh.cpp \
     motor.cpp \
     worker.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     headers.h \
     helper.h \
     mainwindow.h \
+    we20x.h \
     weigh.h \
     motor.h \
     worker.h \

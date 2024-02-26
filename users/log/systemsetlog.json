@@ -1,0 +1,13 @@
+{
+    "buandrate": "115200",
+    "color": "normal",
+    "display": "2",
+    "language": "CHN",
+    "limitAddress": "3",
+    "motorAddress": "1",
+    "path": "D:/appFile",
+    "picth": "10",
+    "smooth": "close",
+    "weighAddress": "2",
+    "weighCorrect": "1"
+}

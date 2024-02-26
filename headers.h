@@ -58,7 +58,7 @@
 //charts宏
 QT_CHARTS_USE_NAMESPACE
 
-
+#include<QFileDialog>
 
 //电机信息
 struct motorDetails
@@ -111,9 +111,13 @@ struct materialDetails
     int sampleRate;//采样率
 
     QString testManner;//试验方式
-
 };
 
+//输入开关量WE20x
+struct WE20xDetails
+{
+    int address;//地址
+};
 
 
 // 语料库QString

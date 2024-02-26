@@ -97,23 +97,22 @@ bool motor::stop()
     int address = detail.motorID;
     QString command = motorcmd.motorStopCMD.arg(QString::number(address,16));
     QByteArray stopData = buildCmdData(command);
-    // if(InquireTimer->isActive())
-    // {
-    //     InquireTimer->stop();
-    // }
+    if(InquireTimer->isActive())
+    {
+        InquireTimer->stop();
+    }
     bool stopFlag = mainUiTest::sendWork->sendMessage(stopData);
     return stopFlag;
 }
 
 void motor::speedMove(double moveSpeed)
 {
+    qDebug()<<"speedMove"<<moveSpeed;
+
     int address = detail.motorID;
     QString command = motorcmd.speedConcrolCMD.arg(QString::number(address,16));
 
     QByteArray moveCMD = buildCmdData(command);
-
-    // mainUiTest::sendWork->sendMessage(moveCMD);
-
 
     //speed : mm/s        speed/pitch : r/s          36000*speed/pitch : 度%/s
 
@@ -209,7 +208,6 @@ void motor::angleMove(double moveLen,double moveSpeed)
 
     QByteArray moveData = buildCmdData(data);
 
-    qDebug()<<moveCMD.toHex()+moveData.toHex();
     mainUiTest::sendWork->sendMessage(moveCMD+moveData);
 
 

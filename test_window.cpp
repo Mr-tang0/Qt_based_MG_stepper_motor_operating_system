@@ -104,11 +104,12 @@ void mainUiTest::on_emergency_clicked()
 void mainUiTest::on_clearTest_clicked()
 {
     resetThis();
+    myMotor->angleMove(0,5);
 }
 
 void mainUiTest::on_setLengthZero_clicked()
 {
-    myMotor->detail.zero = myMotor->detail.currentAngle;
+    myWeigh->setSensitivity(60000,1);
 }
 
 

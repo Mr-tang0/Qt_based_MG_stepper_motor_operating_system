@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     test = new mainUiTest();
-
     empty = new QWidget();
     login = new Login();
     helper = new Helper();
@@ -213,8 +212,9 @@ void MainWindow::loadMotorAndWeigh()
         jsonObject["resolution"].toString().toDouble()//resolution
     };
 
-    weighdetail.resolution = 0.01;//测试
     mainUiTest::myWeigh->detail = weighdetail;
+
+
 
 }
 

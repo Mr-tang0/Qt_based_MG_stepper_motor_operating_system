@@ -1,4 +1,4 @@
-#include "weigh.h"
+﻿#include "weigh.h"
 #include "test_window.h"
 weigh::weigh(QObject *parent) : QObject(parent)
 {
@@ -18,19 +18,42 @@ void weigh::getWeight()
     int weighAddress = detail.address;
     QString getWeighCMD =  weighcmd.weighgetWeigh.arg(QString::number(weighAddress,16));
     QByteArray builtData = buildData(getWeighCMD);
-    // QByteArray builtData = buildData(weighAddress,"00:00",false);
+
     mainUiTest::sendWork->sendMessage(builtData);
 }
 
-//去皮
+//灵敏度2000灵敏度1.78164
+void weigh::setSensitivity(int Range, int sensitivity)
+{
+    int weighAddress = detail.address;
+    QString closeWirteProtectCMD =  weighcmd.closeWirteProtect.arg(QString::number(weighAddress,16));
+    QByteArray builtData = buildData(closeWirteProtectCMD);
+    mainUiTest::sendWork->sendMessage(builtData);
 
+    QString startSetSensitivityCMD =  weighcmd.startSetSensitivity.arg(QString::number(weighAddress,16));
+    builtData = buildData(startSetSensitivityCMD);
+    mainUiTest::sendWork->sendMessage(builtData);
+
+    QString RangeString=  QString::number(Range,16);
+    qDebug()<<"set RangeString"<<RangeString;
+    QString setRangeCMD =  weighcmd.setRange.arg(QString::number(weighAddress,16)).arg(RangeString.left(RangeString.length()-2)).arg(RangeString.right(2));//量程1000
+    builtData = buildData(setRangeCMD);
+    mainUiTest::sendWork->sendMessage(builtData);
+
+    QString sensitivityString = QString::number(sensitivity,16);
+    qDebug()<<"set sensitivityString"<<sensitivityString;
+    QString setSensitivityCMD =  weighcmd.setSensitivity.arg(QString::number(weighAddress,16)).arg(sensitivityString.left(sensitivityString.length()-2)).arg(sensitivityString.right(2));//
+    builtData = buildData(setSensitivityCMD);
+    mainUiTest::sendWork->sendMessage(builtData);
+
+}
 void weigh::shelling()
 {
     int weighAddress = detail.address;
     QString closeWirteProtectCMD = weighcmd.closeWirteProtect.arg(QString::number(weighAddress,16));
     QByteArray closeWirteProtectData = buildData(closeWirteProtectCMD);
     mainUiTest::sendWork->sendMessage(closeWirteProtectData);
-    delay(20);
+
     QString shellingCMD =  weighcmd.shelling.arg(QString::number(weighAddress,16));
     QByteArray shellingData = buildData(shellingCMD);
     mainUiTest::sendWork->sendMessage(shellingData);

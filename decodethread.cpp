@@ -64,10 +64,12 @@ void decodeThread::decodeMessage(QString reseivedMessage)
             //力回复
             if (reseivedMessage.mid(2,2)=="03")
             {
-                double weight = decodeCurrentWeight(reseivedMessage)/100;
+                double weight = decodeCurrentWeight(reseivedMessage);
+                qDebug()<<weight;
                 mainUiTest::myWeigh->detail.currentWeight = weight;
                 emit currentWeight(weight);
             }
+
         }
         else {
 

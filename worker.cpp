@@ -28,15 +28,19 @@ bool Worker::sendMessage(QByteArray message)
 bool Worker::openReseiveChannal()
 {
     connect(sendTimer,&QTimer::timeout,[=](){
-        if(!sendMessageList.isEmpty())
+
+        if(mainUiTest::myPort->isOpen())
         {
-            sendFlag = mainUiTest::myPort->write(sendMessageList.first());
-            sendMessageList.removeFirst();
+            if(!sendMessageList.isEmpty())
+            {
+                sendFlag = mainUiTest::myPort->write(sendMessageList.first());
+                sendMessageList.removeFirst();
+            }
+            mainUiTest::myMotor->getLength();
+            mainUiTest::myWeigh->getWeight();
+
+            mainUiTest::freshrate++;
         }
-
-        mainUiTest::myMotor->getLength();
-        mainUiTest::myWeigh->getWeight();
-
 
         QString temp;
         if(readBuffer.length()<18)return;
@@ -52,7 +56,6 @@ bool Worker::openReseiveChannal()
         }
 
         emit ReseiveMassage(temp);
-        mainUiTest::freshrate++;
 
         if(readBuffer.length()>200)
         {

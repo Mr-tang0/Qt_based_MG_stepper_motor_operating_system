@@ -1,4 +1,4 @@
-#ifndef SYSTEMSET_H
+﻿#ifndef SYSTEMSET_H
 #define SYSTEMSET_H
 
 #include <QWidget>
@@ -17,8 +17,14 @@ public:
     explicit systemSet(QWidget *parent = nullptr);
     ~systemSet();
 
+    void resetThis();
+
 
 private slots:
+
+    void on_openPath_clicked();
+
+    void on_saveSet_clicked();
 
 signals:
 

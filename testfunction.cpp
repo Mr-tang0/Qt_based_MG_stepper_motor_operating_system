@@ -16,13 +16,14 @@ decodeThread *mainUiTest::decodeWork = new decodeThread();
 weigh* mainUiTest::myWeigh = new weigh;
 motor* mainUiTest::myMotor = new motor;
 materialDetails*  mainUiTest::material = new materialDetails;
-
+WE20x * mainUiTest::we20x = new WE20x;
 
 int mainUiTest::freshrate = 0;
 //静态成员初始化区
 
 void mainUiTest::initSystem()
 {
+    we20x->writeRegister(4,true);
 
     m_snackbar->setParent(this);
     m_snackbar->setBackgroundColor(QColor(150,150,150));
